@@ -1,0 +1,30 @@
+# Ignore node modules and build artifacts
+node_modules
+apps/*/node_modules
+packages/*/node_modules
+
+# Turbo and Bun caches
+.turbo
+.bun
+.bun-cache
+.bun-tmp
+
+# Local environment files
+*.env
+*.env.local
+*.env.development
+*.env.production
+
+# Build outputs
+dist
+apps/web/dist
+apps/web/dev-dist
+apps/server/dist
+packages/**/dist
+
+# Miscellaneous
+.DS_Store
+.npm-cache
+coverage
+logs
+tmp

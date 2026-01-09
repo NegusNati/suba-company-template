@@ -1,0 +1,6 @@
+node_modules
+.bun
+dist
+build
+apps/web/dev-dist
+apps/web/src/routeTree.gen.ts

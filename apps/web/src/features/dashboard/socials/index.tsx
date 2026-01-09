@@ -1,0 +1,164 @@
+import { useState } from "react";
+import { toast } from "sonner";
+
+import { Columns } from "./columns";
+import { useDeleteSocialMutation, useSocialsQuery } from "./lib/socials-query";
+import type { Social } from "./lib/socials-schema";
+import { SocialForm } from "./SocialForm";
+import { CreateResourceModal } from "../components/CreateResourceModal";
+import { DeleteDialog } from "../components/deletedialog";
+import { ResourceTable } from "../components/ResourceTable";
+
+import { useTableFilters } from "@/lib/useTableFilters";
+
+export default function Index() {
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selected, setSelected] = useState<Social | null>(null);
+
+  const { page, limit, search, debouncedSearch, setPage, setLimit, setSearch } =
+    useTableFilters({ route: "/dashboard/socials/" });
+
+  const {
+    data: socials,
+    isPending,
+    isError,
+    error,
+  } = useSocialsQuery({
+    page,
+    limit,
+    search: debouncedSearch || undefined,
+  });
+
+  const onView = (social: Social) => {
+    setSelected(social);
+    setIsViewOpen(true);
+  };
+
+  const onEdit = (social: Social) => {
+    setSelected(social);
+    setIsEditOpen(true);
+  };
+
+  const onDelete = (social: Social) => {
+    setSelected(social);
+    setDeleteDialogOpen(true);
+  };
+
+  const deleteMutation = useDeleteSocialMutation({
+    onSuccess: () => {
+      toast.success("Social deleted successfully!");
+    },
+    onError: (mutationError) => {
+      toast.error(`Failed to delete social: ${mutationError.message}`);
+    },
+  });
+
+  const handleCreate = () => {
+    setSelected(null);
+    setIsCreateOpen(true);
+  };
+
+  const handleFormSuccess = () => {
+    // Refetch data after successful operation
+    // The query will automatically refetch due to invalidation in mutations
+  };
+
+  const handleCloseModal = () => {
+    setIsViewOpen(false);
+    setIsEditOpen(false);
+    setIsCreateOpen(false);
+    setSelected(null);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    setLimit(newPageSize);
+    setPage(1);
+  };
+
+  const pagination = socials?.meta?.pagination
+    ? {
+        pageCount: socials.meta.pagination.totalPages,
+        page: socials.meta.pagination.page,
+        limit: socials.meta.pagination.limit,
+        setPage: handlePageChange,
+        setLimit: handlePageSizeChange,
+      }
+    : undefined;
+
+  return (
+    <div className="p-8">
+      <ResourceTable
+        columns={Columns(onView, onEdit, onDelete)}
+        data={socials?.data || []}
+        onAction={handleCreate}
+        actionTitle="Create Social"
+        pagination={pagination}
+        isLoading={isPending}
+        isError={isError}
+        error={error}
+        searchKey="title"
+        searchValue={search}
+        onSearchChange={handleSearchChange}
+      />
+      <CreateResourceModal
+        isOpen={isCreateOpen}
+        onClose={handleCloseModal}
+        title="Add Social"
+      >
+        <SocialForm
+          mode="create"
+          social={selected}
+          onClose={handleCloseModal}
+          onSuccess={handleFormSuccess}
+        />
+      </CreateResourceModal>
+      <CreateResourceModal
+        isOpen={isEditOpen}
+        onClose={handleCloseModal}
+        title="Edit Social"
+      >
+        <SocialForm
+          mode="edit"
+          social={selected}
+          onClose={handleCloseModal}
+          onSuccess={handleFormSuccess}
+        />
+      </CreateResourceModal>
+      <CreateResourceModal
+        isOpen={isViewOpen}
+        onClose={handleCloseModal}
+        title="View Social"
+      >
+        <SocialForm
+          mode="view"
+          social={selected}
+          onClose={handleCloseModal}
+          onSuccess={handleFormSuccess}
+        />
+      </CreateResourceModal>
+      {isDeleteDialogOpen && selected && (
+        <DeleteDialog
+          isOpen={isDeleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}
+          onDelete={() => {
+            deleteMutation.mutate(selected.id.toString());
+            setDeleteDialogOpen(false);
+          }}
+          isDeleting={deleteMutation.isPending}
+        />
+      )}
+    </div>
+  );
+}

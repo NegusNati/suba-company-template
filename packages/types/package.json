@@ -1,0 +1,22 @@
+{
+  "name": "@suba-company-template/types",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./api": {
+      "types": "./dist/api/index.d.ts",
+      "default": "./src/api/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "bun run build"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

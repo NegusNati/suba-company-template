@@ -1,0 +1,74 @@
+name: Zero Downtime Deployment to VPS
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Suba Web + API
+    runs-on: ubuntu-latest
+
+    env:
+      SERVICE_WEB: suba-web
+      SERVICE_API: suba-api
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+      PROXY_NETWORK: ${{ secrets.PROXY_NETWORK }}
+      GIT_BRANCH: ${{ github.ref_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          script: |
+            set -euo pipefail
+
+            DEPLOY_PATH="${DEPLOY_PATH:-/opt/suba/our-company}"
+            SERVICE_WEB="${SERVICE_WEB:-suba-web}"
+            SERVICE_API="${SERVICE_API:-suba-api}"
+            PROXY_NETWORK="${PROXY_NETWORK:-web}"
+            GIT_BRANCH="${GIT_BRANCH:-main}"
+
+            cd "${DEPLOY_PATH}"
+
+            [ -f ".env" ] || { echo "Missing .env"; exit 1; }
+
+            docker network inspect "${PROXY_NETWORK}" >/dev/null 2>&1 || docker network create "${PROXY_NETWORK}"
+
+            echo "Pulling latest code..."
+            git fetch --all
+            git reset --hard "origin/${GIT_BRANCH}"
+
+            echo "Building images..."
+            docker compose -f docker-compose.prod.yml build --no-cache "${SERVICE_WEB}" "${SERVICE_API}"
+
+            echo "Starting new containers alongside old..."
+            docker compose -f docker-compose.prod.yml up -d \
+              --scale "${SERVICE_WEB}"=2 \
+              --scale "${SERVICE_API}"=2 \
+              --no-recreate
+
+            echo "Waiting for containers to become healthy..."
+            sleep 20
+
+            echo "Scaling back to 1..."
+            docker compose -f docker-compose.prod.yml up -d \
+              --scale "${SERVICE_WEB}"=1 \
+              --scale "${SERVICE_API}"=1 \
+              --remove-orphans
+
+            echo "Cleaning up old images..."
+            docker image prune -f
+
+            echo "Service status:"
+            docker compose -f docker-compose.prod.yml ps

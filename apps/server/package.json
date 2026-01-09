@@ -1,0 +1,31 @@
+{
+  "name": "server",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -b",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+    "dev": "bun run --hot src/index.ts",
+    "start": "bun run dist/index.js",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@suba-company-template/auth": "workspace:*",
+    "@suba-company-template/db": "workspace:*",
+    "@suba-company-template/types": "workspace:*",
+    "@vercel/og": "^0.8.6",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "file-type": "^18.7.0",
+    "hono": "^4.8.2",
+    "react": "^19.2.3",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.6",
+    "@types/react": "^19.2.7",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

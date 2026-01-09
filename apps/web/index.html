@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 
+      Analytics Integration
+      Uncomment and configure your preferred analytics provider:
+      
+      <script defer src="https://your-analytics-provider.com/script.js" data-website-id="your-website-id"></script>
+    -->
+
+    <!-- DNS Prefetch: Resolve domains early -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- Preconnect: Establish early connections for critical resources -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin="anonymous"
+    />
+
+    <!-- 
+      =====================================================================
+      TEMPLATE CUSTOMIZATION: Update these meta tags with your branding
+      =====================================================================
+    -->
+    <title>Your Company | Software Engineering & Digital Innovation</title>
+    <meta
+      name="title"
+      content="Your Company | Software Engineering & Digital Innovation"
+    />
+    <meta
+      name="description"
+      content="We craft intelligent software platforms, resilient digital products, and innovation ecosystems for forward-looking teams."
+    />
+    <meta
+      name="keywords"
+      content="software engineering, digital innovation, product development, cloud platforms, automation"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://example.com/" />
+
+    <meta name="application-name" content="Your Company" />
+    <meta name="theme-color" content="#0600ab" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0f172a"
+    />
+    <meta name="msapplication-TileColor" content="#0600ab" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/site/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/site/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/site/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="/site/favicon.ico" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Your Company" />
+    <link rel="apple-touch-startup-image" href="/site/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <meta
+      name="msapplication-TileImage"
+      content="/site/android-chrome-512x512.png"
+    />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://example.com/" />
+    <meta
+      property="og:title"
+      content="Your Company | Software Engineering & Digital Innovation"
+    />
+    <meta
+      property="og:description"
+      content="We build high-quality digital products, cloud-native platforms, and innovation systems for modern enterprises."
+    />
+    <meta property="og:site_name" content="Your Company" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://example.com/api/og/default" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Your Company digital innovation showcase"
+    />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://example.com/" />
+    <meta
+      name="twitter:title"
+      content="Your Company | Software Engineering & Digital Innovation"
+    />
+    <meta
+      name="twitter:description"
+      content="Delivering resilient software systems, immersive product experiences, and measurable innovation outcomes."
+    />
+    <meta name="twitter:image" content="https://example.com/api/og/default" />
+    <meta name="twitter:site" content="@yourcompany" />
+    <meta name="twitter:creator" content="@yourcompany" />
+    <meta
+      name="twitter:image:alt"
+      content="Your Company digital innovation showcase"
+    />
+
+    <!-- Structured Data (JSON-LD) - Update with your company info -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "Your Company",
+            "url": "https://example.com/",
+            "logo": "https://example.com/site/android-chrome-512x512.png",
+            "sameAs": [
+              "https://www.linkedin.com/company/yourcompany/",
+              "https://twitter.com/yourcompany",
+              "https://github.com/yourcompany"
+            ],
+            "description": "We deliver software engineering, digital product strategy, and innovation consulting for fast-scaling organizations."
+          },
+          {
+            "@type": "WebSite",
+            "name": "Your Company",
+            "url": "https://example.com/",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://example.com/?s={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "Service",
+            "serviceType": "Software Engineering & Platform Development",
+            "provider": { "@type": "Organization", "name": "Your Company" }
+          },
+          {
+            "@type": "Service",
+            "serviceType": "Product Design & Digital Experience",
+            "provider": { "@type": "Organization", "name": "Your Company" }
+          },
+          {
+            "@type": "Service",
+            "serviceType": "Innovation Strategy & Technology Advisory",
+            "provider": { "@type": "Organization", "name": "Your Company" }
+          }
+        ]
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

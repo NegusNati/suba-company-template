@@ -1,0 +1,9 @@
+export { FaqSection } from "./FaqSection";
+export { HeroSection } from "./HeroSection";
+export { PartnersSection } from "./PartnersSection";
+export { PricingSection } from "./PricingSection";
+export { TestimonialsSection } from "./TestimonialsSection";
+export { ValuePropSection } from "./ValuePropSection";
+export { WorkflowSection } from "./WorkflowSection";
+export { WorkSamplesSection } from "./WorkSamplesSection";
+export { ContactCTASection } from "./ContactCTASection";

@@ -1,0 +1,2 @@
+# Run Prettier then ESLint on staged files via lint-staged
+bunx --bun lint-staged
