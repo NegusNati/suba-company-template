@@ -122,23 +122,35 @@ main() {
     # Run database migrations
     print_step "Pushing database schema..."
     cd packages/db
-    if bun run db:push; then
-        print_success "Database schema pushed"
-    else
+    DB_PUSH_OUTPUT=$(bun run db:push 2>&1)
+    DB_PUSH_EXIT_CODE=$?
+    
+    # Check for both exit code and error patterns in output
+    if [ $DB_PUSH_EXIT_CODE -ne 0 ] || echo "$DB_PUSH_OUTPUT" | grep -qiE "(error:|password authentication failed|connection refused|ECONNREFUSED)"; then
+        echo "$DB_PUSH_OUTPUT"
         print_error "Failed to push database schema"
         print_warning "Please check your DATABASE_URL in .env and ensure the database is running"
+        print_warning "Your .env may have old credentials. Try: rm .env && cp .env.example .env"
         cd ../..
         exit 1
+    else
+        echo "$DB_PUSH_OUTPUT"
+        print_success "Database schema pushed"
     fi
     cd ../..
 
     # Seed database
     print_step "Seeding database with sample data..."
     cd packages/db
-    if bun run db:seed; then
-        print_success "Database seeded"
-    else
+    SEED_OUTPUT=$(bun run db:seed 2>&1)
+    SEED_EXIT_CODE=$?
+    
+    if [ $SEED_EXIT_CODE -ne 0 ] || echo "$SEED_OUTPUT" | grep -qiE "(error:|password authentication failed|connection refused)"; then
+        echo "$SEED_OUTPUT"
         print_warning "Seeding failed or already seeded. Continuing..."
+    else
+        echo "$SEED_OUTPUT"
+        print_success "Database seeded"
     fi
     cd ../..
 
