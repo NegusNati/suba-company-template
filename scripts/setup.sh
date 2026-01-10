@@ -76,14 +76,16 @@ main() {
         print_warning ".env already exists, skipping"
     fi
 
-    # Load environment variables for database connection check
+    # Load only the database-related environment variables we need
     if [ -f ".env" ]; then
-        export $(grep -v '^#' .env | grep -v '^$' | xargs)
+        # Extract specific variables safely using grep and cut
+        DB_USER=$(grep -E '^POSTGRES_USER=' .env | cut -d '=' -f2- | tr -d '"' | tr -d "'" || echo "")
+        DB_NAME=$(grep -E '^POSTGRES_DB=' .env | cut -d '=' -f2- | tr -d '"' | tr -d "'" || echo "")
     fi
 
     # Use defaults if not set
-    DB_USER="${POSTGRES_USER:-suba}"
-    DB_NAME="${POSTGRES_DB:-suba_app}"
+    DB_USER="${DB_USER:-suba}"
+    DB_NAME="${DB_NAME:-suba_app}"
 
     # Start database (if Docker available)
     if [ "$DOCKER_AVAILABLE" = true ]; then
