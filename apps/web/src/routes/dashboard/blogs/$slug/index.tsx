@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import BlogDetail from "@/features/dashboard/blogs/detail/BlogDetail";
 import {
   fetchBlogById,
   fetchBlogBySlug,
@@ -71,19 +70,4 @@ export const Route = createFileRoute("/dashboard/blogs/$slug/")({
 
     return { id: blogId };
   },
-  component: RouteComponent,
 });
-
-function RouteComponent() {
-  const data = Route.useLoaderData() as { id?: number } | undefined;
-
-  if (!data?.id) {
-    return (
-      <div className="p-6 text-destructive">
-        Unable to load blog. Please return to the list and try again.
-      </div>
-    );
-  }
-
-  return <BlogDetail blogId={data.id} mode="view" />;
-}

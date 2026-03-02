@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import VacancyDetail from "@/features/dashboard/vacancies/detail/VacancyDetail";
 import {
   fetchVacancyById,
   fetchVacancyBySlug,
@@ -71,19 +70,4 @@ export const Route = createFileRoute("/dashboard/vacancies/$slug/edit")({
 
     return { id: vacancyId };
   },
-  component: RouteComponent,
 });
-
-function RouteComponent() {
-  const data = Route.useLoaderData() as { id?: number } | undefined;
-
-  if (!data?.id) {
-    return (
-      <div className="p-6 text-destructive">
-        Unable to load vacancy. Please return to the list and try again.
-      </div>
-    );
-  }
-
-  return <VacancyDetail vacancyId={data.id} mode="edit" />;
-}

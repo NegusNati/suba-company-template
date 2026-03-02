@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import Blogs from "@/features/dashboard/blogs";
 import { blogsListParamsSchema } from "@/features/dashboard/blogs/lib/blogs-schema";
 
 export const Route = createFileRoute("/dashboard/blogs/")({
@@ -15,5 +14,4 @@ export const Route = createFileRoute("/dashboard/blogs/")({
           ? search.sortOrder
           : undefined,
     }),
-  component: Blogs,
 });

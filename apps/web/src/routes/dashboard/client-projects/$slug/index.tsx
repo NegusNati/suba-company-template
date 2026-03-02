@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import ClientProjectView from "@/features/dashboard/client-projects/detail/ClientProjectView";
 import { fetchClientProjectById } from "@/features/dashboard/client-projects/lib/client-projects-api";
 import { clientProjectKeys } from "@/features/dashboard/client-projects/lib/client-projects-query";
 import { fetchPublicCaseStudyBySlug } from "@/lib/case-study/case-study-api";
@@ -59,19 +58,4 @@ export const Route = createFileRoute("/dashboard/client-projects/$slug/")({
 
     return { id: clientProjectId };
   },
-  component: RouteComponent,
 });
-
-function RouteComponent() {
-  const data = Route.useLoaderData() as { id?: number } | undefined;
-
-  if (!data?.id) {
-    return (
-      <div className="p-8 text-destructive">
-        Unable to load client project. Please return to the list and try again.
-      </div>
-    );
-  }
-
-  return <ClientProjectView clientProjectId={data.id} />;
-}

@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import ProductView from "@/features/dashboard/products/detail/ProductView";
 import { fetchProductById } from "@/features/dashboard/products/lib/products-api";
 import { productKeys } from "@/features/dashboard/products/lib/products-query";
 import { prefetchResource } from "@/lib/prefetch";
@@ -58,19 +57,4 @@ export const Route = createFileRoute("/dashboard/products/$slug/")({
 
     return { id: productId };
   },
-  component: RouteComponent,
 });
-
-function RouteComponent() {
-  const data = Route.useLoaderData() as { id?: number } | undefined;
-
-  if (!data?.id) {
-    return (
-      <div className="p-8 text-destructive">
-        Unable to load product. Please return to the list and try again.
-      </div>
-    );
-  }
-
-  return <ProductView productId={data.id} />;
-}

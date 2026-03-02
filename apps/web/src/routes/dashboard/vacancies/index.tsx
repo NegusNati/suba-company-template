@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import Vacancies from "@/features/dashboard/vacancies";
 import { vacanciesListParamsSchema } from "@/features/dashboard/vacancies/lib/vacancies-schema";
 
 export const Route = createFileRoute("/dashboard/vacancies/")({
@@ -16,5 +15,4 @@ export const Route = createFileRoute("/dashboard/vacancies/")({
           : undefined,
       status: typeof search.status === "string" ? search.status : undefined,
     }),
-  component: Vacancies,
 });

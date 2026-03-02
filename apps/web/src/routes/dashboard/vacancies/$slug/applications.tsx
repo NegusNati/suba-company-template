@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { VacancyApplications } from "@/features/dashboard/vacancies/applications/VacancyApplications";
 import {
   fetchVacancyById,
   fetchVacancyBySlug,
@@ -8,7 +7,6 @@ import {
 } from "@/features/dashboard/vacancies/lib/vacancies-api";
 import { vacancyKeys } from "@/features/dashboard/vacancies/lib/vacancies-query";
 import { vacancyApplicationsListParamsSchema } from "@/features/dashboard/vacancies/lib/vacancies-schema";
-import type { VacancyApplicationsListParams } from "@/features/dashboard/vacancies/lib/vacancies-schema";
 import { prefetchResource } from "@/lib/prefetch";
 import { queryClient } from "@/main";
 
@@ -90,28 +88,5 @@ export const Route = createFileRoute("/dashboard/vacancies/$slug/applications")(
 
       return { id: vacancyId };
     },
-    component: RouteComponent,
   },
 );
-
-function RouteComponent() {
-  const { slug } = Route.useParams();
-  const data = Route.useLoaderData() as { id?: number } | undefined;
-  const search = Route.useSearch() as {
-    id?: number;
-  } & Partial<VacancyApplicationsListParams>;
-
-  if (!data?.id) {
-    return (
-      <div className="p-6 text-destructive">
-        Unable to load applications. Please return to the list and try again.
-      </div>
-    );
-  }
-
-  const { id: _ignored, ...listParams } = search;
-
-  return (
-    <VacancyApplications vacancyId={data.id} slug={slug} search={listParams} />
-  );
-}

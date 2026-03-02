@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import ServiceView from "@/features/dashboard/services/detail/ServiceView";
 import { fetchServiceById } from "@/features/dashboard/services/lib/services-api";
 import { serviceKeys } from "@/features/dashboard/services/lib/services-query";
 import { prefetchResource } from "@/lib/prefetch";
-import { fetchPublicServiceBySlug } from "@/lib/services";
+import { fetchPublicServiceBySlug } from "@/lib/services/services-api";
 import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/services/$slug/")({
@@ -35,19 +34,4 @@ export const Route = createFileRoute("/dashboard/services/$slug/")({
 
     return { id };
   },
-  component: RouteComponent,
 });
-
-function RouteComponent() {
-  const data = Route.useLoaderData() as { id?: number } | undefined;
-
-  if (!data?.id) {
-    return (
-      <div className="p-8 text-destructive">
-        Unable to load service. Please return to the list and try again.
-      </div>
-    );
-  }
-
-  return <ServiceView serviceId={data.id} />;
-}

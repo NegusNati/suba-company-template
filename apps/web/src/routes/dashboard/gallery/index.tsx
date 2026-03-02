@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import Gallery from "@/features/dashboard/gallery";
 import { galleryListParamsSchema } from "@/features/dashboard/gallery/lib/gallery-schema";
 
 export const Route = createFileRoute("/dashboard/gallery/")({
@@ -15,5 +14,4 @@ export const Route = createFileRoute("/dashboard/gallery/")({
           ? search.sortOrder
           : undefined,
     }),
-  component: Gallery,
 });

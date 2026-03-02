@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import ContactView from "@/features/dashboard/contact-us/detail/ContactView";
 import { fetchContactById } from "@/features/dashboard/contact-us/lib/contact-api";
 import { contactKeys } from "@/features/dashboard/contact-us/lib/contact-query";
 import { prefetchResource } from "@/lib/prefetch";
@@ -22,19 +21,4 @@ export const Route = createFileRoute("/dashboard/contact-us/$id/")({
 
     return { id };
   },
-  component: RouteComponent,
 });
-
-function RouteComponent() {
-  const data = Route.useLoaderData() as { id?: number } | undefined;
-
-  if (!data?.id) {
-    return (
-      <div className="p-8 text-destructive">
-        Unable to load contact. Please return to the list and try again.
-      </div>
-    );
-  }
-
-  return <ContactView contactId={data.id} />;
-}
