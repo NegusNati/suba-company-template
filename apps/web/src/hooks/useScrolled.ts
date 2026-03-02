@@ -10,10 +10,10 @@ export function useScrolled(threshold: number = 50): boolean {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrolled = window.scrollY > threshold;
-      if (scrolled !== isScrolled) {
-        setIsScrolled(scrolled);
-      }
+      setIsScrolled((prev) => {
+        const next = window.scrollY > threshold;
+        return prev === next ? prev : next;
+      });
     };
 
     // Check initial scroll position
@@ -21,7 +21,7 @@ export function useScrolled(threshold: number = 50): boolean {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [threshold, isScrolled]);
+  }, [threshold]);
 
   return isScrolled;
 }
