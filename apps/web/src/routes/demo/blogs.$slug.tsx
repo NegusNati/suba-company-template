@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { BlogDetailPage } from "@/features/blog";
 import { fetchPublicBlogBySlug } from "@/features/blog/lib/blog-api";
 import { getBlogOgImageUrl, SITE_METADATA } from "@/lib/og-utils";
 
@@ -41,10 +40,4 @@ export const Route = createFileRoute("/demo/blogs/$slug")({
       ],
     };
   },
-  component: BlogDetailRoute,
 });
-
-function BlogDetailRoute() {
-  const { blog } = Route.useLoaderData();
-  return <BlogDetailPage blog={blog} />;
-}

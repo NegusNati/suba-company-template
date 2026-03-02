@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Contact } from "@/features/contact";
 import { getPageOgImageUrl, SITE_METADATA } from "@/lib/og-utils";
 
 const PAGE_TITLE = `Contact Us | ${SITE_METADATA.siteName}`;
@@ -8,7 +7,6 @@ const PAGE_DESCRIPTION =
   "Get in touch with us. We'd love to hear about your project and discuss how we can help bring your ideas to life.";
 
 export const Route = createFileRoute("/demo/contact")({
-  component: ContactPage,
   head: () => ({
     meta: [
       { title: PAGE_TITLE },
@@ -34,7 +32,3 @@ export const Route = createFileRoute("/demo/contact")({
     ],
   }),
 });
-
-function ContactPage() {
-  return <Contact />;
-}

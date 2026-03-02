@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CareerDetailPage } from "@/features/careers";
 import { fetchPublicVacancyBySlug } from "@/features/careers/lib/careers-api";
 import { getCareerOgImageUrl, SITE_METADATA } from "@/lib/og-utils";
 
@@ -41,10 +40,4 @@ export const Route = createFileRoute("/demo/careers/$slug")({
       ],
     };
   },
-  component: CareerDetailRoute,
 });
-
-function CareerDetailRoute() {
-  const { vacancy } = Route.useLoaderData();
-  return <CareerDetailPage vacancy={vacancy} />;
-}

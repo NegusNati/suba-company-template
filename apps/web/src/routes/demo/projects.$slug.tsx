@@ -1,32 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import {
-  CaseStudyDetailPage,
-  ProductDetailPage,
-} from "@/features/work-samples";
-import { fetchPublicCaseStudyBySlug } from "@/lib/case-study";
+import { fetchPublicCaseStudyBySlug } from "@/lib/case-study/case-study-api";
 import { getProjectOgImageUrl, SITE_METADATA } from "@/lib/og-utils";
-import { fetchPublicProductBySlug } from "@/lib/products";
+import { fetchPublicProductBySlug } from "@/lib/products/products-api";
 
 export const Route = createFileRoute("/demo/projects/$slug")({
   loader: async ({ params }: { params: Record<string, string> }) => {
-    // Try to fetch as case study first, then as product
-    try {
-      const caseStudyData = await fetchPublicCaseStudyBySlug(params.slug);
-      if (caseStudyData.data) {
-        return { type: "caseStudy" as const, data: caseStudyData.data };
-      }
-    } catch {
-      // Not a case study, try product
+    const [caseStudyResult, productResult] = await Promise.allSettled([
+      fetchPublicCaseStudyBySlug(params.slug),
+      fetchPublicProductBySlug(params.slug),
+    ]);
+
+    if (caseStudyResult.status === "fulfilled" && caseStudyResult.value.data) {
+      return { type: "caseStudy" as const, data: caseStudyResult.value.data };
     }
 
-    try {
-      const productData = await fetchPublicProductBySlug(params.slug);
-      if (productData.data) {
-        return { type: "product" as const, data: productData.data };
-      }
-    } catch {
-      // Not a product either
+    if (productResult.status === "fulfilled" && productResult.value.data) {
+      return { type: "product" as const, data: productResult.value.data };
     }
 
     throw new Error("Project not found");
@@ -73,15 +63,4 @@ export const Route = createFileRoute("/demo/projects/$slug")({
       ],
     };
   },
-  component: ProjectDetailRoute,
 });
-
-function ProjectDetailRoute() {
-  const loaderData = Route.useLoaderData();
-
-  if (loaderData.type === "caseStudy") {
-    return <CaseStudyDetailPage caseStudy={loaderData.data} />;
-  }
-
-  return <ProductDetailPage product={loaderData.data} />;
-}

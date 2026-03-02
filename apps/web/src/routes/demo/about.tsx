@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { About } from "@/features/about";
 import { getPageOgImageUrl, SITE_METADATA } from "@/lib/og-utils";
 
 const PAGE_TITLE = `About Us | ${SITE_METADATA.siteName}`;
@@ -8,7 +7,6 @@ const PAGE_DESCRIPTION =
   "Learn about our company - our mission, values, and the team behind innovative software development and IT solutions.";
 
 export const Route = createFileRoute("/demo/about")({
-  component: AboutPage,
   head: () => ({
     meta: [
       { title: PAGE_TITLE },
@@ -34,7 +32,3 @@ export const Route = createFileRoute("/demo/about")({
     ],
   }),
 });
-
-function AboutPage() {
-  return <About />;
-}
