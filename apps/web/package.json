@@ -7,6 +7,7 @@
     "dev": "vite --port=3001",
     "build": "bun run generate-sitemap && vite build",
     "build:no-sitemap": "vite build",
+    "perf:budget": "bun run build:no-sitemap && bun run scripts/check-main-chunk-size.ts",
     "serve": "vite preview",
     "start": "vite",
     "check-types": "tsc --noEmit",

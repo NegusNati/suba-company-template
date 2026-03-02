@@ -51,3 +51,6 @@ jobs:
 
       - name: Build packages
         run: bun run build
+
+      - name: Enforce web main chunk budget
+        run: bun run --filter web perf:budget
