@@ -20,6 +20,7 @@ import { Route as DemoContactRouteImport } from './routes/demo/contact'
 import { Route as DemoAboutRouteImport } from './routes/demo/about'
 import { Route as DemoServicesIndexRouteImport } from './routes/demo/services.index'
 import { Route as DemoProjectsIndexRouteImport } from './routes/demo/projects.index'
+import { Route as DemoGalleryIndexRouteImport } from './routes/demo/gallery.index'
 import { Route as DemoCareersIndexRouteImport } from './routes/demo/careers.index'
 import { Route as DemoBlogsIndexRouteImport } from './routes/demo/blogs.index'
 import { Route as DashboardVacanciesIndexRouteImport } from './routes/dashboard/vacancies/index'
@@ -32,6 +33,7 @@ import { Route as DemoProjectsSlugRouteImport } from './routes/demo/projects.$sl
 import { Route as DemoCareersSlugRouteImport } from './routes/demo/careers.$slug'
 import { Route as DemoBlogsSlugRouteImport } from './routes/demo/blogs.$slug'
 import { Route as DashboardServicesCreateRouteImport } from './routes/dashboard/services/create'
+import { Route as DashboardGalleryCategoriesRouteImport } from './routes/dashboard/gallery/categories'
 import { Route as DashboardVacanciesSlugIndexRouteImport } from './routes/dashboard/vacancies/$slug/index'
 import { Route as DashboardUserManagementUserIdIndexRouteImport } from './routes/dashboard/user-management/$userId/index'
 import { Route as DashboardTestimonialsIdIndexRouteImport } from './routes/dashboard/testimonials/$id/index'
@@ -161,17 +163,17 @@ const DemoScheduleRoute = DemoScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() => import('./routes/demo/schedule.lazy').then((d) => d.Route))
 const DemoContactRoute = DemoContactRouteImport.update({
   id: '/contact',
   path: '/contact',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() => import('./routes/demo/contact.lazy').then((d) => d.Route))
 const DemoAboutRoute = DemoAboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() => import('./routes/demo/about.lazy').then((d) => d.Route))
 const DashboardUserManagementIndexLazyRoute =
   DashboardUserManagementIndexLazyRouteImport.update({
     id: '/user-management/',
@@ -252,47 +254,72 @@ const DemoServicesIndexRoute = DemoServicesIndexRouteImport.update({
   id: '/services/',
   path: '/services/',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/services.index.lazy').then((d) => d.Route),
+)
 const DemoProjectsIndexRoute = DemoProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/projects.index.lazy').then((d) => d.Route),
+)
+const DemoGalleryIndexRoute = DemoGalleryIndexRouteImport.update({
+  id: '/gallery/',
+  path: '/gallery/',
+  getParentRoute: () => DemoRoute,
+} as any).lazy(() =>
+  import('./routes/demo/gallery.index.lazy').then((d) => d.Route),
+)
 const DemoCareersIndexRoute = DemoCareersIndexRouteImport.update({
   id: '/careers/',
   path: '/careers/',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/careers.index.lazy').then((d) => d.Route),
+)
 const DemoBlogsIndexRoute = DemoBlogsIndexRouteImport.update({
   id: '/blogs/',
   path: '/blogs/',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/blogs.index.lazy').then((d) => d.Route),
+)
 const DashboardVacanciesIndexRoute = DashboardVacanciesIndexRouteImport.update({
   id: '/vacancies/',
   path: '/vacancies/',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/vacancies/index.lazy').then((d) => d.Route),
+)
 const DashboardServicesIndexRoute = DashboardServicesIndexRouteImport.update({
   id: '/services/',
   path: '/services/',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/services/index.lazy').then((d) => d.Route),
+)
 const DashboardProductsIndexRoute = DashboardProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/products/index.lazy').then((d) => d.Route),
+)
 const DashboardGalleryIndexRoute = DashboardGalleryIndexRouteImport.update({
   id: '/gallery/',
   path: '/gallery/',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/gallery/index.lazy').then((d) => d.Route),
+)
 const DashboardBlogsIndexRoute = DashboardBlogsIndexRouteImport.update({
   id: '/blogs/',
   path: '/blogs/',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/blogs/index.lazy').then((d) => d.Route),
+)
 const DashboardVacanciesCreateLazyRoute =
   DashboardVacanciesCreateLazyRouteImport.update({
     id: '/vacancies/create',
@@ -373,148 +400,224 @@ const DemoServicesSlugRoute = DemoServicesSlugRouteImport.update({
   id: '/services/$slug',
   path: '/services/$slug',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/services.$slug.lazy').then((d) => d.Route),
+)
 const DemoProjectsSlugRoute = DemoProjectsSlugRouteImport.update({
   id: '/projects/$slug',
   path: '/projects/$slug',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/projects.$slug.lazy').then((d) => d.Route),
+)
 const DemoCareersSlugRoute = DemoCareersSlugRouteImport.update({
   id: '/careers/$slug',
   path: '/careers/$slug',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/careers.$slug.lazy').then((d) => d.Route),
+)
 const DemoBlogsSlugRoute = DemoBlogsSlugRouteImport.update({
   id: '/blogs/$slug',
   path: '/blogs/$slug',
   getParentRoute: () => DemoRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/demo/blogs.$slug.lazy').then((d) => d.Route),
+)
 const DashboardServicesCreateRoute = DashboardServicesCreateRouteImport.update({
   id: '/services/create',
   path: '/services/create',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/services/create.lazy').then((d) => d.Route),
+)
+const DashboardGalleryCategoriesRoute =
+  DashboardGalleryCategoriesRouteImport.update({
+    id: '/gallery/categories',
+    path: '/gallery/categories',
+    getParentRoute: () => DashboardRoute,
+  } as any).lazy(() =>
+    import('./routes/dashboard/gallery/categories.lazy').then((d) => d.Route),
+  )
 const DashboardVacanciesSlugIndexRoute =
   DashboardVacanciesSlugIndexRouteImport.update({
     id: '/vacancies/$slug/',
     path: '/vacancies/$slug/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/vacancies/$slug/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardUserManagementUserIdIndexRoute =
   DashboardUserManagementUserIdIndexRouteImport.update({
     id: '/user-management/$userId/',
     path: '/user-management/$userId/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/user-management/$userId/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardTestimonialsIdIndexRoute =
   DashboardTestimonialsIdIndexRouteImport.update({
     id: '/testimonials/$id/',
     path: '/testimonials/$id/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/testimonials/$id/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardServicesSlugIndexRoute =
   DashboardServicesSlugIndexRouteImport.update({
     id: '/services/$slug/',
     path: '/services/$slug/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/services/$slug/index.lazy').then((d) => d.Route),
+  )
 const DashboardProductsSlugIndexRoute =
   DashboardProductsSlugIndexRouteImport.update({
     id: '/products/$slug/',
     path: '/products/$slug/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/products/$slug/index.lazy').then((d) => d.Route),
+  )
 const DashboardPartnersIdIndexRoute =
   DashboardPartnersIdIndexRouteImport.update({
     id: '/partners/$id/',
     path: '/partners/$id/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/partners/$id/index.lazy').then((d) => d.Route),
+  )
 const DashboardGalleryIdIndexRoute = DashboardGalleryIdIndexRouteImport.update({
   id: '/gallery/$id/',
   path: '/gallery/$id/',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/gallery/$id/index.lazy').then((d) => d.Route),
+)
 const DashboardContactUsIdIndexRoute =
   DashboardContactUsIdIndexRouteImport.update({
     id: '/contact-us/$id/',
     path: '/contact-us/$id/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/contact-us/$id/index.lazy').then((d) => d.Route),
+  )
 const DashboardClientProjectsSlugIndexRoute =
   DashboardClientProjectsSlugIndexRouteImport.update({
     id: '/client-projects/$slug/',
     path: '/client-projects/$slug/',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/client-projects/$slug/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardBlogsSlugIndexRoute = DashboardBlogsSlugIndexRouteImport.update({
   id: '/blogs/$slug/',
   path: '/blogs/$slug/',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/blogs/$slug/index.lazy').then((d) => d.Route),
+)
 const DashboardVacanciesSlugEditRoute =
   DashboardVacanciesSlugEditRouteImport.update({
     id: '/vacancies/$slug/edit',
     path: '/vacancies/$slug/edit',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/vacancies/$slug/edit.lazy').then((d) => d.Route),
+  )
 const DashboardVacanciesSlugApplicationsRoute =
   DashboardVacanciesSlugApplicationsRouteImport.update({
     id: '/vacancies/$slug/applications',
     path: '/vacancies/$slug/applications',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/vacancies/$slug/applications.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardUserManagementUserIdEditRoute =
   DashboardUserManagementUserIdEditRouteImport.update({
     id: '/user-management/$userId/edit',
     path: '/user-management/$userId/edit',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/user-management/$userId/edit.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardTestimonialsIdEditRoute =
   DashboardTestimonialsIdEditRouteImport.update({
     id: '/testimonials/$id/edit',
     path: '/testimonials/$id/edit',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/testimonials/$id/edit.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardServicesSlugEditRoute =
   DashboardServicesSlugEditRouteImport.update({
     id: '/services/$slug/edit',
     path: '/services/$slug/edit',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/services/$slug/edit.lazy').then((d) => d.Route),
+  )
 const DashboardProductsSlugEditRoute =
   DashboardProductsSlugEditRouteImport.update({
     id: '/products/$slug/edit',
     path: '/products/$slug/edit',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/products/$slug/edit.lazy').then((d) => d.Route),
+  )
 const DashboardPartnersIdEditRoute = DashboardPartnersIdEditRouteImport.update({
   id: '/partners/$id/edit',
   path: '/partners/$id/edit',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/partners/$id/edit.lazy').then((d) => d.Route),
+)
 const DashboardGalleryIdEditRoute = DashboardGalleryIdEditRouteImport.update({
   id: '/gallery/$id/edit',
   path: '/gallery/$id/edit',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/gallery/$id/edit.lazy').then((d) => d.Route),
+)
 const DashboardContactUsIdEditRoute =
   DashboardContactUsIdEditRouteImport.update({
     id: '/contact-us/$id/edit',
     path: '/contact-us/$id/edit',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/contact-us/$id/edit.lazy').then((d) => d.Route),
+  )
 const DashboardClientProjectsSlugEditRoute =
   DashboardClientProjectsSlugEditRouteImport.update({
     id: '/client-projects/$slug/edit',
     path: '/client-projects/$slug/edit',
     getParentRoute: () => DashboardRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/dashboard/client-projects/$slug/edit.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardBlogsSlugEditRoute = DashboardBlogsSlugEditRouteImport.update({
   id: '/blogs/$slug/edit',
   path: '/blogs/$slug/edit',
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/dashboard/blogs/$slug/edit.lazy').then((d) => d.Route),
+)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -529,6 +632,7 @@ export interface FileRoutesByFullPath {
   '/demo/schedule': typeof DemoScheduleRoute
   '/demo/': typeof DemoIndexRoute
   '/dashboard/': typeof DashboardIndexLazyRoute
+  '/dashboard/gallery/categories': typeof DashboardGalleryCategoriesRoute
   '/dashboard/services/create': typeof DashboardServicesCreateRoute
   '/demo/blogs/$slug': typeof DemoBlogsSlugRoute
   '/demo/careers/$slug': typeof DemoCareersSlugRoute
@@ -550,6 +654,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/vacancies': typeof DashboardVacanciesIndexRoute
   '/demo/blogs': typeof DemoBlogsIndexRoute
   '/demo/careers': typeof DemoCareersIndexRoute
+  '/demo/gallery': typeof DemoGalleryIndexRoute
   '/demo/projects': typeof DemoProjectsIndexRoute
   '/demo/services': typeof DemoServicesIndexRoute
   '/dashboard/client-projects': typeof DashboardClientProjectsIndexLazyRoute
@@ -594,6 +699,7 @@ export interface FileRoutesByTo {
   '/demo/schedule': typeof DemoScheduleRoute
   '/demo': typeof DemoIndexRoute
   '/dashboard': typeof DashboardIndexLazyRoute
+  '/dashboard/gallery/categories': typeof DashboardGalleryCategoriesRoute
   '/dashboard/services/create': typeof DashboardServicesCreateRoute
   '/demo/blogs/$slug': typeof DemoBlogsSlugRoute
   '/demo/careers/$slug': typeof DemoCareersSlugRoute
@@ -615,6 +721,7 @@ export interface FileRoutesByTo {
   '/dashboard/vacancies': typeof DashboardVacanciesIndexRoute
   '/demo/blogs': typeof DemoBlogsIndexRoute
   '/demo/careers': typeof DemoCareersIndexRoute
+  '/demo/gallery': typeof DemoGalleryIndexRoute
   '/demo/projects': typeof DemoProjectsIndexRoute
   '/demo/services': typeof DemoServicesIndexRoute
   '/dashboard/client-projects': typeof DashboardClientProjectsIndexLazyRoute
@@ -662,6 +769,7 @@ export interface FileRoutesById {
   '/demo/schedule': typeof DemoScheduleRoute
   '/demo/': typeof DemoIndexRoute
   '/dashboard/': typeof DashboardIndexLazyRoute
+  '/dashboard/gallery/categories': typeof DashboardGalleryCategoriesRoute
   '/dashboard/services/create': typeof DashboardServicesCreateRoute
   '/demo/blogs/$slug': typeof DemoBlogsSlugRoute
   '/demo/careers/$slug': typeof DemoCareersSlugRoute
@@ -683,6 +791,7 @@ export interface FileRoutesById {
   '/dashboard/vacancies/': typeof DashboardVacanciesIndexRoute
   '/demo/blogs/': typeof DemoBlogsIndexRoute
   '/demo/careers/': typeof DemoCareersIndexRoute
+  '/demo/gallery/': typeof DemoGalleryIndexRoute
   '/demo/projects/': typeof DemoProjectsIndexRoute
   '/demo/services/': typeof DemoServicesIndexRoute
   '/dashboard/client-projects/': typeof DashboardClientProjectsIndexLazyRoute
@@ -731,6 +840,7 @@ export interface FileRouteTypes {
     | '/demo/schedule'
     | '/demo/'
     | '/dashboard/'
+    | '/dashboard/gallery/categories'
     | '/dashboard/services/create'
     | '/demo/blogs/$slug'
     | '/demo/careers/$slug'
@@ -752,6 +862,7 @@ export interface FileRouteTypes {
     | '/dashboard/vacancies'
     | '/demo/blogs'
     | '/demo/careers'
+    | '/demo/gallery'
     | '/demo/projects'
     | '/demo/services'
     | '/dashboard/client-projects'
@@ -796,6 +907,7 @@ export interface FileRouteTypes {
     | '/demo/schedule'
     | '/demo'
     | '/dashboard'
+    | '/dashboard/gallery/categories'
     | '/dashboard/services/create'
     | '/demo/blogs/$slug'
     | '/demo/careers/$slug'
@@ -817,6 +929,7 @@ export interface FileRouteTypes {
     | '/dashboard/vacancies'
     | '/demo/blogs'
     | '/demo/careers'
+    | '/demo/gallery'
     | '/demo/projects'
     | '/demo/services'
     | '/dashboard/client-projects'
@@ -863,6 +976,7 @@ export interface FileRouteTypes {
     | '/demo/schedule'
     | '/demo/'
     | '/dashboard/'
+    | '/dashboard/gallery/categories'
     | '/dashboard/services/create'
     | '/demo/blogs/$slug'
     | '/demo/careers/$slug'
@@ -884,6 +998,7 @@ export interface FileRouteTypes {
     | '/dashboard/vacancies/'
     | '/demo/blogs/'
     | '/demo/careers/'
+    | '/demo/gallery/'
     | '/demo/projects/'
     | '/demo/services/'
     | '/dashboard/client-projects/'
@@ -1091,6 +1206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoProjectsIndexRouteImport
       parentRoute: typeof DemoRoute
     }
+    '/demo/gallery/': {
+      id: '/demo/gallery/'
+      path: '/gallery'
+      fullPath: '/demo/gallery'
+      preLoaderRoute: typeof DemoGalleryIndexRouteImport
+      parentRoute: typeof DemoRoute
+    }
     '/demo/careers/': {
       id: '/demo/careers/'
       path: '/careers'
@@ -1236,6 +1358,13 @@ declare module '@tanstack/react-router' {
       path: '/services/create'
       fullPath: '/dashboard/services/create'
       preLoaderRoute: typeof DashboardServicesCreateRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/gallery/categories': {
+      id: '/dashboard/gallery/categories'
+      path: '/gallery/categories'
+      fullPath: '/dashboard/gallery/categories'
+      preLoaderRoute: typeof DashboardGalleryCategoriesRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/vacancies/$slug/': {
@@ -1390,6 +1519,7 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardIndexLazyRoute: typeof DashboardIndexLazyRoute
+  DashboardGalleryCategoriesRoute: typeof DashboardGalleryCategoriesRoute
   DashboardServicesCreateRoute: typeof DashboardServicesCreateRoute
   DashboardBlogsCreateLazyRoute: typeof DashboardBlogsCreateLazyRoute
   DashboardClientProjectsCreateLazyRoute: typeof DashboardClientProjectsCreateLazyRoute
@@ -1439,6 +1569,7 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardIndexLazyRoute: DashboardIndexLazyRoute,
+  DashboardGalleryCategoriesRoute: DashboardGalleryCategoriesRoute,
   DashboardServicesCreateRoute: DashboardServicesCreateRoute,
   DashboardBlogsCreateLazyRoute: DashboardBlogsCreateLazyRoute,
   DashboardClientProjectsCreateLazyRoute:
@@ -1507,6 +1638,7 @@ interface DemoRouteChildren {
   DemoServicesSlugRoute: typeof DemoServicesSlugRoute
   DemoBlogsIndexRoute: typeof DemoBlogsIndexRoute
   DemoCareersIndexRoute: typeof DemoCareersIndexRoute
+  DemoGalleryIndexRoute: typeof DemoGalleryIndexRoute
   DemoProjectsIndexRoute: typeof DemoProjectsIndexRoute
   DemoServicesIndexRoute: typeof DemoServicesIndexRoute
 }
@@ -1522,6 +1654,7 @@ const DemoRouteChildren: DemoRouteChildren = {
   DemoServicesSlugRoute: DemoServicesSlugRoute,
   DemoBlogsIndexRoute: DemoBlogsIndexRoute,
   DemoCareersIndexRoute: DemoCareersIndexRoute,
+  DemoGalleryIndexRoute: DemoGalleryIndexRoute,
   DemoProjectsIndexRoute: DemoProjectsIndexRoute,
   DemoServicesIndexRoute: DemoServicesIndexRoute,
 }
