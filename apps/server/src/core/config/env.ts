@@ -24,6 +24,11 @@ const envSchema = z.object({
     .int()
     .positive()
     .default(10 * 1024 * 1024),
+  GALLERY_UPLOAD_MAX_BYTES: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(80 * 1024 * 1024),
 });
 
 export type Env = z.infer<typeof envSchema>;

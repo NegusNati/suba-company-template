@@ -1,6 +1,7 @@
 import React from "react";
 
 import trininty from "@/assets/landing/trininty.svg";
+import { AppImage } from "@/components/common/AppImage";
 import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
 import { cn } from "@/lib/utils";
@@ -55,7 +56,7 @@ const defaultPartners: LogoCloudPartner[] = [
 const renderLogo = (partner: LogoCloudPartner) => {
   if (typeof partner.logo === "string") {
     return (
-      <img
+      <AppImage
         className="h-full w-auto object-contain dark:invert"
         src={partner.logo}
         alt={`${partner.label} logo`}
@@ -91,7 +92,11 @@ export const LogoCloud: React.FC<LogoCloudProps> = ({
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
-                    <img src={trininty} alt="Trininty" className="h-6 w-auto" />
+                    <AppImage
+                      src={trininty}
+                      alt="Trininty"
+                      className="h-6 w-auto"
+                    />
                   </div>
                 </>
               ))}

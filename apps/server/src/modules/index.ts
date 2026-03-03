@@ -1,10 +1,12 @@
 import type { Hono } from "hono";
 
 import { initBlogsModule } from "./blogs";
+import { initBusinessSectorsModule } from "./business-sectors";
 import { initCaseStudiesModule } from "./case-studies";
 import { initContactsModule } from "./contacts";
 import { initFaqsModule } from "./faqs";
 import { initGalleryModule } from "./gallery";
+import { initGalleryCategoriesModule } from "./gallery-categories";
 import { initOgImageModule } from "./og-image";
 import { initOrgModule } from "./org";
 import { initPartnersModule } from "./partners";
@@ -39,6 +41,12 @@ const registrations: ModuleRegistration[] = [
     adminPath: "/api/v1/blogs",
     clientPath: "/api/v1/blogs/client",
     init: initBlogsModule,
+  },
+  {
+    name: "business-sectors",
+    adminPath: "/api/v1/business-sectors",
+    clientPath: "/api/v1/business-sectors/client",
+    init: initBusinessSectorsModule,
   },
   {
     name: "case-studies",
@@ -111,6 +119,12 @@ const registrations: ModuleRegistration[] = [
     adminPath: "/api/v1/gallery",
     clientPath: "/api/v1/gallery/client",
     init: initGalleryModule,
+  },
+  {
+    name: "gallery-categories",
+    adminPath: "/api/v1/gallery-categories",
+    clientPath: "/api/v1/gallery-categories/client",
+    init: initGalleryCategoriesModule,
   },
   {
     name: "profiles",

@@ -8,9 +8,9 @@ import {
   ServiceShowcase,
 } from "./components";
 
-import mobileReverseImg from "@/assets/services/mobile_revers.png";
+import mobileReverseImg from "@/assets/services/mobile_revers.webp";
 import iphoneImg from "@/assets/services/Screen.png";
-import screenImg from "@/assets/services/us_addis_hotel.png";
+import screenImg from "@/assets/services/us_addis_hotel.webp";
 import { ContactCTASection } from "@/components/common/ContactCTASection";
 
 const FEATURED_SERVICES: ServiceCarouselItem[] = [
@@ -41,7 +41,7 @@ const FEATURED_SERVICES: ServiceCarouselItem[] = [
 export const Services: React.FC = () => {
   return (
     <div className="w-full min-h-screen pb-20">
-      <div className="px-6 py-8 max-w-7xl mx-auto space-y-20">
+      <div className="px-6 py-8 max-w-7xl mx-auto space-y-20 content-auto">
         <ServicesCarousel items={FEATURED_SERVICES} />
 
         <ServiceShowcase

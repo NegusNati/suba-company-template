@@ -3,6 +3,7 @@ import { ExternalLink, Plus, Trash2 } from "lucide-react";
 import type { SocialPlatform, useSocialsListQuery } from "../lib/users-query";
 import type { UserSocial, UserSocialInput } from "../lib/users-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -97,7 +98,7 @@ export function UserSocialsSection({
                   {/* Social Icon & Title */}
                   <div className="flex items-center gap-3 min-w-[140px]">
                     {details?.iconUrl ? (
-                      <img
+                      <AppImage
                         src={resolveImageUrl(details.iconUrl)}
                         alt={details.title}
                         className="w-6 h-6 object-contain"
@@ -185,7 +186,7 @@ export function UserSocialsSection({
                     <SelectItem key={social.id} value={String(social.id)}>
                       <div className="flex items-center gap-2">
                         {social.iconUrl ? (
-                          <img
+                          <AppImage
                             src={resolveImageUrl(social.iconUrl)}
                             alt={social.title}
                             className="w-4 h-4 object-contain"

@@ -50,7 +50,7 @@ async function main() {
   const sizeKb = mainChunk.sizeBytes / 1024;
 
   process.stdout.write(
-    `[perf:budget] Main chunk ${mainChunk.fileName}: ${sizeKb.toFixed(2)} KiB (limit: ${maxKb.toFixed(2)} KiB)\\n`,
+    `[perf:budget] Main chunk ${mainChunk.fileName}: ${sizeKb.toFixed(2)} KiB (limit: ${maxKb.toFixed(2)} KiB)\n`,
   );
 
   if (sizeKb > maxKb) {

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import React from "react";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -71,10 +72,11 @@ export const ServiceShowcase: React.FC<ServiceShowcaseProps> = ({
       {/* Images Side */}
       <div className="w-full md:w-1/2 relative h-[300px] md:h-[500px] bg-gradient-to-br from-transparent to-white/20 flex items-end justify-center">
         <div className="w-full h-full flex items-end justify-center pl-8">
-          <img
+          <AppImage
             src={image}
             alt={title}
             className="w-full h-auto max-h-full object-contain object-bottom"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
       </div>

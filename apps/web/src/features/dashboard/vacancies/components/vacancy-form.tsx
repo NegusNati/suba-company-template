@@ -20,6 +20,7 @@ import {
   type CreateVacancyInput,
 } from "../lib/vacancies-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { LexicalViewer } from "@/components/common/rich-text/LexicalViewer";
 import { Button } from "@/components/ui/button";
 import {
@@ -727,7 +728,7 @@ export function VacancyForm({
                 )}
 
                 {currentFeaturedPreview ? (
-                  <img
+                  <AppImage
                     src={currentFeaturedPreview}
                     alt="Featured preview"
                     className="h-32 w-48 rounded-md object-cover"

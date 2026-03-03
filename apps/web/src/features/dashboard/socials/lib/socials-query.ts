@@ -26,9 +26,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const socialKeys = {
   all: [AUTH_API_ENDPOINTS.SOCIALS] as const,
   list: (params: SocialsListParams) =>
-    [AUTH_API_ENDPOINTS.SOCIALS, "list", params] as const,
+    [AUTH_API_ENDPOINTS.SOCIALS, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.SOCIALS, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.SOCIALS}/${id}`] as const,
 };
 
 export const useSocialsQuery = (

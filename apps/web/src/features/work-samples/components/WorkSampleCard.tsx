@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
 import React from "react";
 
 import type { WorkSampleListItem } from "../lib/types";
 import { getWorkSampleImageUrl } from "../lib/work-samples-utils";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { DotPattern } from "@/features/components/DotPattern";
 
@@ -41,7 +42,7 @@ export const WorkSampleCard: React.FC<WorkSampleCardProps> = ({
         {/* Image Container */}
         <div className="bg-primary/10 rounded-xl h-48 md:h-56 w-full mb-4 overflow-hidden relative border border-primary/20 transition-colors group-hover:border-primary/40">
           {imageUrl ? (
-            <img
+            <AppImage
               src={imageUrl}
               alt={sample.title}
               className="w-full h-full object-cover"

@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import React from "react";
 
 import BrandScrollSection from "./logo-scroll/brand-scroll-section";
 
 import trininty from "@/assets/landing/trininty.svg";
+import { AppImage } from "@/components/common/AppImage";
 
 export const ValuePropSection: React.FC = () => {
   return (
@@ -28,7 +29,11 @@ export const ValuePropSection: React.FC = () => {
 
           <div className="flex justify-between items-start px-4 md:px-0 md:gap-12 md:justify-start">
             <div className="flex self-center items-center md:translate-y-4">
-              <img src={trininty} className="w-14 md:w-24" alt="Trininty" />
+              <AppImage
+                src={trininty}
+                className="w-14 md:w-24"
+                alt="Trininty"
+              />
             </div>
             <div className="text-center md:text-left flex-1 md:flex-none">
               <div className="text-7xl md:text-8xl font-serif font-normal text-primary leading-none mb-2">

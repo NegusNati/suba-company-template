@@ -4,6 +4,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 
 import type { Partner } from "./lib/partners-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -124,7 +125,7 @@ export const Columns = (
       return (
         <div className="max-w-[100px]">
           {resolvedUrl ? (
-            <img
+            <AppImage
               src={resolvedUrl}
               alt="Logo"
               className="h-12 w-24 rounded object-cover"

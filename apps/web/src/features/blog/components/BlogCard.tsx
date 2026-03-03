@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import React from "react";
 
 import type { BlogPost } from "../lib/types";
 
+import { AppImage } from "@/components/common/AppImage";
 import { DotPattern } from "@/features/components/DotPattern";
 
 interface BlogCardProps {
@@ -30,7 +31,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => (
     >
       <div className="w-24 h-20 md:w-full md:h-48 bg-primary/10 rounded-xl flex-shrink-0 overflow-hidden border border-primary/20 transition-colors group-hover:border-primary/40">
         {post.imageUrl ? (
-          <img
+          <AppImage
             src={post.imageUrl}
             alt={post.title}
             className="w-full h-full object-cover"

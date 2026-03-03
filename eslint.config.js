@@ -73,6 +73,28 @@ export default [
         },
       ],
       "import/newline-after-import": "warn",
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "framer-motion",
+              message:
+                'Use "motion/react" instead of "framer-motion" in this codebase.',
+            },
+            {
+              name: "@tanstack/react-query-devtools",
+              message:
+                "Devtools packages are only allowed via dynamic import in apps/web/src/routes/__root.tsx.",
+            },
+            {
+              name: "@tanstack/react-router-devtools",
+              message:
+                "Devtools packages are only allowed via dynamic import in apps/web/src/routes/__root.tsx.",
+            },
+          ],
+        },
+      ],
 
       // React
       "react/jsx-uses-react": "off",
@@ -92,6 +114,21 @@ export default [
           varsIgnorePattern: "^_",
           args: "after-used",
           argsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
+
+  // Do not allow export-star re-exports in route entry files.
+  {
+    files: ["apps/web/src/routes/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ExportAllDeclaration",
+          message:
+            "Avoid export * in route entry surfaces to keep imports explicit and bundle behavior predictable.",
         },
       ],
     },

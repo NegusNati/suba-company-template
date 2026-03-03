@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { galleryListParamsSchema } from "@/features/dashboard/gallery/lib/gallery-schema";
+import { fetchGalleryItems } from "@/features/dashboard/gallery/lib/gallery-api";
+import { galleryKeys } from "@/features/dashboard/gallery/lib/gallery-query";
+import {
+  galleryListParamsSchema,
+  normalizeGalleryListParams,
+} from "@/features/dashboard/gallery/lib/gallery-schema";
+import { prefetchResource } from "@/lib/prefetch";
+import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/gallery/")({
   validateSearch: (search: Record<string, unknown>) =>
@@ -14,4 +21,12 @@ export const Route = createFileRoute("/dashboard/gallery/")({
           ? search.sortOrder
           : undefined,
     }),
+  loaderDeps: ({ search }) => search,
+  loader: async ({ deps }) => {
+    const params = normalizeGalleryListParams(deps);
+    await prefetchResource(queryClient, galleryKeys.list(params), () =>
+      fetchGalleryItems(params),
+    );
+    return null;
+  },
 });

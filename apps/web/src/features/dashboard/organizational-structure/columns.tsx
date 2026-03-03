@@ -3,6 +3,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 
 import type { OrgMember } from "./lib/org-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,7 +39,7 @@ export const Columns = (
     cell: ({ row }) => {
       const url = resolveImageUrl(row.getValue("headshotUrl") as string | null);
       return url ? (
-        <img
+        <AppImage
           src={url}
           alt="Headshot"
           className="h-10 w-10 rounded-full object-cover border"

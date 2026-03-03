@@ -3,6 +3,7 @@ import React from "react";
 
 import colorsImg from "@/assets/services/branding/colors.svg";
 import ergovilLogo from "@/assets/services/branding/social-media-profile.svg";
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -63,10 +64,11 @@ export const BrandingShowcase: React.FC<BrandingShowcaseProps> = ({
 
           <div className="grid grid-cols-1 w-full max-w-[720px]">
             <div className="overflow-hidden border border-white/10 bg-black/20 flex justify-center items-center gap-4 p-6 ">
-              <img
+              <AppImage
                 src={ergovilLogo}
                 alt="Analytics dashboard design mockup"
                 className="h-auto w-full"
+                sizes="(max-width: 768px) 100vw, 40vw"
               />
               <p className="text-white hidden md:block">
                 Ergolevel positions itself as a specialized ergonomic partner
@@ -74,10 +76,11 @@ export const BrandingShowcase: React.FC<BrandingShowcaseProps> = ({
               </p>
             </div>
             <div>
-              <img
+              <AppImage
                 src={colorsImg}
                 alt="Analytics dashboard design mockup"
                 className="h-auto w-full"
+                sizes="(max-width: 768px) 100vw, 40vw"
               />
             </div>
           </div>

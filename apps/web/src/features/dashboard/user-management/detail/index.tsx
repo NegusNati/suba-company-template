@@ -12,6 +12,7 @@ import {
 } from "../lib/users-query";
 import type { AssignRole } from "../lib/users-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -157,7 +158,7 @@ export default function UserDetail() {
           {/* Avatar and basic info */}
           <div className="flex items-start gap-6">
             {user.image ? (
-              <img
+              <AppImage
                 src={resolveImageUrl(user.image)}
                 alt={user.name}
                 className="h-24 w-24 rounded-full object-cover border-2 border-gray-200"
@@ -232,7 +233,7 @@ export default function UserDetail() {
                     <p className="text-sm text-muted-foreground mb-2">
                       Profile Headshot
                     </p>
-                    <img
+                    <AppImage
                       src={resolveImageUrl(user.profile.headshotUrl)}
                       alt="Profile headshot"
                       className="h-40 w-40 rounded object-cover border"
@@ -254,7 +255,7 @@ export default function UserDetail() {
                     className="flex items-center gap-3 p-3 border rounded-lg bg-muted/30"
                   >
                     {social.socialIconUrl ? (
-                      <img
+                      <AppImage
                         src={resolveImageUrl(social.socialIconUrl)}
                         alt={social.socialTitle}
                         className="w-6 h-6 object-contain"

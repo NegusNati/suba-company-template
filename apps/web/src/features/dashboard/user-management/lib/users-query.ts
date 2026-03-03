@@ -32,9 +32,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const userKeys = {
   all: [AUTH_API_ENDPOINTS.USERS] as const,
   list: (params: UsersListParams) =>
-    [AUTH_API_ENDPOINTS.USERS, "list", params] as const,
-  detail: (id: string) => [AUTH_API_ENDPOINTS.USERS, "detail", id] as const,
-  roles: () => [AUTH_API_ENDPOINTS.USERS, "roles"] as const,
+    [AUTH_API_ENDPOINTS.USERS, params] as const,
+  detail: (id: string) => [`${AUTH_API_ENDPOINTS.USERS}/${id}`] as const,
+  roles: () => [`${AUTH_API_ENDPOINTS.USERS}/roles`] as const,
 };
 
 export const useUsersQuery = (
@@ -187,7 +187,7 @@ export const useSocialsListQuery = (
   >,
 ) => {
   return useQuery<ApiSuccessResponse<SocialPlatform[]>, Error>({
-    queryKey: [AUTH_API_ENDPOINTS.SOCIALS, "list"] as const,
+    queryKey: [AUTH_API_ENDPOINTS.SOCIALS, { page: 1, limit: 100 }] as const,
     queryFn: async () => {
       // Use the existing socials-api module to fetch the list
       const { fetchSocials } = await import(

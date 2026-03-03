@@ -3,18 +3,18 @@ import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PublicServicesParams } from "./services-api";
 import { fetchPublicServices, fetchPublicServiceBySlug } from "./services-api";
 
-import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 
 /**
  * Query key factory for services
  * Centralizes all query keys for better cache management
  */
 export const servicesKeys = {
-  all: [AUTH_API_ENDPOINTS.SERVICES] as const,
-  public: () => [...servicesKeys.all, "public"] as const,
-  publicList: (params: PublicServicesParams) =>
-    [...servicesKeys.public(), params] as const,
-  publicDetail: (slug: string) => [...servicesKeys.public(), slug] as const,
+  all: [LANDING_API_ENDPOINTS.SERVICES_CLIENT] as const,
+  list: (params: PublicServicesParams) =>
+    [LANDING_API_ENDPOINTS.SERVICES_CLIENT, params] as const,
+  detailBySlug: (slug: string) =>
+    [`${LANDING_API_ENDPOINTS.SERVICES_CLIENT}/${slug}`] as const,
 };
 
 /**
@@ -43,7 +43,7 @@ export const publicServicesQueryOptions = (params?: PublicServicesParams) => {
   const normalizedParams = normalizeParams(params);
 
   return queryOptions({
-    queryKey: servicesKeys.publicList(normalizedParams),
+    queryKey: servicesKeys.list(normalizedParams),
     queryFn: () => fetchPublicServices(normalizedParams),
     staleTime: 1000 * 60 * 2, // 2 minutes
   });
@@ -54,7 +54,7 @@ export const publicServicesQueryOptions = (params?: PublicServicesParams) => {
  */
 export const publicServiceBySlugQueryOptions = (slug: string) =>
   queryOptions({
-    queryKey: servicesKeys.publicDetail(slug),
+    queryKey: servicesKeys.detailBySlug(slug),
     queryFn: () => fetchPublicServiceBySlug(slug),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

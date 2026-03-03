@@ -3,6 +3,8 @@ import React from "react";
 
 import { getWorkSampleImageUrl } from "../lib/work-samples-utils";
 
+import { AppImage } from "@/components/common/AppImage";
+
 export interface GalleryImage {
   id: number;
   imageUrl: string;
@@ -27,7 +29,7 @@ export const WorkSamplesGallery: React.FC<WorkSamplesGalleryProps> = ({
   );
 
   return (
-    <div className="mb-10">
+    <div className="mb-10 content-auto">
       {/* Header with back button and dotted line */}
       <div className="flex items-center gap-3 mb-6">
         <button
@@ -49,7 +51,7 @@ export const WorkSamplesGallery: React.FC<WorkSamplesGalleryProps> = ({
           <div className="flex items-center py-2 justify-center overflow-x-auto pb-2">
             {sortedImages.map((image, index) => (
               <div key={image.id} className="shrink-0">
-                <img
+                <AppImage
                   src={getWorkSampleImageUrl(image.imageUrl)}
                   alt={image.caption || `${title} - Image ${index + 1}`}
                   className="w-76 md:w-166 h-auto rounded-2xl shadow-lg object-contain"

@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 
 import faqWomen from "../../../assets/landing/faq_women.webp";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { useFaqListQuery } from "@/lib/faq/faq-query";
 
@@ -19,7 +20,7 @@ export const FaqSection: React.FC = () => {
   }
 
   return (
-    <section className="px-6 py-12 md:py-24 max-w-7xl mx-auto">
+    <section className="px-6 py-12 md:py-24 max-w-7xl mx-auto content-auto">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
         {/* Left Column: Title and CTA */}
         <div className="lg:col-span-6 flex flex-col justify-between">
@@ -35,7 +36,7 @@ export const FaqSection: React.FC = () => {
           <div className="bg-[#F3F6F1] rounded-[32px]  relative overflow-hidden mt-6 md:mt-0">
             <div className="grid grid-cols-1 md:grid-cols-2 items-start relative z-10">
               <div className="w-full h-48 relative ">
-                <img
+                <AppImage
                   src={faqWomen}
                   alt="Support"
                   className="object-contain object-bottom w-full h-full"

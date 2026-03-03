@@ -16,6 +16,7 @@ import {
   updateOrgMemberSchema,
 } from "./lib/org-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -285,7 +286,7 @@ export function OrgMemberForm({
           <div className="flex items-start gap-4">
             <div className="flex flex-col gap-2">
               {currentImagePreview ? (
-                <img
+                <AppImage
                   src={currentImagePreview}
                   alt="Org member headshot preview"
                   className="h-20 w-20 rounded-full object-cover border"

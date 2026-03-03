@@ -10,8 +10,9 @@ import instagramIcon from "@/assets/external-company-logos/socials/insta.svg";
 import linkedinIcon from "@/assets/external-company-logos/socials/Linkedin.svg";
 import telegramIcon from "@/assets/external-company-logos/socials/tg.svg";
 import xIcon from "@/assets/external-company-logos/socials/x.svg";
-import footerBg from "@/assets/footer/footer.svg";
-import footerMobileBg from "@/assets/footer/footer_mobile.svg";
+import footerBg from "@/assets/footer/footer.webp";
+import footerMobileBg from "@/assets/footer/footer_mobile.webp";
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 
 const ROTATE_INTERVAL = 5000; // 10 seconds
@@ -143,7 +144,12 @@ export const Footer: React.FC = () => {
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                <img src={social.icon} alt={social.label} className="h-5 w-5" />
+                <AppImage
+                  src={social.icon}
+                  alt={social.label}
+                  className="h-5 w-5"
+                  loading="eager"
+                />
               </a>
             ))}
           </div>
@@ -154,23 +160,16 @@ export const Footer: React.FC = () => {
           </p>
         </div>
       </div>
-      <div
-        className="hidden md:block absolute inset-0 w-full h-full bg-no-repeat bg-cover bg-bottom xl:translate-y-30"
-        style={{
-          backgroundImage: `url(${footerBg})`,
-          backgroundSize: "100% auto",
-          backgroundPosition: "bottom center",
-        }}
-      />
-      {/* Background Image - Mobile */}
-      <div
-        className="md:hidden absolute inset-0 w-full h-full bg-no-repeat bg-cover bg-bottom"
-        style={{
-          backgroundImage: `url(${footerMobileBg})`,
-          backgroundSize: "100% auto",
-          backgroundPosition: "bottom center",
-        }}
-      />
+      <picture className="absolute inset-0 pointer-events-none">
+        <source media="(min-width: 768px)" srcSet={footerBg} />
+        <AppImage
+          src={footerMobileBg}
+          alt=""
+          aria-hidden
+          className="h-full w-full object-cover object-bottom md:translate-y-30"
+          fetchPriority="low"
+        />
+      </picture>
     </footer>
   );
 };

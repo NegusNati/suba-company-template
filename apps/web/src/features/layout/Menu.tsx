@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { ChevronDown, Instagram, Linkedin, X } from "lucide-react";
+import { motion } from "motion/react";
 import React from "react";
 
 import { Button } from "../components/Button";
@@ -7,6 +7,7 @@ import { landingSocials } from "../navigation/config";
 import { useLandingNavigation } from "../navigation/useLandingNavigation";
 
 import google_meet_logo from "@/assets/external-company-logos/google-meet.svg";
+import { AppImage } from "@/components/common/AppImage";
 
 interface MenuProps {
   onClose: () => void;
@@ -63,7 +64,7 @@ export const MenuPage: React.FC<MenuProps> = ({ onClose }) => {
               }}
             >
               <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center flex-shrink-0">
-                <img
+                <AppImage
                   src={google_meet_logo}
                   alt="Meet"
                   className="w-5 h-5 object-contain"

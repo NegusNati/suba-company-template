@@ -19,10 +19,8 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 
 export const tagKeys = {
   all: [AUTH_API_ENDPOINTS.TAG] as const,
-  list: (params: TagListParams) =>
-    [AUTH_API_ENDPOINTS.TAG, "list", params] as const,
-  detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.TAG, "detail", String(id)] as const,
+  list: (params: TagListParams) => [AUTH_API_ENDPOINTS.TAG, params] as const,
+  detail: (id: number | string) => [`${AUTH_API_ENDPOINTS.TAG}/${id}`] as const,
 };
 
 export const useTagsQuery = (

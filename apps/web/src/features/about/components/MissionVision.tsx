@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 
 import MissionIcon from "@/assets/about-us/mission-target.svg";
 import VisionIcon from "@/assets/about-us/vision-bnacular.png";
+import { AppImage } from "@/components/common/AppImage";
 
 // Animation variants
 const container = {
@@ -111,7 +112,7 @@ const MissionVisionCard = ({ data }: MissionVisionCardProps) => {
 
         {/* Icon Container - Overlapping Boundary */}
         <div className="absolute -top-[-30px] right-10 md:right-16 w-20 h-20 md:w-24 md:h-24 bg-card rounded-full flex items-center justify-center shadow-lg z-20 border-4 border-card">
-          <img
+          <AppImage
             src={data.icon}
             alt={data.iconAlt}
             className="w-10 h-10 md:w-12 md:h-12 object-contain"

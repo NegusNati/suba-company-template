@@ -4,58 +4,32 @@ import { fetchClientProjectById } from "@/features/dashboard/client-projects/lib
 import { clientProjectKeys } from "@/features/dashboard/client-projects/lib/client-projects-query";
 import { fetchPublicCaseStudyBySlug } from "@/lib/case-study/case-study-api";
 import { prefetchResource } from "@/lib/prefetch";
+import { parseSearchId, resolvePrefetchedSlugId } from "@/lib/route-loader";
 import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/client-projects/$slug/")({
-  validateSearch: (search: Record<string, unknown> = {}) => {
-    const rawId = search.id;
-    const id =
-      typeof rawId === "number" ? rawId : rawId ? Number(rawId) : undefined;
-    return { id };
-  },
+  validateSearch: parseSearchId,
   loader: async ({
     search = {},
     params,
   }: {
-    search?: { id?: number };
+    search?: Record<string, unknown>;
     params: { slug: string };
   }) => {
-    const slug = params.slug;
-
-    const idFromSearch =
-      typeof search.id === "number"
-        ? search.id
-        : search.id
-          ? Number(search.id)
-          : undefined;
-
-    let clientProjectId = idFromSearch;
-
-    if (idFromSearch) {
-      await prefetchResource(
-        queryClient,
-        clientProjectKeys.detail(idFromSearch),
-        () => fetchClientProjectById(idFromSearch),
-      );
-    } else {
-      const slugResponse = await fetchPublicCaseStudyBySlug(slug);
-      clientProjectId = slugResponse?.data?.id;
-
-      if (clientProjectId) {
-        await prefetchResource(
+    const id = await resolvePrefetchedSlugId({
+      rawId: search.id,
+      slug: params.slug,
+      fetchBySlug: fetchPublicCaseStudyBySlug,
+      getIdFromSlugResponse: (response) => response?.data?.id,
+      prefetchById: (resolvedId) =>
+        prefetchResource(
           queryClient,
-          clientProjectKeys.detail(clientProjectId),
-          () => fetchClientProjectById(clientProjectId!),
-        );
-      }
-    }
-
-    if (!clientProjectId || Number.isNaN(clientProjectId)) {
-      throw new Error(
+          clientProjectKeys.detail(resolvedId),
+          () => fetchClientProjectById(resolvedId),
+        ),
+      missingIdMessage:
         "Missing client project identifier. Please navigate from the client projects list.",
-      );
-    }
-
-    return { id: clientProjectId };
+    });
+    return { id };
   },
 });

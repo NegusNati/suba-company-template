@@ -21,6 +21,12 @@ export const landingNavItems: LandingNavItem[] = [
     description: "Strategy, design, and build offers",
   },
   {
+    page: "sectors",
+    label: "Business Sectors",
+    path: landingPagePaths.sectors,
+    description: "Industry-specific service portfolios",
+  },
+  {
     page: "blogs",
     label: "Blogs",
     path: landingPagePaths.blogs,
@@ -37,6 +43,12 @@ export const landingNavItems: LandingNavItem[] = [
     label: "Work Samples",
     path: landingPagePaths.projects,
     description: "Case studies & launches",
+  },
+  {
+    page: "gallery",
+    label: "Gallery",
+    path: landingPagePaths.gallery,
+    description: "Moments from events and team culture",
   },
   {
     page: "contact",

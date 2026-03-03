@@ -2,10 +2,15 @@ import { type InferInsertModel } from "../orm";
 import type {
   account,
   blogs,
+  businessSectorGalleryImages,
+  businessSectors,
+  businessSectorServices,
+  businessSectorStats,
   caseStudies,
   companyMembers,
   contacts,
   faqs,
+  galleryCategories,
   galleryItems,
   partners,
   products,
@@ -30,6 +35,15 @@ type SeedCaseStudy = InferInsertModel<typeof caseStudies> & {
 type SeedService = InferInsertModel<typeof services> & {
   images: { url: string; position?: number }[];
 };
+type SeedBusinessSector = InferInsertModel<typeof businessSectors> & {
+  stats: Array<Omit<InferInsertModel<typeof businessSectorStats>, "sectorId">>;
+  services: Array<
+    Omit<InferInsertModel<typeof businessSectorServices>, "sectorId">
+  >;
+  gallery: Array<
+    Omit<InferInsertModel<typeof businessSectorGalleryImages>, "sectorId">
+  >;
+};
 
 type SeedTestimonial = InferInsertModel<typeof testimonials> & {
   partnerSlug: string;
@@ -48,6 +62,13 @@ type SeedVacancyApplication = Omit<
   "vacancyId"
 > & {
   vacancySlug: string;
+};
+type SeedGalleryItem = Omit<
+  InferInsertModel<typeof galleryItems>,
+  "categoryId" | "imageUrls"
+> & {
+  categorySlug?: string;
+  imageUrls: string[];
 };
 
 const now = () => new Date();
@@ -126,6 +147,160 @@ export const serviceSeeds: SeedService[] = [
     images: [
       {
         url: "https://images.unsplash.com/photo-1523475472560-d2df97ec485c?auto=format&fit=crop&w=1400&q=80",
+        position: 0,
+      },
+    ],
+  },
+];
+
+export const businessSectorSeeds: SeedBusinessSector[] = [
+  {
+    title: "Hospitality & Tourism",
+    slug: "hospitality-tourism",
+    excerpt:
+      "Destination-led hospitality products and operations services for premium guest experiences.",
+    history:
+      "<p>We started with boutique hospitality projects in Addis Ababa and scaled into multi-location tourism operations with technology-enabled workflows.</p>",
+    featuredImageUrl:
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80",
+    phoneNumber: "+251-11-123-4567",
+    emailAddress: "hospitality@suba.studio",
+    address: "Bole Road, Addis Ababa, Ethiopia",
+    facebookUrl: "https://facebook.com/subahospitality",
+    instagramUrl: "https://instagram.com/subahospitality",
+    linkedinUrl: "https://www.linkedin.com/company/suba-hospitality",
+    publishDate: daysAgo(20),
+    stats: [
+      { statKey: "Projects Delivered", statValue: "48+", position: 0 },
+      { statKey: "Partner Hotels", statValue: "17", position: 1 },
+      { statKey: "Cities Served", statValue: "6", position: 2 },
+    ],
+    services: [
+      {
+        title: "Hotel Brand & Experience Design",
+        description:
+          "End-to-end brand systems and customer journey design for hospitality operators.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1400&q=80",
+        position: 0,
+      },
+      {
+        title: "Revenue-Focused Web Platforms",
+        description:
+          "Booking-optimized websites with analytics and conversion workflows.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?auto=format&fit=crop&w=1400&q=80",
+        position: 1,
+      },
+    ],
+    gallery: [
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1400&q=80",
+        position: 0,
+      },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=1400&q=80",
+        position: 1,
+      },
+    ],
+  },
+  {
+    title: "Digital Commerce",
+    slug: "digital-commerce",
+    excerpt:
+      "Composable commerce systems, fulfillment workflows, and growth experimentation.",
+    history:
+      "<p>Our commerce team combines platform engineering with growth experimentation, helping brands move from manual operations to measurable digital channels.</p>",
+    featuredImageUrl:
+      "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1600&q=80",
+    phoneNumber: "+251-11-765-4321",
+    emailAddress: "commerce@suba.studio",
+    address: "Kazanchis, Addis Ababa, Ethiopia",
+    facebookUrl: "https://facebook.com/subacommerce",
+    instagramUrl: "https://instagram.com/subacommerce",
+    linkedinUrl: "https://www.linkedin.com/company/suba-commerce",
+    publishDate: daysAgo(10),
+    stats: [
+      { statKey: "Transactions Processed", statValue: "120K+", position: 0 },
+      { statKey: "Avg. Conversion Lift", statValue: "34%", position: 1 },
+      { statKey: "Merchants", statValue: "80+", position: 2 },
+    ],
+    services: [
+      {
+        title: "Commerce Platform Builds",
+        description:
+          "Scalable storefront and back-office architecture tailored for local markets.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1400&q=80",
+        position: 0,
+      },
+      {
+        title: "Lifecycle Automation",
+        description:
+          "Marketing and retention automation that improves conversion and LTV.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80",
+        position: 1,
+      },
+    ],
+    gallery: [
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80",
+        position: 0,
+      },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1400&q=80",
+        position: 1,
+      },
+    ],
+  },
+  {
+    title: "Industrial Solutions",
+    slug: "industrial-solutions",
+    excerpt:
+      "Operational modernization for industrial teams through software and data systems.",
+    history:
+      "<p>We support industrial operators with process digitization, monitoring platforms, and field-ready interfaces that shorten response time and improve quality controls.</p>",
+    featuredImageUrl:
+      "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&w=1600&q=80",
+    phoneNumber: "+251-11-555-0101",
+    emailAddress: "industry@suba.studio",
+    address: "Lebu Industrial Zone, Addis Ababa, Ethiopia",
+    facebookUrl: "https://facebook.com/subaindustry",
+    instagramUrl: "https://instagram.com/subaindustry",
+    linkedinUrl: "https://www.linkedin.com/company/suba-industry",
+    publishDate: null,
+    stats: [
+      { statKey: "Plants Supported", statValue: "12", position: 0 },
+      { statKey: "Downtime Reduction", statValue: "21%", position: 1 },
+      { statKey: "Team Trainings", statValue: "40+", position: 2 },
+    ],
+    services: [
+      {
+        title: "Operations Dashboards",
+        description:
+          "Unified monitoring and reporting dashboards for production teams.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1581090700227-1e8a15f664a2?auto=format&fit=crop&w=1400&q=80",
+        position: 0,
+      },
+      {
+        title: "Workflow Digitization",
+        description:
+          "Field workflows and approval pipelines with audit-ready records.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1400&q=80",
+        position: 1,
+      },
+    ],
+    gallery: [
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1581092919535-7146ff1a5907?auto=format&fit=crop&w=1400&q=80",
         position: 0,
       },
     ],
@@ -437,47 +612,84 @@ export const faqSeeds: InferInsertModel<typeof faqs>[] = [
   },
 ];
 
-export const gallerySeeds: InferInsertModel<typeof galleryItems>[] = [
+export const galleryCategorySeeds: InferInsertModel<
+  typeof galleryCategories
+>[] = [
   {
+    name: "Uncategorized",
+    slug: "uncategorized",
+    isSystem: true,
+  },
+  {
+    name: "Events",
+    slug: "events",
+  },
+  {
+    name: "Team",
+    slug: "team",
+  },
+  {
+    name: "Behind The Scenes",
+    slug: "behind-the-scenes",
+  },
+];
+
+export const gallerySeeds: SeedGalleryItem[] = [
+  {
+    categorySlug: "events",
     title: "Design Sprint Wall",
     description: "Day 2 concept mapping with the client squad.",
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=80",
+    ],
     occurredAt: new Date("2024-10-10T10:00:00Z").toISOString(),
   },
   {
+    categorySlug: "team",
     title: "Component Library Review",
     description: "Audit of button, form, and navigation variants.",
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1400&q=80",
+    ],
     occurredAt: new Date("2024-11-05T10:00:00Z").toISOString(),
   },
   {
+    categorySlug: "behind-the-scenes",
     title: "Mobile Handoff",
     description: "Engineers walking through motion specs.",
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1400&q=80",
+    ],
     occurredAt: new Date("2024-11-28T10:00:00Z").toISOString(),
   },
   {
+    categorySlug: "events",
     title: "Client Roadmap Workshop",
     description: "Prioritizing experiments and releases for Q1.",
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1529333166433-1a6b0d67be04?auto=format&fit=crop&w=1400&q=80",
+    ],
     occurredAt: new Date("2025-01-06T10:00:00Z").toISOString(),
   },
   {
+    categorySlug: "events",
     title: "System Demo",
     description: "Showcase of analytics dashboards shipped in sprints.",
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=1400&q=80",
+    ],
     occurredAt: new Date("2025-01-10T10:00:00Z").toISOString(),
   },
   {
+    categorySlug: "team",
     title: "Team Retro",
     description: "End-of-sprint reflections and next steps.",
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80",
+    ],
     occurredAt: new Date("2025-01-15T10:00:00Z").toISOString(),
   },
 ];
@@ -802,6 +1014,8 @@ export const blogContentSeeds: SeedBlog[] = blogSeeds;
 export const caseStudyContentSeeds: SeedCaseStudy[] = caseStudySeeds;
 export const serviceContentSeeds: SeedService[] = serviceSeeds;
 export const productContentSeeds: SeedProduct[] = productSeeds;
+export const businessSectorContentSeeds: SeedBusinessSector[] =
+  businessSectorSeeds;
 
 // Empty shells for session/account to keep FK-ready, intentionally not seeded with data
 export const accountSeeds: InferInsertModel<typeof account>[] = [];

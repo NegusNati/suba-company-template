@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import ShinyText from "./shinny-text";
 
 import googleMeet from "@/assets/external-company-logos/google-meet.svg";
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 
 export default function BookACall() {
@@ -55,7 +56,11 @@ export default function BookACall() {
                 variant="secondary"
                 className="bg-white text-primary px-6 py-3 rounded-full font-semibold inline-flex items-center gap-2 hover:bg-primary-foreground/95 transition-colors duration-300 hover:shadow-lg cursor-pointer hover:scale-103"
               >
-                <img src={googleMeet} alt="Google Meet" className="w-5 h-5" />
+                <AppImage
+                  src={googleMeet}
+                  alt="Google Meet"
+                  className="w-5 h-5"
+                />
                 Book a Call
               </Button>
             </Link>

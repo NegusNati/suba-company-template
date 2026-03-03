@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { servicesListParamsSchema } from "@/features/dashboard/services/lib/services-schema";
+import { fetchServices } from "@/features/dashboard/services/lib/services-api";
+import { serviceKeys } from "@/features/dashboard/services/lib/services-query";
+import {
+  normalizeServicesListParams,
+  servicesListParamsSchema,
+} from "@/features/dashboard/services/lib/services-schema";
+import { prefetchResource } from "@/lib/prefetch";
+import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/services/")({
   validateSearch: (search: Record<string, unknown>) =>
@@ -14,4 +21,12 @@ export const Route = createFileRoute("/dashboard/services/")({
           ? search.sortOrder
           : undefined,
     }),
+  loaderDeps: ({ search }) => search,
+  loader: async ({ deps }) => {
+    const params = normalizeServicesListParams(deps);
+    await prefetchResource(queryClient, serviceKeys.list(params), () =>
+      fetchServices(params),
+    );
+    return null;
+  },
 });

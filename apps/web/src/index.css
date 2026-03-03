@@ -322,3 +322,8 @@ body {
     animation-play-state: paused;
   }
 }
+
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}

@@ -28,9 +28,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const serviceKeys = {
   all: [AUTH_API_ENDPOINTS.SERVICES] as const,
   list: (params: ServiceListParams) =>
-    [AUTH_API_ENDPOINTS.SERVICES, "list", params] as const,
+    [AUTH_API_ENDPOINTS.SERVICES, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.SERVICES, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.SERVICES}/${id}`] as const,
 };
 
 export const useServicesQuery = (

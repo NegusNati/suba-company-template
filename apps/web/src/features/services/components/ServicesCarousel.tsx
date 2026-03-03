@@ -2,6 +2,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -114,7 +115,7 @@ export const ServicesCarousel: React.FC<ServicesCarouselProps> = ({
                   {/* Bottom Section: Image */}
                   <div className="relative flex-1 w-full flex items-end justify-center mt-auto">
                     <div className="relative w-full max-w-6xl mx-auto transform md:translate-y-[5%] transition-transform duration-700 ease-out hover:scale-[1.02]">
-                      <img
+                      <AppImage
                         src={item.image}
                         alt={item.title}
                         className="w-full h-auto object-contain drop-shadow-2xl"

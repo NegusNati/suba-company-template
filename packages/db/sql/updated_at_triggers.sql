@@ -98,6 +98,17 @@ BEGIN
       FOR EACH ROW EXECUTE FUNCTION set_updated_at();
   END IF;
 
+  -- gallery_categories
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'gallery_categories' AND column_name = 'updated_at'
+  ) THEN
+    DROP TRIGGER IF EXISTS set_updated_at_gallery_categories ON gallery_categories;
+    CREATE TRIGGER set_updated_at_gallery_categories
+      BEFORE UPDATE ON gallery_categories
+      FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+  END IF;
+
   -- user_profiles
   IF EXISTS (
     SELECT 1 FROM information_schema.columns
@@ -121,4 +132,3 @@ BEGIN
   END IF;
 END
 $$;
-

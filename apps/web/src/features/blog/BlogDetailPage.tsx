@@ -17,6 +17,7 @@ import {
   getBlogImageUrl,
 } from "./lib/blog-utils";
 
+import { AppImage } from "@/components/common/AppImage";
 import { LexicalViewer } from "@/components/common/rich-text/LexicalViewer";
 import { AmharicLetterAnimation } from "@/components/motion-primitives/amharic-letter-animation";
 import { Button } from "@/components/ui/button";
@@ -129,7 +130,7 @@ export const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ blog }) => {
                 >
                   <div className=" h-32 rounded-t-lg overflow-hidden ">
                     {getBlogImageUrl(item.featuredImageUrl) ? (
-                      <img
+                      <AppImage
                         src={getBlogImageUrl(item.featuredImageUrl)}
                         alt={item.title}
                         className="w-full h-full object-cover"

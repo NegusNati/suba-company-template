@@ -1,3 +1,5 @@
+import { AppImage } from "@/components/common/AppImage";
+
 interface UserPreviewProps {
   name: string;
   email: string;
@@ -41,7 +43,7 @@ export function UserPreview({
           {/* Avatar */}
           <div className="flex items-center gap-4">
             {avatarPreview ? (
-              <img
+              <AppImage
                 src={avatarPreview}
                 alt={name || "User avatar"}
                 className="h-16 w-16 rounded-full object-cover border-2 border-gray-200"
@@ -119,7 +121,7 @@ export function UserPreview({
                     <p className="text-xs text-muted-foreground mb-1">
                       Headshot
                     </p>
-                    <img
+                    <AppImage
                       src={headshotPreview}
                       alt="Profile headshot"
                       className="h-32 w-32 rounded object-cover border"

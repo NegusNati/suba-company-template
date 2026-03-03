@@ -28,9 +28,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const testimonialKeys = {
   all: [AUTH_API_ENDPOINTS.TESTIMONIALS] as const,
   list: (params: TestimonialsListParams) =>
-    [AUTH_API_ENDPOINTS.TESTIMONIALS, "list", params] as const,
+    [AUTH_API_ENDPOINTS.TESTIMONIALS, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.TESTIMONIALS, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.TESTIMONIALS}/${id}`] as const,
 };
 
 export const useTestimonialsQuery = (

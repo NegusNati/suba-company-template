@@ -29,6 +29,20 @@
       "when": 1735660800000,
       "tag": "0003_better_auth_admin_plugin",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1772409600000,
+      "tag": "0004_gallery_categories_batch_upload",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1772496000000,
+      "tag": "0005_business_sectors",
+      "breakpoints": true
     }
   ]
 }

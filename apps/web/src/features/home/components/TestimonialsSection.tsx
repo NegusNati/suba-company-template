@@ -1,8 +1,9 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Anchor } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 
 import gedaSilhouette from "@/assets/landing/geda.svg";
+import { AppImage } from "@/components/common/AppImage";
 import { useTestimonialListQuery } from "@/lib/testimonial/testimonial-query";
 
 export const TestimonialsSection: React.FC = () => {
@@ -20,7 +21,7 @@ export const TestimonialsSection: React.FC = () => {
   const currentTestimonial = testimonials[activeIndex];
 
   return (
-    <section className="px-6 py-16 max-w-7xl mx-auto">
+    <section className="px-6 py-16 max-w-7xl mx-auto content-auto">
       {/* Section Header */}
       <div className="mb-12 text-center">
         <motion.h2
@@ -56,7 +57,7 @@ export const TestimonialsSection: React.FC = () => {
             <div className="flex flex-col md:flex-row">
               {/* Left Side - Silhouette Image */}
               <div className="hidden md:flex items-end justify-center ] w-[200px] flex-shrink-0">
-                <img
+                <AppImage
                   src={gedaSilhouette}
                   alt="Testimonial silhouette"
                   className="h-full max-h-[280px] object-contain object-bottom"
@@ -75,7 +76,7 @@ export const TestimonialsSection: React.FC = () => {
                   {/* Company Logo & Name */}
                   <div className="flex items-center gap-2">
                     {currentTestimonial.companyLogoUrl ? (
-                      <img
+                      <AppImage
                         src={currentTestimonial.companyLogoUrl}
                         alt={currentTestimonial.companyName}
                         className="h-8 object-contain"

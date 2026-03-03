@@ -28,11 +28,10 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 
 export const blogKeys = {
   all: [AUTH_API_ENDPOINTS.BLOG] as const,
-  list: (params: BlogsListParams) =>
-    [AUTH_API_ENDPOINTS.BLOG, "list", params] as const,
+  list: (params: BlogsListParams) => [AUTH_API_ENDPOINTS.BLOG, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.BLOG, "detail", String(id)] as const,
-  slug: (slug: string) => [AUTH_API_ENDPOINTS.BLOG, "slug", slug] as const,
+    [`${AUTH_API_ENDPOINTS.BLOG}/${id}`] as const,
+  slug: (slug: string) => [`${AUTH_API_ENDPOINTS.BLOG}/slug/${slug}`] as const,
 };
 
 export const useBlogsQuery = (

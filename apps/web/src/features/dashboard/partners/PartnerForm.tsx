@@ -14,6 +14,7 @@ import {
   type PartnerUpdatePayload,
 } from "./lib/partners-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -251,7 +252,7 @@ export function PartnerForm({
           />
           {currentLogo && (
             <div className="mt-2 flex items-center gap-3">
-              <img
+              <AppImage
                 src={currentLogo}
                 alt="Partner logo preview"
                 className="h-12 w-12 object-contain rounded border"

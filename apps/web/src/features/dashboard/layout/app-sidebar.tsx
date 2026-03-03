@@ -4,6 +4,7 @@ import { NavGroup } from "./nav-group";
 
 import company_logo_small from "@/assets/company-logo/logo-small.svg";
 import company_logo from "@/assets/company-logo/logo.svg";
+import { AppImage } from "@/components/common/AppImage";
 import {
   Sidebar,
   SidebarContent,
@@ -28,7 +29,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       >
         <Link to="/" className="flex items-center justify-center">
           <div className="relative flex h-10 w-full items-center justify-center">
-            <img
+            <AppImage
               src={company_logo}
               alt="Company Logo"
               className={cn(
@@ -37,7 +38,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               )}
               aria-hidden={state !== "expanded"}
             />
-            <img
+            <AppImage
               src={company_logo_small}
               alt="Company Logo"
               className={cn(

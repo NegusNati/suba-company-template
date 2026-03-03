@@ -1,18 +1,23 @@
+import { AppImage } from "@/components/common/AppImage";
+
 interface GalleryPreviewProps {
   title?: string;
   description?: string;
   occurredAt?: string;
-  imagePreview?: string | null;
+  categoryName?: string;
+  imagePreviews: string[];
 }
 
 export function GalleryPreview({
   title,
   description,
   occurredAt,
-  imagePreview,
+  categoryName,
+  imagePreviews,
 }: GalleryPreviewProps) {
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return null;
+
     try {
       const date = new Date(dateStr);
       return date.toLocaleDateString("en-US", {
@@ -26,50 +31,70 @@ export function GalleryPreview({
   };
 
   return (
-    <div className="sticky top-8">
-      <h3 className="text-lg font-semibold mb-4">Preview</h3>
-      <div className="border rounded-lg p-6 bg-card space-y-4">
-        {/* Image preview */}
-        <div className="aspect-video w-full rounded-lg overflow-hidden bg-muted flex items-center justify-center">
-          {imagePreview ? (
-            <img
-              src={imagePreview}
-              alt="Preview"
-              className="w-full h-full object-cover"
-            />
+    <div className="sticky top-8 space-y-4">
+      <h3 className="text-lg font-semibold">Preview</h3>
+
+      <div className="space-y-4 rounded-lg border bg-card p-6">
+        <div>
+          <p className="mb-2 text-sm font-medium text-muted-foreground">
+            Images ({imagePreviews.length})
+          </p>
+          {imagePreviews.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {imagePreviews.map((src, index) => (
+                <div
+                  key={`${src}-${index}`}
+                  className="aspect-video overflow-hidden rounded-md bg-muted"
+                >
+                  <AppImage
+                    src={src}
+                    alt={`Preview ${index + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           ) : (
-            <div className="text-muted-foreground text-sm">
-              No image selected
+            <div className="flex aspect-video items-center justify-center rounded-md bg-muted text-sm text-muted-foreground">
+              No images selected
             </div>
           )}
         </div>
 
-        {/* Title */}
         <div>
-          <p className="text-sm font-medium text-muted-foreground mb-1">
+          <p className="mb-1 text-sm font-medium text-muted-foreground">
             Title
           </p>
           <p className="font-medium">
             {title || (
-              <span className="text-muted-foreground italic">Untitled</span>
+              <span className="italic text-muted-foreground">Untitled</span>
             )}
           </p>
         </div>
 
-        {/* Description */}
+        <div>
+          <p className="mb-1 text-sm font-medium text-muted-foreground">
+            Category
+          </p>
+          <p>
+            {categoryName || (
+              <span className="italic text-muted-foreground">Not selected</span>
+            )}
+          </p>
+        </div>
+
         {description && (
           <div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">
+            <p className="mb-1 text-sm font-medium text-muted-foreground">
               Description
             </p>
-            <p className="text-sm whitespace-pre-wrap">{description}</p>
+            <p className="whitespace-pre-wrap text-sm">{description}</p>
           </div>
         )}
 
-        {/* Occurred date */}
         {occurredAt && (
           <div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">
+            <p className="mb-1 text-sm font-medium text-muted-foreground">
               Occurred On
             </p>
             <p className="text-sm">{formatDate(occurredAt) || occurredAt}</p>

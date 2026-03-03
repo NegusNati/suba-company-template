@@ -1,6 +1,7 @@
 import React from "react";
 
-import hostingImg from "@/assets/services/hosting.png";
+import hostingImg from "@/assets/services/hosting.webp";
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -57,10 +58,11 @@ export const HostingShowcase: React.FC<HostingShowcaseProps> = ({
         {/* Bottom Section: Image */}
         <div className="relative flex-1 w-full flex items-end justify-center mt-auto">
           <div className="relative w-full max-w-6xl mx-auto transform md:translate-y-[5%] scale-[1.6] md:scale-[1.2] transition-transform duration-700 ease-out hover:scale-[1.02]">
-            <img
+            <AppImage
               src={hostingImg}
               alt="Hosting and Maintenance Dashboard"
               className="w-full h-auto object-contain drop-shadow-2xl"
+              sizes="(max-width: 768px) 100vw, 70vw"
             />
           </div>
         </div>

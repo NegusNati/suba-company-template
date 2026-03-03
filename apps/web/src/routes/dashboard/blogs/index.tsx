@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { blogsListParamsSchema } from "@/features/dashboard/blogs/lib/blogs-schema";
+import { fetchBlogs } from "@/features/dashboard/blogs/lib/blogs-api";
+import { blogKeys } from "@/features/dashboard/blogs/lib/blogs-query";
+import {
+  blogsListParamsSchema,
+  normalizeBlogsListParams,
+} from "@/features/dashboard/blogs/lib/blogs-schema";
+import { prefetchResource } from "@/lib/prefetch";
+import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/blogs/")({
   validateSearch: (search: Record<string, unknown> = {}) =>
@@ -14,4 +21,12 @@ export const Route = createFileRoute("/dashboard/blogs/")({
           ? search.sortOrder
           : undefined,
     }),
+  loaderDeps: ({ search }) => search,
+  loader: async ({ deps }) => {
+    const params = normalizeBlogsListParams(deps);
+    await prefetchResource(queryClient, blogKeys.list(params), () =>
+      fetchBlogs(params),
+    );
+    return null;
+  },
 });

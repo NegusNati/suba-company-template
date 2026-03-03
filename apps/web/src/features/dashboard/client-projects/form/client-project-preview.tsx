@@ -2,6 +2,7 @@ import type { Partner } from "../../partners/lib/partners-schema";
 import type { Service } from "../../services/lib/services-schema";
 import type { Tag } from "../../tags/lib/tags-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { LexicalViewer } from "@/components/common/rich-text/LexicalViewer";
 
 interface ClientProjectPreviewProps {
@@ -47,7 +48,7 @@ export default function ClientProjectPreview({
                 key={src + index}
                 className="relative aspect-video rounded-lg overflow-hidden bg-gray-200"
               >
-                <img
+                <AppImage
                   src={src}
                   alt={`Project image ${index + 1}`}
                   className="w-full h-full object-cover"

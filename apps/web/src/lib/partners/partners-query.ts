@@ -7,13 +7,15 @@ import {
 import { fetchClientPartners } from "./partners-api";
 import type { ClientPartner } from "./partners-schema";
 
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const partnerKeys = {
-  all: ["partners"] as const,
-  clients: () => [...partnerKeys.all, "client"] as const,
+  all: [LANDING_API_ENDPOINTS.PARTNERS_CLIENT] as const,
+  clients: () => [...partnerKeys.all] as const,
 };
 
 // ============================================================================

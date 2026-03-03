@@ -14,24 +14,26 @@ import type {
   PublicProductListItem,
 } from "./products-schema";
 
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const productKeys = {
-  all: ["products"] as const,
-  lists: () => [...productKeys.all, "list"] as const,
+  all: [LANDING_API_ENDPOINTS.PRODUCTS_CLIENT] as const,
+  lists: () => [...productKeys.all] as const,
   list: (params: {
     page: number;
     limit: number;
     search?: string;
     tagId?: number;
-  }) => [...productKeys.lists(), params] as const,
-  details: () => [...productKeys.all, "detail"] as const,
+  }) => [...productKeys.all, params] as const,
+  details: () => [...productKeys.all] as const,
   detail: (id: number | string) =>
-    [...productKeys.details(), String(id)] as const,
+    [`${LANDING_API_ENDPOINTS.PRODUCTS_CLIENT}/${id}`] as const,
   detailBySlug: (slug: string) =>
-    [...productKeys.details(), "slug", slug] as const,
+    [`${LANDING_API_ENDPOINTS.PRODUCTS_CLIENT}/${slug}`] as const,
 };
 
 // ============================================================================

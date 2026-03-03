@@ -12,6 +12,7 @@ import {
   CircleUserRound,
   UsersRound,
   Tags,
+  Building2,
 } from "lucide-react";
 
 import { type SidebarData } from "@/types/types";
@@ -65,6 +66,11 @@ export const sidebarData: SidebarData = {
           title: "Services",
           url: "/dashboard/services",
           icon: Layers,
+        },
+        {
+          title: "Business Sectors",
+          url: "/dashboard/business-sectors",
+          icon: Building2,
         },
         {
           title: "Tags",

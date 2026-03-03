@@ -10,6 +10,7 @@ import {
 
 import type { User } from "./lib/users-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -62,7 +63,7 @@ export const Columns = (
       return (
         <div className="flex items-center gap-3">
           {user.image ? (
-            <img
+            <AppImage
               src={resolveImageUrl(user.image)}
               alt={user.name}
               className="h-8 w-8 rounded-full object-cover"

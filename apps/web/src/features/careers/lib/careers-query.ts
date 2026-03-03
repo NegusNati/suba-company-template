@@ -26,9 +26,9 @@ import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const careersKeys = {
   all: [LANDING_API_ENDPOINTS.VACANCIES_CLIENT] as const,
   list: (params: PublicVacancyListParams) =>
-    [LANDING_API_ENDPOINTS.VACANCIES_CLIENT, "list", params] as const,
+    [LANDING_API_ENDPOINTS.VACANCIES_CLIENT, params] as const,
   slug: (slug: string) =>
-    [LANDING_API_ENDPOINTS.VACANCIES_CLIENT, "slug", slug] as const,
+    [`${LANDING_API_ENDPOINTS.VACANCIES_CLIENT}/slug/${slug}`] as const,
 };
 
 export const useCareersListQuery = (

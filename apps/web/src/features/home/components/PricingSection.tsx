@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Sparkles, Layers, FileText } from "lucide-react";
+import { motion } from "motion/react";
 import React from "react";
 
 import payment_image from "@/assets/landing/ceramic 1.webp";

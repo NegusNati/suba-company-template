@@ -14,13 +14,15 @@ import type {
   PublicCaseStudyListItem,
 } from "./case-study-schema";
 
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const caseStudyKeys = {
-  all: ["case-studies"] as const,
-  lists: () => [...caseStudyKeys.all, "list"] as const,
+  all: [LANDING_API_ENDPOINTS.CASE_STUDIES_CLIENT] as const,
+  lists: () => [...caseStudyKeys.all] as const,
   list: (params: {
     page: number;
     limit: number;
@@ -28,12 +30,12 @@ export const caseStudyKeys = {
     tagId?: number;
     clientId?: number;
     serviceId?: number;
-  }) => [...caseStudyKeys.lists(), params] as const,
-  details: () => [...caseStudyKeys.all, "detail"] as const,
+  }) => [...caseStudyKeys.all, params] as const,
+  details: () => [...caseStudyKeys.all] as const,
   detail: (id: number | string) =>
-    [...caseStudyKeys.details(), String(id)] as const,
+    [`${LANDING_API_ENDPOINTS.CASE_STUDIES_CLIENT}/${id}`] as const,
   detailBySlug: (slug: string) =>
-    [...caseStudyKeys.details(), "slug", slug] as const,
+    [`${LANDING_API_ENDPOINTS.CASE_STUDIES_CLIENT}/${slug}`] as const,
 };
 
 // ============================================================================

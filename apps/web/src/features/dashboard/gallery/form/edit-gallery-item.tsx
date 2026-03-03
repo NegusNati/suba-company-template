@@ -34,10 +34,11 @@ export default function EditGalleryItem() {
       mode="edit"
       initialData={{
         id: data.data.id,
-        title: data.data.title || "",
-        description: data.data.description || "",
-        occurredAt: data.data.occurredAt || "",
-        imageUrl: data.data.imageUrl,
+        title: data.data.title,
+        description: data.data.description ?? "",
+        occurredAt: data.data.occurredAt,
+        categoryId: data.data.category.id,
+        imageUrls: data.data.imageUrls,
       }}
     />
   );

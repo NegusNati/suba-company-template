@@ -20,10 +20,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 
 export const faqKeys = {
   all: [AUTH_API_ENDPOINTS.FAQS] as const,
-  list: (params: FaqsListParams) =>
-    [AUTH_API_ENDPOINTS.FAQS, "list", params] as const,
+  list: (params: FaqsListParams) => [AUTH_API_ENDPOINTS.FAQS, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.FAQS, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.FAQS}/${id}`] as const,
 };
 
 export const useFaqsQuery = (

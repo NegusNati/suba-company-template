@@ -3,7 +3,7 @@ import {
   type QueryKey,
   type UseQueryOptions,
 } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { DEFAULT_DEBOUNCE_MS } from "./forms";
 import { useDebounce } from "./use-debounce";
@@ -55,10 +55,8 @@ export function useAsyncSelect<TOption extends BaseOption = BaseOption>({
     ...queryOptions,
   });
 
-  const options = useMemo(() => data, [data]);
-
   return {
-    options,
+    options: data,
     isLoading: isPending || isFetching,
     isError,
     error,

@@ -2,6 +2,7 @@ import React from "react";
 
 import { getBlogImageUrl } from "../../lib/blog-utils";
 
+import { AppImage } from "@/components/common/AppImage";
 import { DotPattern } from "@/features/components/DotPattern";
 
 interface BlogDetailHeroProps {
@@ -24,7 +25,7 @@ export const BlogDetailHero: React.FC<BlogDetailHeroProps> = ({
       {/* Featured Image */}
       <div className="bg-primary/10 rounded-3xl h-56 md:h-[420px] w-full mb-10 overflow-hidden relative border border-[#e3e7da]">
         {fullImageUrl ? (
-          <img
+          <AppImage
             src={fullImageUrl}
             alt="Blog featured image"
             className="w-full h-full object-cover"

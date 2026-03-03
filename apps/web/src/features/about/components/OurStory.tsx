@@ -5,6 +5,7 @@ import { useState } from "react";
 import growthSvg from "@/assets/about-us/growth.svg";
 import somaliSvg from "@/assets/about-us/somali.svg";
 import speedSvg from "@/assets/about-us/speed.svg";
+import { AppImage } from "@/components/common/AppImage";
 
 const container = {
   hidden: { opacity: 0 },
@@ -195,7 +196,7 @@ export const OurStory = () => {
           {/* Speed Card */}
           <div className="bg-muted/30 rounded-3xl p-6 flex flex-col items-center text-center border border-border/20 overflow-hidden">
             <div className="w-full h-32 md:h-40 flex items-center justify-center mb-4">
-              <img
+              <AppImage
                 src={speedSvg}
                 alt="Speed gauge illustration"
                 className="w-full h-full object-contain"
@@ -211,7 +212,7 @@ export const OurStory = () => {
           {/* Growth Card */}
           <div className="bg-muted/30 rounded-3xl p-6 flex flex-col items-center text-center border border-border/20 overflow-hidden">
             <div className="w-full h-32 md:h-40 flex items-center justify-center mb-4">
-              <img
+              <AppImage
                 src={growthSvg}
                 alt="Growth chart illustration"
                 className="w-full h-full object-contain"
@@ -229,7 +230,7 @@ export const OurStory = () => {
             {/* Cross icon */}
             <div className="flex justify-center md:justify-start">
               <div className="w-16 h-16 md:w-20 md:h-20">
-                <img
+                <AppImage
                   src={somaliSvg}
                   alt="Somali decorative icon"
                   className="w-full h-full object-contain"

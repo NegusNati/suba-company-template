@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import type { Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
+import type { Variants } from "motion/react";
 
 import { PartnersSection } from "./PartnersSection";
 
 import sofumer from "@/assets/ethiopian/sofumer.webp";
 import google_meet_logo from "@/assets/external-company-logos/google-meet.svg";
+import { AppImage } from "@/components/common/AppImage";
 import { AnimatedGroup } from "@/components/motion-primitives/animated-group";
 import { Button } from "@/components/ui/button";
 
@@ -60,10 +61,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBookClick }) => {
       {/* Pushed top down to 30% to clear the header area and focus the cave floor at the bottom */}
       <div className="absolute inset-x-0 bottom-0 top-[20%] md:top-[30%] z-0 pointer-events-none  md:translate-y-10 ">
         {/* Using a canyon image to simulate the rock formations in the design, desaturated and lightened */}
-        <img
+        <AppImage
           src={sofumer}
           alt="Abstract Background"
           className="w-full h-full object-cover object-bottom opacity-90 grayscale brightness-110"
+          priority
+          sizes="100vw"
         />
         {/* Heavy white overlay to fade it out */}
         <div className="absolute inset-0 bg-background/50 "></div>
@@ -125,10 +128,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBookClick }) => {
           <div className="flex -space-x-3">
             {avatars.map((src) => (
               <div key={src} className="relative z-0 hover:z-10 transition-all">
-                <img
+                <AppImage
                   src={src}
                   alt="Client"
                   className="w-12 h-12 rounded-full border-[1.5px] border-background object-cover ring-1 ring-gray-50 z-20"
+                  loading="eager"
                 />
               </div>
             ))}
@@ -150,10 +154,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBookClick }) => {
             className="group relative h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full pl-1.5 pr-6 flex items-center gap-3 shadow-lg shadow-primary/20 transition-all active:scale-95"
           >
             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-inner">
-              <img
+              <AppImage
                 src={google_meet_logo}
                 className="w-6 h-6 object-contain"
                 alt="Meet"
+                loading="eager"
               />
             </div>
             <span className="font-medium text-sm">Book a Call</span>

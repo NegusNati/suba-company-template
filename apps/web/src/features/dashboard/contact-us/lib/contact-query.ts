@@ -30,11 +30,10 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
  */
 export const contactKeys = {
   all: [AUTH_API_ENDPOINTS.CONTACT_US] as const,
-  lists: () => [...contactKeys.all, "list"] as const,
-  list: (params: ContactListParams) =>
-    [...contactKeys.lists(), params] as const,
-  details: () => [...contactKeys.all, "detail"] as const,
-  detail: (id: number) => [...contactKeys.details(), id] as const,
+  lists: () => [...contactKeys.all] as const,
+  list: (params: ContactListParams) => [...contactKeys.all, params] as const,
+  details: () => [...contactKeys.all] as const,
+  detail: (id: number) => [`${AUTH_API_ENDPOINTS.CONTACT_US}/${id}`] as const,
 };
 
 /**

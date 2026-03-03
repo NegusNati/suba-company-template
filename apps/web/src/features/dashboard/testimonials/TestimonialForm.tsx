@@ -17,6 +17,7 @@ import {
 import { AsyncSearchableSelect } from "../components/AsyncSearchableSelect";
 import type { Partner } from "../partners/lib/partners-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -335,7 +336,7 @@ export function TestimonialForm({
           />
           {companyLogoUpload.previews[0] && (
             <div className="mt-2">
-              <img
+              <AppImage
                 src={companyLogoUpload.previews[0]}
                 alt="Company logo preview"
                 className="h-16 w-auto rounded border object-contain"
@@ -358,7 +359,7 @@ export function TestimonialForm({
           />
           {headshotUpload.previews[0] && (
             <div className="mt-2">
-              <img
+              <AppImage
                 src={headshotUpload.previews[0]}
                 alt="Spokesperson headshot preview"
                 className="h-16 w-16 rounded-full border object-cover"

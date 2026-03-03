@@ -3,6 +3,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 
 import type { Blog } from "./lib/blogs-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -89,7 +90,7 @@ export const Columns = (
       return (
         <div className="max-w-[100px]">
           {resolvedUrl ? (
-            <img
+            <AppImage
               src={resolvedUrl}
               alt="Featured"
               className="h-8 w-8 rounded object-cover"

@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import React from "react";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { getWorkSampleImageUrl } from "@/features/work-samples/lib/work-samples-utils";
 import { cn } from "@/lib/utils";
@@ -37,7 +38,7 @@ export const WorkSampleCard: React.FC<WorkSampleCardProps> = ({
     >
       {/* Image Container */}
       <div className="relative aspect-[16/11] overflow-hidden rounded-xl">
-        <img
+        <AppImage
           src={imageUrl || ""}
           alt={project.title}
           className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"

@@ -7,15 +7,17 @@ import {
 import { fetchPublicTags, type PublicTagsParams } from "./tags-api";
 import type { PublicTag } from "./tags-schema";
 
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const tagKeys = {
-  all: ["tags"] as const,
-  lists: () => [...tagKeys.all, "list"] as const,
+  all: [LANDING_API_ENDPOINTS.TAGS_CLIENT] as const,
+  lists: () => [...tagKeys.all] as const,
   list: (params?: { page?: number; limit?: number; search?: string }) =>
-    [...tagKeys.lists(), params ?? {}] as const,
+    [...tagKeys.all, params ?? {}] as const,
 };
 
 // ============================================================================

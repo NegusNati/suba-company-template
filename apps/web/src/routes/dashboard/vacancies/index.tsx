@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { vacanciesListParamsSchema } from "@/features/dashboard/vacancies/lib/vacancies-schema";
+import { fetchVacancies } from "@/features/dashboard/vacancies/lib/vacancies-api";
+import { vacancyKeys } from "@/features/dashboard/vacancies/lib/vacancies-query";
+import {
+  normalizeVacanciesListParams,
+  vacanciesListParamsSchema,
+} from "@/features/dashboard/vacancies/lib/vacancies-schema";
+import { prefetchResource } from "@/lib/prefetch";
+import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/vacancies/")({
   validateSearch: (search: Record<string, unknown> = {}) =>
@@ -15,4 +22,12 @@ export const Route = createFileRoute("/dashboard/vacancies/")({
           : undefined,
       status: typeof search.status === "string" ? search.status : undefined,
     }),
+  loaderDeps: ({ search }) => search,
+  loader: async ({ deps }) => {
+    const params = normalizeVacanciesListParams(deps);
+    await prefetchResource(queryClient, vacancyKeys.list(params), () =>
+      fetchVacancies(params),
+    );
+    return null;
+  },
 });

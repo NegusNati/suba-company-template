@@ -7,15 +7,17 @@ import {
 import { fetchPublicTestimonials } from "./testimonial-api";
 import type { Testimonial } from "./testimonial-schema";
 
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const testimonialKeys = {
-  all: ["testimonials"] as const,
-  lists: () => [...testimonialKeys.all, "list"] as const,
+  all: [LANDING_API_ENDPOINTS.TESTIMONIALS_CLIENT] as const,
+  lists: () => [...testimonialKeys.all] as const,
   list: (params: { page: number; limit: number; search?: string }) =>
-    [...testimonialKeys.lists(), params] as const,
+    [...testimonialKeys.all, params] as const,
 };
 
 // ============================================================================

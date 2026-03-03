@@ -1,5 +1,6 @@
 import type { Tag } from "../../tags/lib/tags-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { LexicalViewer } from "@/components/common/rich-text/LexicalViewer";
 
 interface BlogPreviewProps {
@@ -34,7 +35,7 @@ export default function BlogPreview({
 
       {imagePreviews[0] && (
         <div className="overflow-hidden rounded-lg border bg-muted">
-          <img
+          <AppImage
             src={imagePreviews[0]}
             alt="Featured"
             className="h-48 w-full object-cover"

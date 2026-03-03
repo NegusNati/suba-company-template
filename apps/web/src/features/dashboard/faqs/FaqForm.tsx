@@ -33,6 +33,12 @@ interface FaqFormProps {
 
 type FormData = ZodInfer<typeof createFaqSchema>;
 
+const createDefaultValues = (): FormData => ({
+  question: "",
+  answer: "",
+  isActive: true,
+});
+
 export function FaqForm({ mode, faq, onClose, onSuccess }: FaqFormProps) {
   // Create, Update, and Delete mutations
   const createMutation = useCreateFaqMutation({
@@ -70,11 +76,7 @@ export function FaqForm({ mode, faq, onClose, onSuccess }: FaqFormProps) {
 
   // TanStack Form hook setup
   const form = useDashboardForm<FormData>({
-    defaultValues: {
-      question: "",
-      answer: "",
-      isActive: true as boolean,
-    } satisfies FormData,
+    defaultValues: createDefaultValues(),
     validators: {
       onSubmit: createFaqSchema,
     },
@@ -87,16 +89,23 @@ export function FaqForm({ mode, faq, onClose, onSuccess }: FaqFormProps) {
     },
   });
 
-  // Effect to update form when faq prop changes (for edit/view modes)
+  const faqId = faq?.id;
+  const faqQuestion = faq?.question ?? "";
+  const faqAnswer = faq?.answer ?? "";
+  const faqIsActive = faq?.isActive ?? true;
+
+  // Reset form when modal mode or active entity changes.
   useEffect(() => {
-    if (faq && (mode === "edit" || mode === "view")) {
-      form.setFieldValue("question", faq.question);
-      form.setFieldValue("answer", faq.answer);
-      form.setFieldValue("isActive", faq.isActive as boolean);
+    if (faqId && (mode === "edit" || mode === "view")) {
+      form.reset({
+        question: faqQuestion,
+        answer: faqAnswer,
+        isActive: faqIsActive,
+      });
     } else if (mode === "create") {
-      form.reset();
+      form.reset(createDefaultValues());
     }
-  }, [faq, mode, form]);
+  }, [faqId, faqQuestion, faqAnswer, faqIsActive, mode, form]);
 
   const handleDelete = () => {
     if (faq) {

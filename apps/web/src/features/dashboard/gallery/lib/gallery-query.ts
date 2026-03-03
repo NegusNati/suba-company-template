@@ -1,167 +1,131 @@
+import type { ApiSuccessResponse } from "@suba-company-template/types/api";
 import {
-  useQuery,
   useMutation,
+  useQuery,
   useQueryClient,
-  type UseQueryOptions,
   type UseMutationOptions,
+  type UseQueryOptions,
 } from "@tanstack/react-query";
 
 import {
-  fetchGalleryItems,
-  fetchGalleryItemById,
   createGalleryItem,
-  updateGalleryItem,
   deleteGalleryItem,
-  type GalleryDetailResponse,
-  type DeleteGalleryResponse,
+  fetchGalleryItemById,
+  fetchGalleryItems,
+  updateGalleryItem,
 } from "./gallery-api";
 import {
   normalizeGalleryListParams,
-  type GalleryListParams,
   type CreateGalleryItem,
+  type GalleryItem,
+  type GalleryListParams,
   type UpdateGalleryItem,
 } from "./gallery-schema";
 
 import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 
-/**
- * Query key factory for gallery items
- * Provides consistent cache keys across the application
- */
 export const galleryKeys = {
   all: [AUTH_API_ENDPOINTS.GALLERY] as const,
-  lists: () => [...galleryKeys.all, "list"] as const,
   list: (params: GalleryListParams) =>
-    [...galleryKeys.lists(), params] as const,
-  details: () => [...galleryKeys.all, "detail"] as const,
-  detail: (id: number) => [...galleryKeys.details(), id] as const,
+    [AUTH_API_ENDPOINTS.GALLERY, params] as const,
+  detail: (id: number | string) =>
+    [`${AUTH_API_ENDPOINTS.GALLERY}/${id}`] as const,
 };
 
-/**
- * Fetch gallery items with pagination and filtering
- */
-export const useGalleryItemsQuery = (params: Partial<GalleryListParams>) => {
-  const normalizedParams = normalizeGalleryListParams(params);
-
-  return useQuery({
-    queryKey: galleryKeys.list(normalizedParams),
-    queryFn: () => fetchGalleryItems(normalizedParams),
-  });
-};
-
-/**
- * Fetch a single gallery item by ID
- */
-export const useGalleryItemByIdQuery = (
-  id: number,
+export const useGalleryItemsQuery = (
+  params?: Partial<GalleryListParams>,
   options?: Omit<
-    UseQueryOptions<GalleryDetailResponse>,
+    UseQueryOptions<ApiSuccessResponse<GalleryItem[]>, Error>,
     "queryKey" | "queryFn"
   >,
 ) => {
-  return useQuery({
+  const normalizedParams = normalizeGalleryListParams(params ?? {});
+  return useQuery<ApiSuccessResponse<GalleryItem[]>, Error>({
+    queryKey: galleryKeys.list(normalizedParams),
+    queryFn: () => fetchGalleryItems(normalizedParams),
+    ...options,
+  });
+};
+
+export const useGalleryItemByIdQuery = (
+  id: number,
+  options?: Omit<
+    UseQueryOptions<ApiSuccessResponse<GalleryItem>, Error>,
+    "queryKey" | "queryFn"
+  >,
+) => {
+  return useQuery<ApiSuccessResponse<GalleryItem>, Error>({
     queryKey: galleryKeys.detail(id),
     queryFn: () => fetchGalleryItemById(id),
     ...options,
   });
 };
 
-/**
- * Create gallery item mutation options
- */
-type CreateGalleryItemMutationOptions = Omit<
-  UseMutationOptions<GalleryDetailResponse, Error, CreateGalleryItem>,
+type CreateMutationOptions = Omit<
+  UseMutationOptions<ApiSuccessResponse<GalleryItem>, Error, CreateGalleryItem>,
   "mutationFn"
 >;
 
-/**
- * Create a new gallery item
- */
 export const useCreateGalleryItemMutation = (
-  options?: CreateGalleryItemMutationOptions,
+  options?: CreateMutationOptions,
 ) => {
   const queryClient = useQueryClient();
   const { onSuccess, onError, ...rest } = options || {};
 
-  return useMutation<GalleryDetailResponse, Error, CreateGalleryItem>({
-    mutationFn: createGalleryItem,
-    onSuccess: (...args) => {
-      // Invalidate all list queries to refetch with new item
-      queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
-      onSuccess?.(...args);
+  return useMutation<ApiSuccessResponse<GalleryItem>, Error, CreateGalleryItem>(
+    {
+      mutationFn: createGalleryItem,
+      onSuccess: (...args) => {
+        queryClient.invalidateQueries({ queryKey: galleryKeys.all });
+        onSuccess?.(...args);
+      },
+      onError,
+      ...rest,
     },
-    ...(onError && { onError }),
-    ...rest,
-  });
+  );
 };
 
-/**
- * Update gallery item mutation options
- */
-type UpdateGalleryItemMutationOptions = Omit<
-  UseMutationOptions<
-    GalleryDetailResponse,
-    Error,
-    { id: number; data: UpdateGalleryItem }
-  >,
-  "mutationFn"
->;
+type UpdateVariables = {
+  id: number;
+  data: UpdateGalleryItem;
+};
 
-/**
- * Update an existing gallery item
- */
 export const useUpdateGalleryItemMutation = (
-  options?: UpdateGalleryItemMutationOptions,
+  options?: Omit<
+    UseMutationOptions<ApiSuccessResponse<GalleryItem>, Error, UpdateVariables>,
+    "mutationFn"
+  >,
 ) => {
   const queryClient = useQueryClient();
   const { onSuccess, onError, ...rest } = options || {};
 
-  return useMutation<
-    GalleryDetailResponse,
-    Error,
-    { id: number; data: UpdateGalleryItem }
-  >({
+  return useMutation<ApiSuccessResponse<GalleryItem>, Error, UpdateVariables>({
     mutationFn: ({ id, data }) => updateGalleryItem(id, data),
     onSuccess: (...args) => {
-      // Invalidate list queries and specific detail query
-      queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
-      queryClient.invalidateQueries({
-        queryKey: galleryKeys.detail(args[1].id),
-      });
+      queryClient.invalidateQueries({ queryKey: galleryKeys.all });
       onSuccess?.(...args);
     },
-    ...(onError && { onError }),
+    onError,
     ...rest,
   });
 };
 
-/**
- * Delete gallery item mutation options
- */
-type DeleteGalleryItemMutationOptions = Omit<
-  UseMutationOptions<DeleteGalleryResponse, Error, number>,
-  "mutationFn"
->;
-
-/**
- * Delete a gallery item
- */
 export const useDeleteGalleryItemMutation = (
-  options?: DeleteGalleryItemMutationOptions,
+  options?: Omit<
+    UseMutationOptions<ApiSuccessResponse<{ message: string }>, Error, number>,
+    "mutationFn"
+  >,
 ) => {
   const queryClient = useQueryClient();
   const { onSuccess, onError, ...rest } = options || {};
 
-  return useMutation<DeleteGalleryResponse, Error, number>({
+  return useMutation<ApiSuccessResponse<{ message: string }>, Error, number>({
     mutationFn: deleteGalleryItem,
     onSuccess: (...args) => {
-      // Invalidate all list queries
-      queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
-      // Remove the deleted item from cache
-      queryClient.removeQueries({ queryKey: galleryKeys.detail(args[1]) });
+      queryClient.invalidateQueries({ queryKey: galleryKeys.all });
       onSuccess?.(...args);
     },
-    ...(onError && { onError }),
+    onError,
     ...rest,
   });
 };

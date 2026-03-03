@@ -1,9 +1,10 @@
-import { LexicalEditor } from "@rich-text/LexicalEditor";
 import { useRouter } from "@tanstack/react-router";
 import React from "react";
 
 import { getServiceImageUrl } from "./lib/service-utils";
 
+import { AppImage } from "@/components/common/AppImage";
+import { LexicalViewer } from "@/components/common/rich-text/LexicalViewer";
 import { Button } from "@/components/ui/button";
 import type { PublicServiceDetail } from "@/lib/services";
 
@@ -50,7 +51,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
         <div className="mb-12">
           {featuredImageUrl && (
             <div className="w-full aspect-video rounded-3xl overflow-hidden mb-8">
-              <img
+              <AppImage
                 src={featuredImageUrl}
                 alt={service.title}
                 className="w-full h-full object-cover"
@@ -68,11 +69,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
         {/* Description Section */}
         {service.description && (
           <div className="mb-12">
-            <LexicalEditor
-              value={service.description}
-              readOnly
-              valueFormat="html"
-            />
+            <LexicalViewer content={service.description} />
           </div>
         )}
 
@@ -88,7 +85,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
                     key={index}
                     className="aspect-video rounded-2xl overflow-hidden"
                   >
-                    <img
+                    <AppImage
                       src={imageUrl}
                       alt={`${service.title} - Image ${index + 2}`}
                       className="w-full h-full object-cover"

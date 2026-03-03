@@ -2,30 +2,72 @@ import type { Context } from "hono";
 
 import type { GalleryService } from "./service";
 import {
-  createGalleryItemSchema,
   createGalleryFormSchema,
-  updateGalleryItemSchema,
-  updateGalleryFormSchema,
+  createGalleryItemSchema,
   galleryQuerySchema,
   publicGalleryQuerySchema,
+  updateGalleryFormSchema,
+  updateGalleryItemSchema,
+  type CreateGalleryItemInput,
+  type GalleryIdParams,
+  type GalleryImageMetaInput,
   type GalleryQuery,
   type PublicGalleryQuery,
-  type GalleryIdParams,
-  type CreateGalleryItemInput,
   type UpdateGalleryItemInput,
 } from "./validators";
 import {
-  successResponse,
-  paginatedResponse,
-  ValidationError,
   BadRequestError,
+  ValidationError,
+  paginatedResponse,
+  successResponse,
 } from "../../core/http";
 import {
-  uploadGalleryImage,
   FileUploadError,
+  uploadGalleryImage,
 } from "../../shared/storage/uploadFile";
 
 import { logger } from "@/shared/logger";
+
+const resolveImageUrls = async (
+  formData: FormData,
+  imagesMeta: GalleryImageMetaInput[],
+) => {
+  const resolved = await Promise.all(
+    imagesMeta.map(async (meta, index) => {
+      const file = formData.get(`images[${index}]`);
+      if (file instanceof File) {
+        try {
+          const imageUrl = await uploadGalleryImage(file);
+          return {
+            position: meta.position,
+            imageUrl,
+          };
+        } catch (error) {
+          if (error instanceof FileUploadError) {
+            throw new BadRequestError(error.message);
+          }
+
+          throw error;
+        }
+      }
+
+      if (!meta.imageUrl) {
+        throw new BadRequestError(
+          "Each image entry must include imageUrl or an uploaded file",
+        );
+      }
+
+      return {
+        position: meta.position,
+        imageUrl: meta.imageUrl,
+      };
+    }),
+  );
+
+  return resolved
+    .toSorted((a, b) => a.position - b.position)
+    .map((item) => item.imageUrl);
+};
 
 export const createGalleryController = (service: GalleryService) => {
   return {
@@ -50,6 +92,7 @@ export const createGalleryController = (service: GalleryService) => {
           if (Number.isNaN(parsed)) {
             throw new ValidationError("Invalid gallery item ID");
           }
+
           return { id: parsed };
         })();
 
@@ -62,44 +105,30 @@ export const createGalleryController = (service: GalleryService) => {
       try {
         const formData = await c.req.formData();
 
-        // Parse form data
         const formInput = {
           title: formData.get("title"),
           description: formData.get("description"),
           occurredAt: formData.get("occurredAt"),
-          image: formData.get("image"),
+          categoryId: formData.get("categoryId"),
+          imagesMeta: formData.get("imagesMeta"),
         };
 
-        // Validate form data
         const validatedData = createGalleryFormSchema.parse(formInput);
+        const imageUrls = await resolveImageUrls(
+          formData,
+          validatedData.imagesMeta,
+        );
 
-        // Handle file upload if provided
-        let imageUrl: string | undefined;
-        if (validatedData.image) {
-          try {
-            imageUrl = await uploadGalleryImage(validatedData.image);
-            logger.info(`Gallery image uploaded successfully: ${imageUrl}`);
-          } catch (error) {
-            if (error instanceof FileUploadError) {
-              throw new BadRequestError(error.message);
-            }
-            throw error;
-          }
-        }
-
-        // Prepare gallery data for service
         const itemData =
           (c.get("validatedBody") as CreateGalleryItemInput | undefined) ??
           createGalleryItemSchema.parse({
             title: validatedData.title,
             description: validatedData.description,
             occurredAt: validatedData.occurredAt,
-            imageUrl,
+            categoryId: validatedData.categoryId,
+            imageUrls,
           });
 
-        logger.info("Creating gallery item with data", {
-          title: itemData.title,
-        });
         const item = await service.createGalleryItem(itemData);
         return successResponse(c, item, 201);
       } catch (error) {
@@ -116,6 +145,7 @@ export const createGalleryController = (service: GalleryService) => {
           if (Number.isNaN(parsed)) {
             throw new ValidationError("Invalid gallery item ID");
           }
+
           return { id: parsed };
         })();
 
@@ -130,24 +160,15 @@ export const createGalleryController = (service: GalleryService) => {
             title: formData.get("title"),
             description: formData.get("description"),
             occurredAt: formData.get("occurredAt"),
-            image: formData.get("image"),
-            imageUrl: formData.get("imageUrl"),
+            categoryId: formData.get("categoryId"),
+            imagesMeta: formData.get("imagesMeta"),
           };
 
           const validatedData = updateGalleryFormSchema.parse(formInput);
-
-          let imageUrl = validatedData.imageUrl;
-          if (validatedData.image) {
-            try {
-              imageUrl = await uploadGalleryImage(validatedData.image);
-              logger.info(`Gallery image uploaded successfully: ${imageUrl}`);
-            } catch (error) {
-              if (error instanceof FileUploadError) {
-                throw new BadRequestError(error.message);
-              }
-              throw error;
-            }
-          }
+          const imageUrls =
+            validatedData.imagesMeta !== undefined
+              ? await resolveImageUrls(formData, validatedData.imagesMeta)
+              : undefined;
 
           const data =
             (c.get("validatedBody") as UpdateGalleryItemInput | undefined) ??
@@ -155,7 +176,8 @@ export const createGalleryController = (service: GalleryService) => {
               title: validatedData.title,
               description: validatedData.description,
               occurredAt: validatedData.occurredAt,
-              imageUrl,
+              categoryId: validatedData.categoryId,
+              imageUrls,
             });
 
           const item = await service.updateGalleryItem(id, data);
@@ -175,9 +197,8 @@ export const createGalleryController = (service: GalleryService) => {
     },
 
     async deleteGalleryItem(c: Context) {
-      const id = parseInt(c.req.param("id"));
-
-      if (isNaN(id)) {
+      const id = Number.parseInt(c.req.param("id"), 10);
+      if (Number.isNaN(id)) {
         throw new ValidationError("Invalid gallery item ID");
       }
 
@@ -197,6 +218,7 @@ export const createGalleryController = (service: GalleryService) => {
         page: result.page,
         limit: result.limit,
         total: result.total,
+        nextCursor: result.nextCursor,
       });
     },
   };

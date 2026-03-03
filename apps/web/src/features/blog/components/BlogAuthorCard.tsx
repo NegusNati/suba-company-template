@@ -2,6 +2,7 @@ import React from "react";
 
 import type { BlogSocial } from "../lib/blog-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { API_BASE_URL } from "@/lib/api-base";
 
 const SERVER_URL = (API_BASE_URL ?? "").replace(/\/$/, "");
@@ -29,7 +30,11 @@ export const BlogAuthorCard: React.FC<BlogAuthorCardProps> = ({
 }) => (
   <div className="mt-16 pt-8 border-t border-gray-100 flex flex-col items-center text-center">
     <div className="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 border-white shadow-sm ring-1 ring-gray-100">
-      <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+      <AppImage
+        src={avatarUrl}
+        alt={name}
+        className="w-full h-full object-cover"
+      />
     </div>
     <h3 className="font-serif font-bold text-foreground text-base mb-1">
       {name}
@@ -58,7 +63,7 @@ export const BlogAuthorCard: React.FC<BlogAuthorCardProps> = ({
                 className="hover:opacity-80 transition-all hover:scale-110 transform duration-200"
                 title={`${social.title}${social.handle ? `: @${social.handle}` : ""}`}
               >
-                <img
+                <AppImage
                   src={iconSrc!}
                   alt={social.title}
                   className="w-5 h-5 object-contain"

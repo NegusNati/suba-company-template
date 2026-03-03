@@ -22,7 +22,12 @@ export const createGalleryService = (repository: GalleryRepository) => {
     },
 
     async createGalleryItem(data: CreateGalleryItemInput) {
-      return await repository.create(data);
+      const created = await repository.create(data);
+      if (!created) {
+        throw new NotFoundError("Failed to load created gallery item");
+      }
+
+      return created;
     },
 
     async updateGalleryItem(id: number, data: UpdateGalleryItemInput) {
@@ -31,7 +36,12 @@ export const createGalleryService = (repository: GalleryRepository) => {
         throw new NotFoundError(`Gallery item with id ${id} not found`);
       }
 
-      return await repository.update(id, data);
+      const updated = await repository.update(id, data);
+      if (!updated) {
+        throw new NotFoundError(`Gallery item with id ${id} not found`);
+      }
+
+      return updated;
     },
 
     async deleteGalleryItem(id: number) {

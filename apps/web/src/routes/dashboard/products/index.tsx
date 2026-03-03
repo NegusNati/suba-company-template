@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { productsListParamsSchema } from "@/features/dashboard/products/lib/products-schema";
+import { fetchProducts } from "@/features/dashboard/products/lib/products-api";
+import { productKeys } from "@/features/dashboard/products/lib/products-query";
+import {
+  normalizeProductsListParams,
+  productsListParamsSchema,
+} from "@/features/dashboard/products/lib/products-schema";
+import { prefetchResource } from "@/lib/prefetch";
+import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/products/")({
   validateSearch: (search: Record<string, unknown>) =>
@@ -14,4 +21,12 @@ export const Route = createFileRoute("/dashboard/products/")({
           ? search.sortOrder
           : undefined,
     }),
+  loaderDeps: ({ search }) => search,
+  loader: async ({ deps }) => {
+    const params = normalizeProductsListParams(deps);
+    await prefetchResource(queryClient, productKeys.list(params), () =>
+      fetchProducts(params),
+    );
+    return null;
+  },
 });

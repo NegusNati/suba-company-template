@@ -9,12 +9,17 @@ import { eq, inArray, sql, type InferInsertModel, type PgColumn } from "../orm";
 import {
   blogTags,
   blogs,
+  businessSectorGalleryImages,
+  businessSectors,
+  businessSectorServices,
+  businessSectorStats,
   caseStudies,
   caseStudyImages,
   caseStudyTags,
   companyMembers,
   contacts,
   faqs,
+  galleryCategories,
   galleryItems,
   partners,
   productImages,
@@ -34,10 +39,12 @@ import {
 } from "../schema";
 import {
   blogContentSeeds,
+  businessSectorContentSeeds,
   caseStudyContentSeeds,
   companyMemberSeeds,
   contactSeeds,
   faqSeeds,
+  galleryCategorySeeds,
   gallerySeeds,
   partnerSeeds,
   productContentSeeds,
@@ -85,6 +92,10 @@ if (GUARDED) {
 const truncateTables = async () => {
   if (!fresh) return;
   const tableList = [
+    "business_sector_gallery_images",
+    "business_sector_services",
+    "business_sector_stats",
+    "business_sectors",
     "blog_tags",
     "blogs",
     "case_study_tags",
@@ -101,6 +112,7 @@ const truncateTables = async () => {
     "vacancy_applications",
     "vacancies",
     "contacts",
+    "gallery_categories",
     "gallery_items",
     "faqs",
     "user_socials",
@@ -207,6 +219,66 @@ async function run() {
   await insertMany(serviceImages, serviceImageRows, {
     conflictTarget: [serviceImages.serviceId, serviceImages.position],
   });
+
+  // Business sectors + stats + services + gallery
+  await insertMany(
+    businessSectors,
+    businessSectorContentSeeds.map(
+      ({ stats: _stats, services: _services, gallery: _gallery, ...row }) =>
+        row,
+    ),
+    { conflictTarget: businessSectors.slug },
+  );
+  const businessSectorMap = await selectSlugMap(
+    businessSectors,
+    businessSectors.slug,
+    businessSectors.id,
+  );
+
+  const businessSectorStatRows: InferInsertModel<typeof businessSectorStats>[] =
+    [];
+  const businessSectorServiceRows: Array<
+    InferInsertModel<typeof businessSectorServices>
+  > = [];
+  const businessSectorGalleryRows: Array<
+    InferInsertModel<typeof businessSectorGalleryImages>
+  > = [];
+
+  for (const sector of businessSectorContentSeeds) {
+    const sectorId = businessSectorMap[sector.slug];
+    if (!sectorId) continue;
+
+    sector.stats.forEach((stat, idx) => {
+      businessSectorStatRows.push({
+        sectorId,
+        statKey: stat.statKey,
+        statValue: stat.statValue,
+        position: stat.position ?? idx,
+      });
+    });
+
+    sector.services.forEach((service, idx) => {
+      businessSectorServiceRows.push({
+        sectorId,
+        title: service.title,
+        description: service.description,
+        imageUrl: service.imageUrl,
+        position: service.position ?? idx,
+      });
+    });
+
+    sector.gallery.forEach((gallery, idx) => {
+      businessSectorGalleryRows.push({
+        sectorId,
+        imageUrl: gallery.imageUrl,
+        position: gallery.position ?? idx,
+      });
+    });
+  }
+
+  await insertMany(businessSectorStats, businessSectorStatRows);
+  await insertMany(businessSectorServices, businessSectorServiceRows);
+  await insertMany(businessSectorGalleryImages, businessSectorGalleryRows);
 
   // Partners + testimonials
   await insertMany(partners, partnerSeeds, { conflictTarget: partners.slug });
@@ -384,8 +456,28 @@ async function run() {
   // FAQs
   await insertMany(faqs, faqSeeds);
 
-  // Gallery
-  await insertMany(galleryItems, gallerySeeds);
+  // Gallery categories + items
+  await insertMany(galleryCategories, galleryCategorySeeds, {
+    conflictTarget: galleryCategories.slug,
+  });
+  const galleryCategoryMap = await selectSlugMap(
+    galleryCategories,
+    galleryCategories.slug,
+    galleryCategories.id,
+  );
+  const uncategorizedCategoryId = galleryCategoryMap.uncategorized;
+  if (!uncategorizedCategoryId) {
+    throw new Error("Uncategorized gallery category is required for seeding");
+  }
+  const galleryRows: InferInsertModel<typeof galleryItems>[] = gallerySeeds.map(
+    ({ categorySlug, ...item }) => ({
+      ...item,
+      categoryId:
+        (categorySlug ? galleryCategoryMap[categorySlug] : undefined) ??
+        uncategorizedCategoryId,
+    }),
+  );
+  await insertMany(galleryItems, galleryRows);
 
   // Contacts (assign service by slug when available)
   const contactRows: InferInsertModel<typeof contacts>[] = contactSeeds.map(

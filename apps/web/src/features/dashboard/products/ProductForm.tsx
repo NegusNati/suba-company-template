@@ -17,6 +17,7 @@ import {
   type Product,
 } from "./lib/products-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { LexicalViewer } from "@/components/common/rich-text/LexicalViewer";
 import { Button } from "@/components/ui/button";
 import {
@@ -469,7 +470,7 @@ export function ProductForm({
                       key={src + index}
                       className="relative aspect-video rounded-lg overflow-hidden bg-gray-200"
                     >
-                      <img
+                      <AppImage
                         src={src}
                         alt={`Product image ${index + 1}`}
                         className="w-full h-full object-cover"

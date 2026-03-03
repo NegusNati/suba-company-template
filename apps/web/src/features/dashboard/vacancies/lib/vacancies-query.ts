@@ -38,18 +38,17 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const vacancyKeys = {
   all: [AUTH_API_ENDPOINTS.VACANCIES] as const,
   list: (params: VacanciesListParams) =>
-    [AUTH_API_ENDPOINTS.VACANCIES, "list", params] as const,
+    [AUTH_API_ENDPOINTS.VACANCIES, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.VACANCIES, "detail", String(id)] as const,
-  slug: (slug: string) => [AUTH_API_ENDPOINTS.VACANCIES, "slug", slug] as const,
+    [`${AUTH_API_ENDPOINTS.VACANCIES}/${id}`] as const,
+  slug: (slug: string) =>
+    [`${AUTH_API_ENDPOINTS.VACANCIES}/slug/${slug}`] as const,
   applications: (
     vacancyId: number | string,
     params: VacancyApplicationsListParams,
   ) =>
     [
-      AUTH_API_ENDPOINTS.VACANCIES,
-      "applications",
-      String(vacancyId),
+      `${AUTH_API_ENDPOINTS.VACANCIES}/${vacancyId}/applications`,
       params,
     ] as const,
   applicationDetail: (
@@ -57,10 +56,7 @@ export const vacancyKeys = {
     applicationId: number | string,
   ) =>
     [
-      AUTH_API_ENDPOINTS.VACANCIES,
-      "application",
-      String(vacancyId),
-      String(applicationId),
+      `${AUTH_API_ENDPOINTS.VACANCIES}/${vacancyId}/applications/${applicationId}`,
     ] as const,
 };
 

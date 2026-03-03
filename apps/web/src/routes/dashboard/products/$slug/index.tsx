@@ -4,57 +4,30 @@ import { fetchProductById } from "@/features/dashboard/products/lib/products-api
 import { productKeys } from "@/features/dashboard/products/lib/products-query";
 import { prefetchResource } from "@/lib/prefetch";
 import { fetchPublicProductBySlug } from "@/lib/products/products-api";
+import { parseSearchId, resolvePrefetchedSlugId } from "@/lib/route-loader";
 import { queryClient } from "@/main";
 
 export const Route = createFileRoute("/dashboard/products/$slug/")({
-  validateSearch: (search: Record<string, unknown> = {}) => {
-    const rawId = search.id;
-    const id =
-      typeof rawId === "number" ? rawId : rawId ? Number(rawId) : undefined;
-    return { id };
-  },
+  validateSearch: parseSearchId,
   loader: async ({
     search = {},
     params,
   }: {
-    search?: { id?: number };
+    search?: Record<string, unknown>;
     params: { slug: string };
   }) => {
-    const slug = params.slug;
-    const idFromSearch =
-      typeof search.id === "number"
-        ? search.id
-        : search.id
-          ? Number(search.id)
-          : undefined;
-
-    let productId = idFromSearch;
-
-    if (idFromSearch) {
-      // Fast path when we already have the id from the list navigation.
-      await prefetchResource(
-        queryClient,
-        productKeys.detail(idFromSearch),
-        () => fetchProductById(idFromSearch),
-      );
-    } else {
-      // Derive the id from the slug to support direct deep links.
-      const slugResponse = await fetchPublicProductBySlug(slug);
-      productId = slugResponse?.data?.id;
-
-      if (productId) {
-        await prefetchResource(queryClient, productKeys.detail(productId), () =>
-          fetchProductById(productId!),
-        );
-      }
-    }
-
-    if (!productId || Number.isNaN(productId)) {
-      throw new Error(
-        "Missing product id. Please navigate from the products list.",
-      );
-    }
-
-    return { id: productId };
+    const id = await resolvePrefetchedSlugId({
+      rawId: search.id,
+      slug: params.slug,
+      fetchBySlug: fetchPublicProductBySlug,
+      getIdFromSlugResponse: (response) => response?.data?.id,
+      prefetchById: (resolvedId) =>
+        prefetchResource(queryClient, productKeys.detail(resolvedId), () =>
+          fetchProductById(resolvedId),
+        ),
+      missingIdMessage:
+        "Missing product identifier. Please navigate from the products list.",
+    });
+    return { id };
   },
 });

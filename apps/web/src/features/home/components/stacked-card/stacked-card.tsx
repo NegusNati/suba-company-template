@@ -1,5 +1,5 @@
-import type { Variants } from "framer-motion";
-import { motion, AnimatePresence } from "framer-motion";
+import type { Variants } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import React, { useState, useEffect } from "react";
 
 interface StackedCardCarouselProps {

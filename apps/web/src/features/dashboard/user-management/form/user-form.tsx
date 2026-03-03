@@ -12,6 +12,7 @@ import {
 } from "../lib/users-query";
 import { type UpdateUser, type UserSocialInput } from "../lib/users-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -370,7 +371,7 @@ export function UserForm({ mode = "create", initialData }: UserFormProps) {
               />
               {avatarPreview && (
                 <div className="mt-2">
-                  <img
+                  <AppImage
                     src={avatarPreview}
                     alt="Avatar preview"
                     className="h-20 w-20 rounded-full object-cover"
@@ -456,7 +457,7 @@ export function UserForm({ mode = "create", initialData }: UserFormProps) {
                   />
                   {headshotPreview && (
                     <div className="mt-2">
-                      <img
+                      <AppImage
                         src={headshotPreview}
                         alt="Headshot preview"
                         className="h-32 w-32 rounded object-cover"

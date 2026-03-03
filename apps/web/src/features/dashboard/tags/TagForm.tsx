@@ -32,6 +32,10 @@ interface TagFormProps {
 
 type FormData = z.infer<typeof createTagSchema>;
 
+const createDefaultValues = (): FormData => ({
+  name: "",
+});
+
 export function TagForm({ mode, tag, onClose, onSuccess }: TagFormProps) {
   const createMutation = useCreateTagMutation({
     onSuccess: () => {
@@ -68,9 +72,7 @@ export function TagForm({ mode, tag, onClose, onSuccess }: TagFormProps) {
 
   // TanStack Form hook setup
   const form = useDashboardForm<FormData>({
-    defaultValues: {
-      name: "",
-    } satisfies FormData,
+    defaultValues: createDefaultValues(),
     validators: {
       onSubmit: createTagSchema,
     },
@@ -83,14 +85,17 @@ export function TagForm({ mode, tag, onClose, onSuccess }: TagFormProps) {
     },
   });
 
-  // Effect to update form when tag prop changes (for edit/view modes)
+  const tagId = tag?.id;
+  const tagName = tag?.name ?? "";
+
+  // Reset form when modal mode or active entity changes.
   useEffect(() => {
-    if (tag && (mode === "edit" || mode === "view")) {
-      form.setFieldValue("name", tag.name);
+    if (tagId && (mode === "edit" || mode === "view")) {
+      form.reset({ name: tagName });
     } else if (mode === "create") {
-      form.reset();
+      form.reset(createDefaultValues());
     }
-  }, [tag, mode, form]);
+  }, [tagId, tagName, mode, form]);
 
   const handleDelete = () => {
     if (tag) {

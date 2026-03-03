@@ -4,6 +4,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { ClientProject } from "./lib/client-projects-schema";
 import type { Tag } from "../tags/lib/tags-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -171,7 +172,7 @@ export const Columns = (
         <div className="max-w-[100px]">
           {images && images.length > 0 ? (
             <div className="flex items-center space-x-1">
-              <img
+              <AppImage
                 src={resolveImageUrl(images[0].imageUrl)}
                 alt="Project"
                 className="h-8 w-8 rounded object-cover"

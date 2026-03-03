@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 
-import teamImage from "@/assets/about-us/team.jpg";
+import teamImage from "@/assets/about-us/team.webp";
+import { AppImage } from "@/components/common/AppImage";
 
 const container = {
   hidden: { opacity: 0 },
@@ -124,7 +125,7 @@ export const TeamSection = () => {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-100px" }}
-      className="px-6 md:px-12 lg:px-20 py-16 md:py-24"
+      className="px-6 md:px-12 lg:px-20 py-16 md:py-24 content-auto"
     >
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
@@ -142,10 +143,11 @@ export const TeamSection = () => {
         {/* Team Photo with Labels */}
         <motion.div variants={item} className="relative mb-12 md:mb-16">
           <div className="relative rounded-xl overflow-hidden">
-            <img
+            <AppImage
               src={teamImage}
               alt="Our Team"
               className="w-full h-auto object-cover"
+              sizes="(max-width: 768px) 100vw, 80vw"
             />
 
             {/* Curved arrow labels overlay */}

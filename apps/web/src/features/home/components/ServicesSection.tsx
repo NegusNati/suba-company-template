@@ -5,10 +5,11 @@ import React, { useState, useEffect } from "react";
 // Import service images
 import { ServiceCard } from "./services";
 
-import brandingImage from "@/assets/landing/services/branding.webp";
-import mobileImage from "@/assets/landing/services/mobile.webp";
-import statImage from "@/assets/landing/services/stat.webp";
-import webImage from "@/assets/landing/services/web.webp";
+import brandingImage from "@/assets/landing/services/branding.optimized.webp";
+import mobileImage from "@/assets/landing/services/mobile.optimized.webp";
+import statImage from "@/assets/landing/services/stat.optimized.webp";
+import webImage from "@/assets/landing/services/web.optimized.webp";
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 
 // --- MAIN SERVICE DATA ---
@@ -62,7 +63,7 @@ const ServicesSection: React.FC = () => {
   const currentService = services[activeService];
 
   return (
-    <section className="py-20">
+    <section className="py-20 content-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16 md:mb-24">
@@ -163,10 +164,11 @@ const ServicesSection: React.FC = () => {
                 key={currentService.id}
                 className="w-full h-full flex items-center justify-center animate-fade-in-up "
               >
-                <img
+                <AppImage
                   src={currentService.image}
                   alt={currentService.title}
                   className="max-w-full max-h-full object-contain rounded-2xl px-4 translate-y-[30px]"
+                  sizes="(max-width: 1024px) 90vw, 45vw"
                 />
               </div>
             </div>

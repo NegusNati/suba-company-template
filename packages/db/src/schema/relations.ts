@@ -2,8 +2,15 @@ import { relations } from "drizzle-orm";
 
 import { user } from "./auth";
 import { blogs, blogTags } from "./blogs";
+import {
+  businessSectorGalleryImages,
+  businessSectors,
+  businessSectorServices,
+  businessSectorStats,
+} from "./business-sectors";
 import { caseStudies, caseStudyImages, caseStudyTags } from "./case-studies";
 import { contacts } from "./contacts";
+import { galleryCategories, galleryItems } from "./gallery";
 import { partners, testimonials } from "./partners";
 import { products, productImages, productTags } from "./products";
 import { services, serviceImages, serviceTags } from "./services";
@@ -72,6 +79,59 @@ export const contactsRelations = relations(contacts, ({ one }) => ({
   service: one(services, {
     fields: [contacts.serviceId],
     references: [services.id],
+  }),
+}));
+
+export const businessSectorsRelations = relations(
+  businessSectors,
+  ({ many }) => ({
+    stats: many(businessSectorStats),
+    services: many(businessSectorServices),
+    gallery: many(businessSectorGalleryImages),
+  }),
+);
+
+export const businessSectorStatsRelations = relations(
+  businessSectorStats,
+  ({ one }) => ({
+    sector: one(businessSectors, {
+      fields: [businessSectorStats.sectorId],
+      references: [businessSectors.id],
+    }),
+  }),
+);
+
+export const businessSectorServicesRelations = relations(
+  businessSectorServices,
+  ({ one }) => ({
+    sector: one(businessSectors, {
+      fields: [businessSectorServices.sectorId],
+      references: [businessSectors.id],
+    }),
+  }),
+);
+
+export const businessSectorGalleryImagesRelations = relations(
+  businessSectorGalleryImages,
+  ({ one }) => ({
+    sector: one(businessSectors, {
+      fields: [businessSectorGalleryImages.sectorId],
+      references: [businessSectors.id],
+    }),
+  }),
+);
+
+export const galleryCategoriesRelations = relations(
+  galleryCategories,
+  ({ many }) => ({
+    items: many(galleryItems),
+  }),
+);
+
+export const galleryItemsRelations = relations(galleryItems, ({ one }) => ({
+  category: one(galleryCategories, {
+    fields: [galleryItems.categoryId],
+    references: [galleryCategories.id],
   }),
 }));
 

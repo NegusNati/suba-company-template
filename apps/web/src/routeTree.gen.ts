@@ -19,6 +19,7 @@ import { Route as DemoScheduleRouteImport } from './routes/demo/schedule'
 import { Route as DemoContactRouteImport } from './routes/demo/contact'
 import { Route as DemoAboutRouteImport } from './routes/demo/about'
 import { Route as DemoServicesIndexRouteImport } from './routes/demo/services.index'
+import { Route as DemoSectorsIndexRouteImport } from './routes/demo/sectors.index'
 import { Route as DemoProjectsIndexRouteImport } from './routes/demo/projects.index'
 import { Route as DemoGalleryIndexRouteImport } from './routes/demo/gallery.index'
 import { Route as DemoCareersIndexRouteImport } from './routes/demo/careers.index'
@@ -27,13 +28,16 @@ import { Route as DashboardVacanciesIndexRouteImport } from './routes/dashboard/
 import { Route as DashboardServicesIndexRouteImport } from './routes/dashboard/services/index'
 import { Route as DashboardProductsIndexRouteImport } from './routes/dashboard/products/index'
 import { Route as DashboardGalleryIndexRouteImport } from './routes/dashboard/gallery/index'
+import { Route as DashboardBusinessSectorsIndexRouteImport } from './routes/dashboard/business-sectors/index'
 import { Route as DashboardBlogsIndexRouteImport } from './routes/dashboard/blogs/index'
 import { Route as DemoServicesSlugRouteImport } from './routes/demo/services.$slug'
+import { Route as DemoSectorsSlugRouteImport } from './routes/demo/sectors.$slug'
 import { Route as DemoProjectsSlugRouteImport } from './routes/demo/projects.$slug'
 import { Route as DemoCareersSlugRouteImport } from './routes/demo/careers.$slug'
 import { Route as DemoBlogsSlugRouteImport } from './routes/demo/blogs.$slug'
 import { Route as DashboardServicesCreateRouteImport } from './routes/dashboard/services/create'
 import { Route as DashboardGalleryCategoriesRouteImport } from './routes/dashboard/gallery/categories'
+import { Route as DashboardBusinessSectorsCreateRouteImport } from './routes/dashboard/business-sectors/create'
 import { Route as DashboardVacanciesSlugIndexRouteImport } from './routes/dashboard/vacancies/$slug/index'
 import { Route as DashboardUserManagementUserIdIndexRouteImport } from './routes/dashboard/user-management/$userId/index'
 import { Route as DashboardTestimonialsIdIndexRouteImport } from './routes/dashboard/testimonials/$id/index'
@@ -43,6 +47,7 @@ import { Route as DashboardPartnersIdIndexRouteImport } from './routes/dashboard
 import { Route as DashboardGalleryIdIndexRouteImport } from './routes/dashboard/gallery/$id/index'
 import { Route as DashboardContactUsIdIndexRouteImport } from './routes/dashboard/contact-us/$id/index'
 import { Route as DashboardClientProjectsSlugIndexRouteImport } from './routes/dashboard/client-projects/$slug/index'
+import { Route as DashboardBusinessSectorsSlugIndexRouteImport } from './routes/dashboard/business-sectors/$slug/index'
 import { Route as DashboardBlogsSlugIndexRouteImport } from './routes/dashboard/blogs/$slug/index'
 import { Route as DashboardVacanciesSlugEditRouteImport } from './routes/dashboard/vacancies/$slug/edit'
 import { Route as DashboardVacanciesSlugApplicationsRouteImport } from './routes/dashboard/vacancies/$slug/applications'
@@ -54,6 +59,7 @@ import { Route as DashboardPartnersIdEditRouteImport } from './routes/dashboard/
 import { Route as DashboardGalleryIdEditRouteImport } from './routes/dashboard/gallery/$id/edit'
 import { Route as DashboardContactUsIdEditRouteImport } from './routes/dashboard/contact-us/$id/edit'
 import { Route as DashboardClientProjectsSlugEditRouteImport } from './routes/dashboard/client-projects/$slug/edit'
+import { Route as DashboardBusinessSectorsSlugEditRouteImport } from './routes/dashboard/business-sectors/$slug/edit'
 import { Route as DashboardBlogsSlugEditRouteImport } from './routes/dashboard/blogs/$slug/edit'
 
 const RegisterLazyRouteImport = createFileRoute('/register')()
@@ -257,6 +263,13 @@ const DemoServicesIndexRoute = DemoServicesIndexRouteImport.update({
 } as any).lazy(() =>
   import('./routes/demo/services.index.lazy').then((d) => d.Route),
 )
+const DemoSectorsIndexRoute = DemoSectorsIndexRouteImport.update({
+  id: '/sectors/',
+  path: '/sectors/',
+  getParentRoute: () => DemoRoute,
+} as any).lazy(() =>
+  import('./routes/demo/sectors.index.lazy').then((d) => d.Route),
+)
 const DemoProjectsIndexRoute = DemoProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
@@ -313,6 +326,16 @@ const DashboardGalleryIndexRoute = DashboardGalleryIndexRouteImport.update({
 } as any).lazy(() =>
   import('./routes/dashboard/gallery/index.lazy').then((d) => d.Route),
 )
+const DashboardBusinessSectorsIndexRoute =
+  DashboardBusinessSectorsIndexRouteImport.update({
+    id: '/business-sectors/',
+    path: '/business-sectors/',
+    getParentRoute: () => DashboardRoute,
+  } as any).lazy(() =>
+    import('./routes/dashboard/business-sectors/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardBlogsIndexRoute = DashboardBlogsIndexRouteImport.update({
   id: '/blogs/',
   path: '/blogs/',
@@ -403,6 +426,13 @@ const DemoServicesSlugRoute = DemoServicesSlugRouteImport.update({
 } as any).lazy(() =>
   import('./routes/demo/services.$slug.lazy').then((d) => d.Route),
 )
+const DemoSectorsSlugRoute = DemoSectorsSlugRouteImport.update({
+  id: '/sectors/$slug',
+  path: '/sectors/$slug',
+  getParentRoute: () => DemoRoute,
+} as any).lazy(() =>
+  import('./routes/demo/sectors.$slug.lazy').then((d) => d.Route),
+)
 const DemoProjectsSlugRoute = DemoProjectsSlugRouteImport.update({
   id: '/projects/$slug',
   path: '/projects/$slug',
@@ -438,6 +468,16 @@ const DashboardGalleryCategoriesRoute =
     getParentRoute: () => DashboardRoute,
   } as any).lazy(() =>
     import('./routes/dashboard/gallery/categories.lazy').then((d) => d.Route),
+  )
+const DashboardBusinessSectorsCreateRoute =
+  DashboardBusinessSectorsCreateRouteImport.update({
+    id: '/business-sectors/create',
+    path: '/business-sectors/create',
+    getParentRoute: () => DashboardRoute,
+  } as any).lazy(() =>
+    import('./routes/dashboard/business-sectors/create.lazy').then(
+      (d) => d.Route,
+    ),
   )
 const DashboardVacanciesSlugIndexRoute =
   DashboardVacanciesSlugIndexRouteImport.update({
@@ -515,6 +555,16 @@ const DashboardClientProjectsSlugIndexRoute =
     getParentRoute: () => DashboardRoute,
   } as any).lazy(() =>
     import('./routes/dashboard/client-projects/$slug/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const DashboardBusinessSectorsSlugIndexRoute =
+  DashboardBusinessSectorsSlugIndexRouteImport.update({
+    id: '/business-sectors/$slug/',
+    path: '/business-sectors/$slug/',
+    getParentRoute: () => DashboardRoute,
+  } as any).lazy(() =>
+    import('./routes/dashboard/business-sectors/$slug/index.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -611,6 +661,16 @@ const DashboardClientProjectsSlugEditRoute =
       (d) => d.Route,
     ),
   )
+const DashboardBusinessSectorsSlugEditRoute =
+  DashboardBusinessSectorsSlugEditRouteImport.update({
+    id: '/business-sectors/$slug/edit',
+    path: '/business-sectors/$slug/edit',
+    getParentRoute: () => DashboardRoute,
+  } as any).lazy(() =>
+    import('./routes/dashboard/business-sectors/$slug/edit.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const DashboardBlogsSlugEditRoute = DashboardBlogsSlugEditRouteImport.update({
   id: '/blogs/$slug/edit',
   path: '/blogs/$slug/edit',
@@ -632,11 +692,13 @@ export interface FileRoutesByFullPath {
   '/demo/schedule': typeof DemoScheduleRoute
   '/demo/': typeof DemoIndexRoute
   '/dashboard/': typeof DashboardIndexLazyRoute
+  '/dashboard/business-sectors/create': typeof DashboardBusinessSectorsCreateRoute
   '/dashboard/gallery/categories': typeof DashboardGalleryCategoriesRoute
   '/dashboard/services/create': typeof DashboardServicesCreateRoute
   '/demo/blogs/$slug': typeof DemoBlogsSlugRoute
   '/demo/careers/$slug': typeof DemoCareersSlugRoute
   '/demo/projects/$slug': typeof DemoProjectsSlugRoute
+  '/demo/sectors/$slug': typeof DemoSectorsSlugRoute
   '/demo/services/$slug': typeof DemoServicesSlugRoute
   '/dashboard/blogs/create': typeof DashboardBlogsCreateLazyRoute
   '/dashboard/client-projects/create': typeof DashboardClientProjectsCreateLazyRoute
@@ -648,6 +710,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/user-management/create': typeof DashboardUserManagementCreateLazyRoute
   '/dashboard/vacancies/create': typeof DashboardVacanciesCreateLazyRoute
   '/dashboard/blogs': typeof DashboardBlogsIndexRoute
+  '/dashboard/business-sectors': typeof DashboardBusinessSectorsIndexRoute
   '/dashboard/gallery': typeof DashboardGalleryIndexRoute
   '/dashboard/products': typeof DashboardProductsIndexRoute
   '/dashboard/services': typeof DashboardServicesIndexRoute
@@ -656,6 +719,7 @@ export interface FileRoutesByFullPath {
   '/demo/careers': typeof DemoCareersIndexRoute
   '/demo/gallery': typeof DemoGalleryIndexRoute
   '/demo/projects': typeof DemoProjectsIndexRoute
+  '/demo/sectors': typeof DemoSectorsIndexRoute
   '/demo/services': typeof DemoServicesIndexRoute
   '/dashboard/client-projects': typeof DashboardClientProjectsIndexLazyRoute
   '/dashboard/contact-us': typeof DashboardContactUsIndexLazyRoute
@@ -667,6 +731,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/testimonials': typeof DashboardTestimonialsIndexLazyRoute
   '/dashboard/user-management': typeof DashboardUserManagementIndexLazyRoute
   '/dashboard/blogs/$slug/edit': typeof DashboardBlogsSlugEditRoute
+  '/dashboard/business-sectors/$slug/edit': typeof DashboardBusinessSectorsSlugEditRoute
   '/dashboard/client-projects/$slug/edit': typeof DashboardClientProjectsSlugEditRoute
   '/dashboard/contact-us/$id/edit': typeof DashboardContactUsIdEditRoute
   '/dashboard/gallery/$id/edit': typeof DashboardGalleryIdEditRoute
@@ -678,6 +743,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/vacancies/$slug/applications': typeof DashboardVacanciesSlugApplicationsRoute
   '/dashboard/vacancies/$slug/edit': typeof DashboardVacanciesSlugEditRoute
   '/dashboard/blogs/$slug': typeof DashboardBlogsSlugIndexRoute
+  '/dashboard/business-sectors/$slug': typeof DashboardBusinessSectorsSlugIndexRoute
   '/dashboard/client-projects/$slug': typeof DashboardClientProjectsSlugIndexRoute
   '/dashboard/contact-us/$id': typeof DashboardContactUsIdIndexRoute
   '/dashboard/gallery/$id': typeof DashboardGalleryIdIndexRoute
@@ -699,11 +765,13 @@ export interface FileRoutesByTo {
   '/demo/schedule': typeof DemoScheduleRoute
   '/demo': typeof DemoIndexRoute
   '/dashboard': typeof DashboardIndexLazyRoute
+  '/dashboard/business-sectors/create': typeof DashboardBusinessSectorsCreateRoute
   '/dashboard/gallery/categories': typeof DashboardGalleryCategoriesRoute
   '/dashboard/services/create': typeof DashboardServicesCreateRoute
   '/demo/blogs/$slug': typeof DemoBlogsSlugRoute
   '/demo/careers/$slug': typeof DemoCareersSlugRoute
   '/demo/projects/$slug': typeof DemoProjectsSlugRoute
+  '/demo/sectors/$slug': typeof DemoSectorsSlugRoute
   '/demo/services/$slug': typeof DemoServicesSlugRoute
   '/dashboard/blogs/create': typeof DashboardBlogsCreateLazyRoute
   '/dashboard/client-projects/create': typeof DashboardClientProjectsCreateLazyRoute
@@ -715,6 +783,7 @@ export interface FileRoutesByTo {
   '/dashboard/user-management/create': typeof DashboardUserManagementCreateLazyRoute
   '/dashboard/vacancies/create': typeof DashboardVacanciesCreateLazyRoute
   '/dashboard/blogs': typeof DashboardBlogsIndexRoute
+  '/dashboard/business-sectors': typeof DashboardBusinessSectorsIndexRoute
   '/dashboard/gallery': typeof DashboardGalleryIndexRoute
   '/dashboard/products': typeof DashboardProductsIndexRoute
   '/dashboard/services': typeof DashboardServicesIndexRoute
@@ -723,6 +792,7 @@ export interface FileRoutesByTo {
   '/demo/careers': typeof DemoCareersIndexRoute
   '/demo/gallery': typeof DemoGalleryIndexRoute
   '/demo/projects': typeof DemoProjectsIndexRoute
+  '/demo/sectors': typeof DemoSectorsIndexRoute
   '/demo/services': typeof DemoServicesIndexRoute
   '/dashboard/client-projects': typeof DashboardClientProjectsIndexLazyRoute
   '/dashboard/contact-us': typeof DashboardContactUsIndexLazyRoute
@@ -734,6 +804,7 @@ export interface FileRoutesByTo {
   '/dashboard/testimonials': typeof DashboardTestimonialsIndexLazyRoute
   '/dashboard/user-management': typeof DashboardUserManagementIndexLazyRoute
   '/dashboard/blogs/$slug/edit': typeof DashboardBlogsSlugEditRoute
+  '/dashboard/business-sectors/$slug/edit': typeof DashboardBusinessSectorsSlugEditRoute
   '/dashboard/client-projects/$slug/edit': typeof DashboardClientProjectsSlugEditRoute
   '/dashboard/contact-us/$id/edit': typeof DashboardContactUsIdEditRoute
   '/dashboard/gallery/$id/edit': typeof DashboardGalleryIdEditRoute
@@ -745,6 +816,7 @@ export interface FileRoutesByTo {
   '/dashboard/vacancies/$slug/applications': typeof DashboardVacanciesSlugApplicationsRoute
   '/dashboard/vacancies/$slug/edit': typeof DashboardVacanciesSlugEditRoute
   '/dashboard/blogs/$slug': typeof DashboardBlogsSlugIndexRoute
+  '/dashboard/business-sectors/$slug': typeof DashboardBusinessSectorsSlugIndexRoute
   '/dashboard/client-projects/$slug': typeof DashboardClientProjectsSlugIndexRoute
   '/dashboard/contact-us/$id': typeof DashboardContactUsIdIndexRoute
   '/dashboard/gallery/$id': typeof DashboardGalleryIdIndexRoute
@@ -769,11 +841,13 @@ export interface FileRoutesById {
   '/demo/schedule': typeof DemoScheduleRoute
   '/demo/': typeof DemoIndexRoute
   '/dashboard/': typeof DashboardIndexLazyRoute
+  '/dashboard/business-sectors/create': typeof DashboardBusinessSectorsCreateRoute
   '/dashboard/gallery/categories': typeof DashboardGalleryCategoriesRoute
   '/dashboard/services/create': typeof DashboardServicesCreateRoute
   '/demo/blogs/$slug': typeof DemoBlogsSlugRoute
   '/demo/careers/$slug': typeof DemoCareersSlugRoute
   '/demo/projects/$slug': typeof DemoProjectsSlugRoute
+  '/demo/sectors/$slug': typeof DemoSectorsSlugRoute
   '/demo/services/$slug': typeof DemoServicesSlugRoute
   '/dashboard/blogs/create': typeof DashboardBlogsCreateLazyRoute
   '/dashboard/client-projects/create': typeof DashboardClientProjectsCreateLazyRoute
@@ -785,6 +859,7 @@ export interface FileRoutesById {
   '/dashboard/user-management/create': typeof DashboardUserManagementCreateLazyRoute
   '/dashboard/vacancies/create': typeof DashboardVacanciesCreateLazyRoute
   '/dashboard/blogs/': typeof DashboardBlogsIndexRoute
+  '/dashboard/business-sectors/': typeof DashboardBusinessSectorsIndexRoute
   '/dashboard/gallery/': typeof DashboardGalleryIndexRoute
   '/dashboard/products/': typeof DashboardProductsIndexRoute
   '/dashboard/services/': typeof DashboardServicesIndexRoute
@@ -793,6 +868,7 @@ export interface FileRoutesById {
   '/demo/careers/': typeof DemoCareersIndexRoute
   '/demo/gallery/': typeof DemoGalleryIndexRoute
   '/demo/projects/': typeof DemoProjectsIndexRoute
+  '/demo/sectors/': typeof DemoSectorsIndexRoute
   '/demo/services/': typeof DemoServicesIndexRoute
   '/dashboard/client-projects/': typeof DashboardClientProjectsIndexLazyRoute
   '/dashboard/contact-us/': typeof DashboardContactUsIndexLazyRoute
@@ -804,6 +880,7 @@ export interface FileRoutesById {
   '/dashboard/testimonials/': typeof DashboardTestimonialsIndexLazyRoute
   '/dashboard/user-management/': typeof DashboardUserManagementIndexLazyRoute
   '/dashboard/blogs/$slug/edit': typeof DashboardBlogsSlugEditRoute
+  '/dashboard/business-sectors/$slug/edit': typeof DashboardBusinessSectorsSlugEditRoute
   '/dashboard/client-projects/$slug/edit': typeof DashboardClientProjectsSlugEditRoute
   '/dashboard/contact-us/$id/edit': typeof DashboardContactUsIdEditRoute
   '/dashboard/gallery/$id/edit': typeof DashboardGalleryIdEditRoute
@@ -815,6 +892,7 @@ export interface FileRoutesById {
   '/dashboard/vacancies/$slug/applications': typeof DashboardVacanciesSlugApplicationsRoute
   '/dashboard/vacancies/$slug/edit': typeof DashboardVacanciesSlugEditRoute
   '/dashboard/blogs/$slug/': typeof DashboardBlogsSlugIndexRoute
+  '/dashboard/business-sectors/$slug/': typeof DashboardBusinessSectorsSlugIndexRoute
   '/dashboard/client-projects/$slug/': typeof DashboardClientProjectsSlugIndexRoute
   '/dashboard/contact-us/$id/': typeof DashboardContactUsIdIndexRoute
   '/dashboard/gallery/$id/': typeof DashboardGalleryIdIndexRoute
@@ -840,11 +918,13 @@ export interface FileRouteTypes {
     | '/demo/schedule'
     | '/demo/'
     | '/dashboard/'
+    | '/dashboard/business-sectors/create'
     | '/dashboard/gallery/categories'
     | '/dashboard/services/create'
     | '/demo/blogs/$slug'
     | '/demo/careers/$slug'
     | '/demo/projects/$slug'
+    | '/demo/sectors/$slug'
     | '/demo/services/$slug'
     | '/dashboard/blogs/create'
     | '/dashboard/client-projects/create'
@@ -856,6 +936,7 @@ export interface FileRouteTypes {
     | '/dashboard/user-management/create'
     | '/dashboard/vacancies/create'
     | '/dashboard/blogs'
+    | '/dashboard/business-sectors'
     | '/dashboard/gallery'
     | '/dashboard/products'
     | '/dashboard/services'
@@ -864,6 +945,7 @@ export interface FileRouteTypes {
     | '/demo/careers'
     | '/demo/gallery'
     | '/demo/projects'
+    | '/demo/sectors'
     | '/demo/services'
     | '/dashboard/client-projects'
     | '/dashboard/contact-us'
@@ -875,6 +957,7 @@ export interface FileRouteTypes {
     | '/dashboard/testimonials'
     | '/dashboard/user-management'
     | '/dashboard/blogs/$slug/edit'
+    | '/dashboard/business-sectors/$slug/edit'
     | '/dashboard/client-projects/$slug/edit'
     | '/dashboard/contact-us/$id/edit'
     | '/dashboard/gallery/$id/edit'
@@ -886,6 +969,7 @@ export interface FileRouteTypes {
     | '/dashboard/vacancies/$slug/applications'
     | '/dashboard/vacancies/$slug/edit'
     | '/dashboard/blogs/$slug'
+    | '/dashboard/business-sectors/$slug'
     | '/dashboard/client-projects/$slug'
     | '/dashboard/contact-us/$id'
     | '/dashboard/gallery/$id'
@@ -907,11 +991,13 @@ export interface FileRouteTypes {
     | '/demo/schedule'
     | '/demo'
     | '/dashboard'
+    | '/dashboard/business-sectors/create'
     | '/dashboard/gallery/categories'
     | '/dashboard/services/create'
     | '/demo/blogs/$slug'
     | '/demo/careers/$slug'
     | '/demo/projects/$slug'
+    | '/demo/sectors/$slug'
     | '/demo/services/$slug'
     | '/dashboard/blogs/create'
     | '/dashboard/client-projects/create'
@@ -923,6 +1009,7 @@ export interface FileRouteTypes {
     | '/dashboard/user-management/create'
     | '/dashboard/vacancies/create'
     | '/dashboard/blogs'
+    | '/dashboard/business-sectors'
     | '/dashboard/gallery'
     | '/dashboard/products'
     | '/dashboard/services'
@@ -931,6 +1018,7 @@ export interface FileRouteTypes {
     | '/demo/careers'
     | '/demo/gallery'
     | '/demo/projects'
+    | '/demo/sectors'
     | '/demo/services'
     | '/dashboard/client-projects'
     | '/dashboard/contact-us'
@@ -942,6 +1030,7 @@ export interface FileRouteTypes {
     | '/dashboard/testimonials'
     | '/dashboard/user-management'
     | '/dashboard/blogs/$slug/edit'
+    | '/dashboard/business-sectors/$slug/edit'
     | '/dashboard/client-projects/$slug/edit'
     | '/dashboard/contact-us/$id/edit'
     | '/dashboard/gallery/$id/edit'
@@ -953,6 +1042,7 @@ export interface FileRouteTypes {
     | '/dashboard/vacancies/$slug/applications'
     | '/dashboard/vacancies/$slug/edit'
     | '/dashboard/blogs/$slug'
+    | '/dashboard/business-sectors/$slug'
     | '/dashboard/client-projects/$slug'
     | '/dashboard/contact-us/$id'
     | '/dashboard/gallery/$id'
@@ -976,11 +1066,13 @@ export interface FileRouteTypes {
     | '/demo/schedule'
     | '/demo/'
     | '/dashboard/'
+    | '/dashboard/business-sectors/create'
     | '/dashboard/gallery/categories'
     | '/dashboard/services/create'
     | '/demo/blogs/$slug'
     | '/demo/careers/$slug'
     | '/demo/projects/$slug'
+    | '/demo/sectors/$slug'
     | '/demo/services/$slug'
     | '/dashboard/blogs/create'
     | '/dashboard/client-projects/create'
@@ -992,6 +1084,7 @@ export interface FileRouteTypes {
     | '/dashboard/user-management/create'
     | '/dashboard/vacancies/create'
     | '/dashboard/blogs/'
+    | '/dashboard/business-sectors/'
     | '/dashboard/gallery/'
     | '/dashboard/products/'
     | '/dashboard/services/'
@@ -1000,6 +1093,7 @@ export interface FileRouteTypes {
     | '/demo/careers/'
     | '/demo/gallery/'
     | '/demo/projects/'
+    | '/demo/sectors/'
     | '/demo/services/'
     | '/dashboard/client-projects/'
     | '/dashboard/contact-us/'
@@ -1011,6 +1105,7 @@ export interface FileRouteTypes {
     | '/dashboard/testimonials/'
     | '/dashboard/user-management/'
     | '/dashboard/blogs/$slug/edit'
+    | '/dashboard/business-sectors/$slug/edit'
     | '/dashboard/client-projects/$slug/edit'
     | '/dashboard/contact-us/$id/edit'
     | '/dashboard/gallery/$id/edit'
@@ -1022,6 +1117,7 @@ export interface FileRouteTypes {
     | '/dashboard/vacancies/$slug/applications'
     | '/dashboard/vacancies/$slug/edit'
     | '/dashboard/blogs/$slug/'
+    | '/dashboard/business-sectors/$slug/'
     | '/dashboard/client-projects/$slug/'
     | '/dashboard/contact-us/$id/'
     | '/dashboard/gallery/$id/'
@@ -1199,6 +1295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoServicesIndexRouteImport
       parentRoute: typeof DemoRoute
     }
+    '/demo/sectors/': {
+      id: '/demo/sectors/'
+      path: '/sectors'
+      fullPath: '/demo/sectors'
+      preLoaderRoute: typeof DemoSectorsIndexRouteImport
+      parentRoute: typeof DemoRoute
+    }
     '/demo/projects/': {
       id: '/demo/projects/'
       path: '/projects'
@@ -1253,6 +1356,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/dashboard/gallery'
       preLoaderRoute: typeof DashboardGalleryIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/business-sectors/': {
+      id: '/dashboard/business-sectors/'
+      path: '/business-sectors'
+      fullPath: '/dashboard/business-sectors'
+      preLoaderRoute: typeof DashboardBusinessSectorsIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/blogs/': {
@@ -1332,6 +1442,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoServicesSlugRouteImport
       parentRoute: typeof DemoRoute
     }
+    '/demo/sectors/$slug': {
+      id: '/demo/sectors/$slug'
+      path: '/sectors/$slug'
+      fullPath: '/demo/sectors/$slug'
+      preLoaderRoute: typeof DemoSectorsSlugRouteImport
+      parentRoute: typeof DemoRoute
+    }
     '/demo/projects/$slug': {
       id: '/demo/projects/$slug'
       path: '/projects/$slug'
@@ -1365,6 +1482,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery/categories'
       fullPath: '/dashboard/gallery/categories'
       preLoaderRoute: typeof DashboardGalleryCategoriesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/business-sectors/create': {
+      id: '/dashboard/business-sectors/create'
+      path: '/business-sectors/create'
+      fullPath: '/dashboard/business-sectors/create'
+      preLoaderRoute: typeof DashboardBusinessSectorsCreateRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/vacancies/$slug/': {
@@ -1428,6 +1552,13 @@ declare module '@tanstack/react-router' {
       path: '/client-projects/$slug'
       fullPath: '/dashboard/client-projects/$slug'
       preLoaderRoute: typeof DashboardClientProjectsSlugIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/business-sectors/$slug/': {
+      id: '/dashboard/business-sectors/$slug/'
+      path: '/business-sectors/$slug'
+      fullPath: '/dashboard/business-sectors/$slug'
+      preLoaderRoute: typeof DashboardBusinessSectorsSlugIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/blogs/$slug/': {
@@ -1507,6 +1638,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardClientProjectsSlugEditRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/business-sectors/$slug/edit': {
+      id: '/dashboard/business-sectors/$slug/edit'
+      path: '/business-sectors/$slug/edit'
+      fullPath: '/dashboard/business-sectors/$slug/edit'
+      preLoaderRoute: typeof DashboardBusinessSectorsSlugEditRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/blogs/$slug/edit': {
       id: '/dashboard/blogs/$slug/edit'
       path: '/blogs/$slug/edit'
@@ -1519,6 +1657,7 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardIndexLazyRoute: typeof DashboardIndexLazyRoute
+  DashboardBusinessSectorsCreateRoute: typeof DashboardBusinessSectorsCreateRoute
   DashboardGalleryCategoriesRoute: typeof DashboardGalleryCategoriesRoute
   DashboardServicesCreateRoute: typeof DashboardServicesCreateRoute
   DashboardBlogsCreateLazyRoute: typeof DashboardBlogsCreateLazyRoute
@@ -1531,6 +1670,7 @@ interface DashboardRouteChildren {
   DashboardUserManagementCreateLazyRoute: typeof DashboardUserManagementCreateLazyRoute
   DashboardVacanciesCreateLazyRoute: typeof DashboardVacanciesCreateLazyRoute
   DashboardBlogsIndexRoute: typeof DashboardBlogsIndexRoute
+  DashboardBusinessSectorsIndexRoute: typeof DashboardBusinessSectorsIndexRoute
   DashboardGalleryIndexRoute: typeof DashboardGalleryIndexRoute
   DashboardProductsIndexRoute: typeof DashboardProductsIndexRoute
   DashboardServicesIndexRoute: typeof DashboardServicesIndexRoute
@@ -1545,6 +1685,7 @@ interface DashboardRouteChildren {
   DashboardTestimonialsIndexLazyRoute: typeof DashboardTestimonialsIndexLazyRoute
   DashboardUserManagementIndexLazyRoute: typeof DashboardUserManagementIndexLazyRoute
   DashboardBlogsSlugEditRoute: typeof DashboardBlogsSlugEditRoute
+  DashboardBusinessSectorsSlugEditRoute: typeof DashboardBusinessSectorsSlugEditRoute
   DashboardClientProjectsSlugEditRoute: typeof DashboardClientProjectsSlugEditRoute
   DashboardContactUsIdEditRoute: typeof DashboardContactUsIdEditRoute
   DashboardGalleryIdEditRoute: typeof DashboardGalleryIdEditRoute
@@ -1556,6 +1697,7 @@ interface DashboardRouteChildren {
   DashboardVacanciesSlugApplicationsRoute: typeof DashboardVacanciesSlugApplicationsRoute
   DashboardVacanciesSlugEditRoute: typeof DashboardVacanciesSlugEditRoute
   DashboardBlogsSlugIndexRoute: typeof DashboardBlogsSlugIndexRoute
+  DashboardBusinessSectorsSlugIndexRoute: typeof DashboardBusinessSectorsSlugIndexRoute
   DashboardClientProjectsSlugIndexRoute: typeof DashboardClientProjectsSlugIndexRoute
   DashboardContactUsIdIndexRoute: typeof DashboardContactUsIdIndexRoute
   DashboardGalleryIdIndexRoute: typeof DashboardGalleryIdIndexRoute
@@ -1569,6 +1711,7 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardIndexLazyRoute: DashboardIndexLazyRoute,
+  DashboardBusinessSectorsCreateRoute: DashboardBusinessSectorsCreateRoute,
   DashboardGalleryCategoriesRoute: DashboardGalleryCategoriesRoute,
   DashboardServicesCreateRoute: DashboardServicesCreateRoute,
   DashboardBlogsCreateLazyRoute: DashboardBlogsCreateLazyRoute,
@@ -1583,6 +1726,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
     DashboardUserManagementCreateLazyRoute,
   DashboardVacanciesCreateLazyRoute: DashboardVacanciesCreateLazyRoute,
   DashboardBlogsIndexRoute: DashboardBlogsIndexRoute,
+  DashboardBusinessSectorsIndexRoute: DashboardBusinessSectorsIndexRoute,
   DashboardGalleryIndexRoute: DashboardGalleryIndexRoute,
   DashboardProductsIndexRoute: DashboardProductsIndexRoute,
   DashboardServicesIndexRoute: DashboardServicesIndexRoute,
@@ -1598,6 +1742,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardTestimonialsIndexLazyRoute: DashboardTestimonialsIndexLazyRoute,
   DashboardUserManagementIndexLazyRoute: DashboardUserManagementIndexLazyRoute,
   DashboardBlogsSlugEditRoute: DashboardBlogsSlugEditRoute,
+  DashboardBusinessSectorsSlugEditRoute: DashboardBusinessSectorsSlugEditRoute,
   DashboardClientProjectsSlugEditRoute: DashboardClientProjectsSlugEditRoute,
   DashboardContactUsIdEditRoute: DashboardContactUsIdEditRoute,
   DashboardGalleryIdEditRoute: DashboardGalleryIdEditRoute,
@@ -1611,6 +1756,8 @@ const DashboardRouteChildren: DashboardRouteChildren = {
     DashboardVacanciesSlugApplicationsRoute,
   DashboardVacanciesSlugEditRoute: DashboardVacanciesSlugEditRoute,
   DashboardBlogsSlugIndexRoute: DashboardBlogsSlugIndexRoute,
+  DashboardBusinessSectorsSlugIndexRoute:
+    DashboardBusinessSectorsSlugIndexRoute,
   DashboardClientProjectsSlugIndexRoute: DashboardClientProjectsSlugIndexRoute,
   DashboardContactUsIdIndexRoute: DashboardContactUsIdIndexRoute,
   DashboardGalleryIdIndexRoute: DashboardGalleryIdIndexRoute,
@@ -1635,11 +1782,13 @@ interface DemoRouteChildren {
   DemoBlogsSlugRoute: typeof DemoBlogsSlugRoute
   DemoCareersSlugRoute: typeof DemoCareersSlugRoute
   DemoProjectsSlugRoute: typeof DemoProjectsSlugRoute
+  DemoSectorsSlugRoute: typeof DemoSectorsSlugRoute
   DemoServicesSlugRoute: typeof DemoServicesSlugRoute
   DemoBlogsIndexRoute: typeof DemoBlogsIndexRoute
   DemoCareersIndexRoute: typeof DemoCareersIndexRoute
   DemoGalleryIndexRoute: typeof DemoGalleryIndexRoute
   DemoProjectsIndexRoute: typeof DemoProjectsIndexRoute
+  DemoSectorsIndexRoute: typeof DemoSectorsIndexRoute
   DemoServicesIndexRoute: typeof DemoServicesIndexRoute
 }
 
@@ -1651,11 +1800,13 @@ const DemoRouteChildren: DemoRouteChildren = {
   DemoBlogsSlugRoute: DemoBlogsSlugRoute,
   DemoCareersSlugRoute: DemoCareersSlugRoute,
   DemoProjectsSlugRoute: DemoProjectsSlugRoute,
+  DemoSectorsSlugRoute: DemoSectorsSlugRoute,
   DemoServicesSlugRoute: DemoServicesSlugRoute,
   DemoBlogsIndexRoute: DemoBlogsIndexRoute,
   DemoCareersIndexRoute: DemoCareersIndexRoute,
   DemoGalleryIndexRoute: DemoGalleryIndexRoute,
   DemoProjectsIndexRoute: DemoProjectsIndexRoute,
+  DemoSectorsIndexRoute: DemoSectorsIndexRoute,
   DemoServicesIndexRoute: DemoServicesIndexRoute,
 }
 

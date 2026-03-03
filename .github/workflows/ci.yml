@@ -26,6 +26,9 @@ jobs:
       - name: Run linter
         run: bun lint
 
+      - name: Enforce web performance guardrails
+        run: bun run --filter web perf:lint
+
       - name: Check formatting
         run: bun format:check
 
@@ -52,5 +55,5 @@ jobs:
       - name: Build packages
         run: bun run build
 
-      - name: Enforce web main chunk budget
+      - name: Enforce web performance budgets
         run: bun run --filter web perf:budget

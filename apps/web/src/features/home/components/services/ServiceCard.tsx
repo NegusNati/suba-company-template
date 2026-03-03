@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import React from "react";
 
+import { AppImage } from "@/components/common/AppImage";
 import { cn } from "@/lib/utils";
 
 interface ServiceCardProps {
@@ -43,7 +44,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
       {/* Visual area - service image in green container */}
       {image && (
         <div className="w-full h-[320px] md:h-[360px] bg-[#E9F3E6] rounded-3xl flex items-center justify-center overflow-hidden p-4">
-          <img
+          <AppImage
             src={image}
             alt={title}
             className={cn("w-full h-full object-contain")}

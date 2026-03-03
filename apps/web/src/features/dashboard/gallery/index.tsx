@@ -1,202 +1,318 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Images } from "lucide-react";
+import { FolderOpen, Images, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 
-import { Columns } from "./columns";
+import { Columns as GalleryColumns } from "./columns";
 import {
-  useGalleryItemsQuery,
   useDeleteGalleryItemMutation,
+  useGalleryItemsQuery,
   type GalleryItem,
 } from "./lib";
+import { CreateResourceModal } from "../components/CreateResourceModal";
 import { DeleteDialog } from "../components/deletedialog";
 import { DataTable } from "../components/table/DataTable";
+import { CategoryForm } from "../gallery-categories/CategoryForm";
+import { Columns as CategoryColumns } from "../gallery-categories/columns";
+import {
+  useDeleteGalleryCategoryMutation,
+  useGalleryCategoriesQuery,
+  type GalleryCategory,
+} from "../gallery-categories/lib";
 
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function Index() {
+type GalleryDashboardTab = "entries" | "categories";
+
+interface GalleryDashboardProps {
+  initialTab?: GalleryDashboardTab;
+}
+
+export default function GalleryDashboard({
+  initialTab = "entries",
+}: GalleryDashboardProps) {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<GalleryDashboardTab>(initialTab);
 
-  // State for pagination
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [entryPage, setEntryPage] = useState(1);
+  const [entryPageSize, setEntryPageSize] = useState(10);
+  const [entrySearch, setEntrySearch] = useState("");
+  const [debouncedEntrySearch] = useDebounce(entrySearch, 300);
 
-  // State for search
-  const [search, setSearch] = useState("");
-  const [debouncedSearch] = useDebounce(search, 300);
+  const [categoryPage, setCategoryPage] = useState(1);
+  const [categoryPageSize, setCategoryPageSize] = useState(10);
+  const [categorySearch, setCategorySearch] = useState("");
+  const [debouncedCategorySearch] = useDebounce(categorySearch, 300);
 
-  // State for delete dialog
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<GalleryItem | null>(null);
+  const [entryDeleteOpen, setEntryDeleteOpen] = useState(false);
+  const [entryToDelete, setEntryToDelete] = useState<GalleryItem | null>(null);
 
-  // Fetch gallery items
+  const [isCategoryViewOpen, setIsCategoryViewOpen] = useState(false);
+  const [isCategoryEditOpen, setIsCategoryEditOpen] = useState(false);
+  const [isCategoryCreateOpen, setIsCategoryCreateOpen] = useState(false);
+  const [isCategoryDeleteOpen, setIsCategoryDeleteOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] =
+    useState<GalleryCategory | null>(null);
+
   const {
     data: galleryData,
-    isPending,
-    isError,
-    error,
+    isPending: isEntriesPending,
+    isError: isEntriesError,
+    error: entriesError,
   } = useGalleryItemsQuery({
-    page,
-    limit: pageSize,
-    search: debouncedSearch,
+    page: entryPage,
+    limit: entryPageSize,
+    search: debouncedEntrySearch || undefined,
     sortBy: "createdAt",
     sortOrder: "desc",
   });
 
-  // Delete mutation
-  const deleteMutation = useDeleteGalleryItemMutation({
+  const {
+    data: categoriesData,
+    isPending: isCategoriesPending,
+    isError: isCategoriesError,
+    error: categoriesError,
+  } = useGalleryCategoriesQuery({
+    page: categoryPage,
+    limit: categoryPageSize,
+    search: debouncedCategorySearch || undefined,
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
+
+  const deleteGalleryMutation = useDeleteGalleryItemMutation({
     onSuccess: () => {
-      toast.success("Gallery item deleted successfully!");
-      setDeleteDialogOpen(false);
-      setItemToDelete(null);
+      toast.success("Gallery entry deleted successfully.");
+      setEntryDeleteOpen(false);
+      setEntryToDelete(null);
     },
     onError: (error) => {
-      toast.error(`Failed to delete gallery item: ${error.message}`);
+      toast.error(`Failed to delete gallery entry: ${error.message}`);
     },
   });
 
-  // Action handlers
-  const handleCreate = () => {
-    navigate({ to: "/dashboard/gallery/create" });
-  };
+  const deleteCategoryMutation = useDeleteGalleryCategoryMutation({
+    onSuccess: () => {
+      toast.success("Gallery category deleted successfully.");
+      setIsCategoryDeleteOpen(false);
+      setSelectedCategory(null);
+    },
+    onError: (error) => {
+      toast.error(`Failed to delete gallery category: ${error.message}`);
+    },
+  });
 
-  const handleView = (item: GalleryItem) => {
-    navigate({ to: `/dashboard/gallery/$id`, params: { id: String(item.id) } });
-  };
+  const galleryItems = galleryData?.data ?? [];
+  const categoryItems = categoriesData?.data ?? [];
 
-  const handleEdit = (item: GalleryItem) => {
-    navigate({
-      to: `/dashboard/gallery/$id/edit`,
-      params: { id: String(item.id) },
-    });
-  };
-
-  const handleDelete = (item: GalleryItem) => {
-    setItemToDelete(item);
-    setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (itemToDelete) {
-      deleteMutation.mutate(itemToDelete.id);
-    }
-  };
-
-  // Pagination handlers
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage); // DataTable already converts to 1-indexed
-  };
-
-  const handlePageSizeChange = (newPageSize: number) => {
-    setPageSize(newPageSize);
-    setPage(1); // Reset to first page
-  };
-
-  // Search handler
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    setPage(1); // Reset to first page on search
-  };
-
-  const galleryItems = galleryData?.data || [];
-  const pagination = galleryData?.meta?.pagination
+  const galleryPagination = galleryData?.meta?.pagination
     ? {
         pageCount: galleryData.meta.pagination.totalPages,
         pageIndex: galleryData.meta.pagination.page - 1,
         pageSize: galleryData.meta.pagination.limit,
-        onPageChange: handlePageChange,
-        onPageSizeChange: handlePageSizeChange,
+        onPageChange: setEntryPage,
+        onPageSizeChange: (size: number) => {
+          setEntryPageSize(size);
+          setEntryPage(1);
+        },
       }
     : undefined;
 
-  // Loading skeleton
-  if (isPending) {
-    return (
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-6">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-10 w-40" />
-        </div>
-        <div className="space-y-4">
-          {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-20 w-full" />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const categoryPagination = categoriesData?.meta?.pagination
+    ? {
+        pageCount: categoriesData.meta.pagination.totalPages,
+        pageIndex: categoriesData.meta.pagination.page - 1,
+        pageSize: categoriesData.meta.pagination.limit,
+        onPageChange: setCategoryPage,
+        onPageSizeChange: (size: number) => {
+          setCategoryPageSize(size);
+          setCategoryPage(1);
+        },
+      }
+    : undefined;
 
-  // Empty state when no gallery items exist
-  const hasNoItems = !isPending && galleryItems.length === 0 && !search;
-  if (hasNoItems) {
-    return (
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Gallery</h1>
-          <Button onClick={handleCreate}>
-            <Images className="mr-2 h-4 w-4" />
-            Add Image
-          </Button>
-        </div>
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Images className="h-16 w-16 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No gallery items yet</h3>
-          <p className="text-muted-foreground mb-6 max-w-sm">
-            Start building your gallery by adding your first image.
-          </p>
-          <Button onClick={handleCreate}>
-            <Images className="mr-2 h-4 w-4" />
-            Add First Image
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  const handleEntryView = (item: GalleryItem) => {
+    navigate({ to: "/dashboard/gallery/$id", params: { id: String(item.id) } });
+  };
 
-  // Empty state for filtered results
-  const hasNoResults = !isPending && galleryItems.length === 0 && search;
+  const handleEntryEdit = (item: GalleryItem) => {
+    navigate({
+      to: "/dashboard/gallery/$id/edit",
+      params: { id: String(item.id) },
+    });
+  };
+
+  const handleEntryDelete = (item: GalleryItem) => {
+    setEntryToDelete(item);
+    setEntryDeleteOpen(true);
+  };
+
+  const handleCategoryView = (category: GalleryCategory) => {
+    setSelectedCategory(category);
+    setIsCategoryViewOpen(true);
+  };
+
+  const handleCategoryEdit = (category: GalleryCategory) => {
+    setSelectedCategory(category);
+    setIsCategoryEditOpen(true);
+  };
+
+  const handleCategoryDelete = (category: GalleryCategory) => {
+    if (category.isSystem) return;
+    setSelectedCategory(category);
+    setIsCategoryDeleteOpen(true);
+  };
+
+  const closeCategoryModal = () => {
+    setIsCategoryCreateOpen(false);
+    setIsCategoryEditOpen(false);
+    setIsCategoryViewOpen(false);
+    setSelectedCategory(null);
+  };
 
   return (
     <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Gallery</h1>
-        <Button onClick={handleCreate}>
-          <Images className="mr-2 h-4 w-4" />
-          Add Image
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          {activeTab === "entries" ? (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => setActiveTab("categories")}
+                className="gap-2"
+              >
+                <FolderOpen className="h-4 w-4" />
+                Manage Categories
+              </Button>
+              <Button
+                onClick={() => navigate({ to: "/dashboard/gallery/create" })}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Entry
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => setActiveTab("entries")}
+                className="gap-2"
+              >
+                <Images className="h-4 w-4" />
+                Back to Gallery
+              </Button>
+              <Button onClick={() => setIsCategoryCreateOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create Category
+              </Button>
+            </>
+          )}
+        </div>
       </div>
 
-      {hasNoResults ? (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Images className="h-16 w-16 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No results found</h3>
-          <p className="text-muted-foreground mb-6 max-w-sm">
-            No gallery items match your search "{search}". Try a different
-            search term.
-          </p>
-        </div>
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as GalleryDashboardTab)}
+        className="mb-6"
+      >
+        <TabsList className="bg-muted/60">
+          <TabsTrigger value="entries">Entries</TabsTrigger>
+          <TabsTrigger value="categories">Categories</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
+      {activeTab === "entries" ? (
+        <DataTable
+          columns={GalleryColumns(
+            handleEntryView,
+            handleEntryEdit,
+            handleEntryDelete,
+          )}
+          data={galleryItems}
+          pagination={galleryPagination}
+          isLoading={isEntriesPending}
+          isError={isEntriesError}
+          error={entriesError}
+          searchKey="title"
+          searchValue={entrySearch}
+          onSearchChange={(value) => {
+            setEntrySearch(value);
+            setEntryPage(1);
+          }}
+        />
       ) : (
         <DataTable
-          columns={Columns(handleView, handleEdit, handleDelete)}
-          data={galleryItems}
-          pagination={pagination}
-          isLoading={isPending}
-          isError={isError}
-          error={error}
-          searchKey="title"
-          searchValue={search}
-          onSearchChange={handleSearchChange}
+          columns={CategoryColumns(
+            handleCategoryView,
+            handleCategoryEdit,
+            handleCategoryDelete,
+          )}
+          data={categoryItems}
+          pagination={categoryPagination}
+          isLoading={isCategoriesPending}
+          isError={isCategoriesError}
+          error={categoriesError}
+          searchKey="name"
+          searchValue={categorySearch}
+          onSearchChange={(value) => {
+            setCategorySearch(value);
+            setCategoryPage(1);
+          }}
         />
       )}
 
-      {/* Delete confirmation dialog */}
       <DeleteDialog
-        isOpen={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        onDelete={confirmDelete}
-        isDeleting={deleteMutation.isPending}
+        isOpen={entryDeleteOpen}
+        onClose={() => setEntryDeleteOpen(false)}
+        onDelete={() =>
+          entryToDelete && deleteGalleryMutation.mutate(entryToDelete.id)
+        }
+        isDeleting={deleteGalleryMutation.isPending}
+      />
+
+      <CreateResourceModal
+        isOpen={isCategoryCreateOpen}
+        onClose={closeCategoryModal}
+        title="Add Gallery Category"
+      >
+        <CategoryForm mode="create" onClose={closeCategoryModal} />
+      </CreateResourceModal>
+
+      <CreateResourceModal
+        isOpen={isCategoryEditOpen}
+        onClose={closeCategoryModal}
+        title="Edit Gallery Category"
+      >
+        <CategoryForm
+          mode="edit"
+          category={selectedCategory}
+          onClose={closeCategoryModal}
+        />
+      </CreateResourceModal>
+
+      <CreateResourceModal
+        isOpen={isCategoryViewOpen}
+        onClose={closeCategoryModal}
+        title="View Gallery Category"
+      >
+        <CategoryForm
+          mode="view"
+          category={selectedCategory}
+          onClose={closeCategoryModal}
+        />
+      </CreateResourceModal>
+
+      <DeleteDialog
+        isOpen={isCategoryDeleteOpen}
+        onClose={() => setIsCategoryDeleteOpen(false)}
+        onDelete={() => {
+          if (!selectedCategory || selectedCategory.isSystem) return;
+          deleteCategoryMutation.mutate(selectedCategory.id);
+        }}
+        isDeleting={deleteCategoryMutation.isPending}
       />
     </div>
   );

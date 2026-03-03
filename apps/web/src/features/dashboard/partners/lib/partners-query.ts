@@ -28,9 +28,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const partnerKeys = {
   all: [AUTH_API_ENDPOINTS.PARTNER] as const,
   list: (params: PartnerListParams) =>
-    [AUTH_API_ENDPOINTS.PARTNER, "list", params] as const,
+    [AUTH_API_ENDPOINTS.PARTNER, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.PARTNER, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.PARTNER}/${id}`] as const,
 };
 
 export const usePartnersQuery = (

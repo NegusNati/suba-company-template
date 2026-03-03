@@ -2,12 +2,14 @@ export type LandingPage =
   | "home"
   | "about"
   | "services"
+  | "sectors"
   | "blogs"
   | "blogDetail"
   | "careers"
   | "booking"
   | "contact"
-  | "projects";
+  | "projects"
+  | "gallery";
 
 export type Page = LandingPage;
 
@@ -37,10 +39,12 @@ export const landingPagePaths: Record<LandingPage, string> = {
   home: `${DEMO_PREFIX}`,
   about: `${DEMO_PREFIX}/about`,
   services: `${DEMO_PREFIX}/services`,
+  sectors: `${DEMO_PREFIX}/sectors`,
   blogs: `${DEMO_PREFIX}/blogs`,
   blogDetail: `${DEMO_PREFIX}/blogs/$slug`,
   careers: `${DEMO_PREFIX}/careers`,
   booking: `${DEMO_PREFIX}/schedule`,
   contact: `${DEMO_PREFIX}/contact`,
   projects: `${DEMO_PREFIX}/projects`,
+  gallery: `${DEMO_PREFIX}/gallery`,
 };

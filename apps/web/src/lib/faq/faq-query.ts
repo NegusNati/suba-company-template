@@ -7,20 +7,22 @@ import {
 import { fetchPublicFaqs } from "./faq-api";
 import type { Faq } from "./faq-schema";
 
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const faqKeys = {
-  all: ["faqs"] as const,
-  lists: () => [...faqKeys.all, "list"] as const,
+  all: [LANDING_API_ENDPOINTS.FAQS_CLIENT] as const,
+  lists: () => [...faqKeys.all] as const,
   list: (params: {
     page: number;
     limit: number;
     search?: string;
     sortBy?: "createdAt" | "question";
     sortOrder?: "asc" | "desc";
-  }) => [...faqKeys.lists(), params] as const,
+  }) => [...faqKeys.all, params] as const,
 };
 
 // ============================================================================

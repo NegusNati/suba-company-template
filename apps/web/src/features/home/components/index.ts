@@ -6,4 +6,5 @@ export { TestimonialsSection } from "./TestimonialsSection";
 export { ValuePropSection } from "./ValuePropSection";
 export { WorkflowSection } from "./WorkflowSection";
 export { WorkSamplesSection } from "./WorkSamplesSection";
-export { ContactCTASection } from "./ContactCTASection";
+export { ContactCTASection } from "@/components/common/ContactCTASection";
+export { SectorsSection } from "./SectorsSection";

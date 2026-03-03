@@ -1,8 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, ImageIcon, Pencil, Tag, Trash2 } from "lucide-react";
 
 import type { GalleryItem } from "./lib/gallery-schema";
 
+import { AppImage } from "@/components/common/AppImage";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,9 +16,12 @@ import { DataTableColumnHeader } from "@/features/dashboard/components/table/Dat
 import { API_BASE_URL } from "@/lib/api-base";
 import { humanizeDate } from "@/utils/dateHuman";
 
-/**
- * Create gallery table columns with action handlers
- */
+const resolveImageUrl = (imageUrl?: string | null) => {
+  if (!imageUrl) return "";
+  const baseUrl = (API_BASE_URL ?? "").replace(/\/$/, "");
+  return imageUrl.startsWith("/") ? `${baseUrl}${imageUrl}` : imageUrl;
+};
+
 export const Columns = (
   onView: (item: GalleryItem) => void,
   onEdit: (item: GalleryItem) => void,
@@ -24,9 +29,7 @@ export const Columns = (
 ): ColumnDef<GalleryItem>[] => [
   {
     accessorKey: "id",
-    meta: {
-      title: "ID",
-    },
+    meta: { title: "ID" },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
@@ -35,109 +38,102 @@ export const Columns = (
     ),
   },
   {
-    accessorKey: "imageUrl",
-    meta: {
-      title: "Image",
-    },
-    header: "Image",
+    id: "coverImage",
+    meta: { title: "Cover" },
+    header: "Cover",
     cell: ({ row }) => {
       const item = row.original;
-      const baseUrl = (API_BASE_URL ?? "").replace(/\/$/, "");
-      const resolveImageUrl = (imageUrl?: string | null) =>
-        imageUrl
-          ? imageUrl.startsWith("/")
-            ? `${baseUrl}${imageUrl}`
-            : imageUrl
-          : "";
+      const coverImage = resolveImageUrl(
+        item.coverImageUrl ?? item.imageUrls[0],
+      );
 
       return (
-        <div className="flex items-center">
-          <img
-            src={resolveImageUrl(item.imageUrl)}
-            alt={item.title || "Gallery image"}
-            className="h-16 w-16 rounded object-cover border"
-            loading="lazy"
-          />
+        <div className="h-14 w-14 overflow-hidden rounded-md border bg-muted">
+          {coverImage ? (
+            <AppImage
+              src={coverImage}
+              alt={item.title || "Gallery cover"}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <ImageIcon className="h-4 w-4 text-muted-foreground" />
+            </div>
+          )}
         </div>
       );
     },
   },
   {
     accessorKey: "title",
-    meta: {
-      title: "Title",
-    },
+    meta: { title: "Title" },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Title" />
     ),
+    cell: ({ row }) => (
+      <div className="max-w-[220px] truncate">{row.getValue("title")}</div>
+    ),
+  },
+  {
+    id: "category",
+    meta: { title: "Category" },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Category" />
+    ),
     cell: ({ row }) => {
-      const title = row.getValue("title") as string | null;
+      const category = row.original.category;
       return (
-        <div className="max-w-[200px] truncate">
-          {title || (
-            <span className="text-muted-foreground italic">Untitled</span>
-          )}
-        </div>
+        <Badge variant="secondary" className="gap-1">
+          <Tag className="h-3 w-3" />
+          {category.name}
+        </Badge>
       );
     },
   },
   {
-    accessorKey: "description",
-    meta: {
-      title: "Description",
-    },
-    header: "Description",
+    id: "imageCount",
+    meta: { title: "Images" },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Images" />
+    ),
     cell: ({ row }) => {
-      const description = row.getValue("description") as string | null;
-      return (
-        <div className="max-w-[250px] truncate text-sm">
-          {description || (
-            <span className="text-muted-foreground italic">No description</span>
-          )}
-        </div>
-      );
+      const count = row.original.imageCount ?? row.original.imageUrls.length;
+      return <div className="font-medium">{count}</div>;
     },
   },
   {
     accessorKey: "occurredAt",
-    meta: {
-      title: "Occurred At",
-    },
+    meta: { title: "Occurred At" },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Occurred At" />
     ),
     cell: ({ row }) => {
-      const occurredAt = row.getValue("occurredAt") as string | null;
-      return (
-        <div className="max-w-[120px] truncate text-sm">
-          {occurredAt ? (
-            humanizeDate(occurredAt) || ""
-          ) : (
-            <span className="text-muted-foreground italic">—</span>
-          )}
+      const occurredAt = row.original.occurredAt;
+      return occurredAt ? (
+        <div className="max-w-[140px] truncate text-sm">
+          {humanizeDate(occurredAt) || ""}
         </div>
+      ) : (
+        <span className="text-sm text-muted-foreground italic">-</span>
       );
     },
   },
   {
     accessorKey: "createdAt",
-    meta: {
-      title: "Created At",
-    },
+    meta: { title: "Created At" },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created" />
     ),
     cell: ({ row }) => (
-      <div className="max-w-[120px] truncate text-sm">
+      <div className="max-w-[140px] truncate text-sm">
         {humanizeDate(row.getValue("createdAt")) || ""}
       </div>
     ),
   },
   {
     id: "actions",
-    meta: {
-      title: "Actions",
-    },
+    meta: { title: "Actions" },
     header: "Actions",
     cell: ({ row }) => {
       const item = row.original;

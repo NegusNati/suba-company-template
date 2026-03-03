@@ -28,9 +28,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const clientProjectKeys = {
   all: [AUTH_API_ENDPOINTS.CLIENT_PROJECTS] as const,
   list: (params: ClientProjectsListParams) =>
-    [AUTH_API_ENDPOINTS.CLIENT_PROJECTS, "list", params] as const,
+    [AUTH_API_ENDPOINTS.CLIENT_PROJECTS, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.CLIENT_PROJECTS, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.CLIENT_PROJECTS}/${id}`] as const,
 };
 
 export const useClientProjectsQuery = (

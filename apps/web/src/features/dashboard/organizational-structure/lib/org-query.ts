@@ -31,9 +31,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const orgMemberKeys = {
   all: [AUTH_API_ENDPOINTS.ORG_MEMBERS] as const,
   list: (params: OrgMembersListParams) =>
-    [AUTH_API_ENDPOINTS.ORG_MEMBERS, "list", params] as const,
+    [AUTH_API_ENDPOINTS.ORG_MEMBERS, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.ORG_MEMBERS, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.ORG_MEMBERS}/${id}`] as const,
 };
 
 /**

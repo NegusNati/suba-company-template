@@ -1,28 +1,30 @@
 import {
-  and,
+  desc,
   eq,
   gte,
   lte,
-  desc,
+  sql,
   type SQL,
 } from "@suba-company-template/db/orm";
-import { galleryItems } from "@suba-company-template/db/schema";
+import {
+  galleryCategories,
+  galleryItems,
+} from "@suba-company-template/db/schema";
 
 import type {
   CreateGalleryItemInput,
-  UpdateGalleryItemInput,
   GalleryQuery,
-  PublicGalleryQuery,
   GallerySortField,
+  PublicGalleryQuery,
+  UpdateGalleryItemInput,
 } from "./validators";
 import type { DbClient } from "../../shared/db";
 import {
-  createQueryBuilder,
-  countRecords,
-  buildListResult,
   buildCursorResult,
-  decodeCursorValue,
+  buildListResult,
   combineWhere,
+  createQueryBuilder,
+  decodeCursorValue,
 } from "../../shared/query";
 import { stripUndefinedValues } from "../../shared/utils/object";
 
@@ -40,6 +42,62 @@ const galleryQueryBuilder = createQueryBuilder<
   defaultSortField: "occurredAt",
 });
 
+type GalleryItemWithCategoryRow = {
+  id: number;
+  imageUrls: string[];
+  title: string;
+  description: string | null;
+  occurredAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  categoryId: number;
+  categoryName: string;
+  categorySlug: string;
+};
+
+const selectGalleryItemWithCategory = {
+  id: galleryItems.id,
+  imageUrls: galleryItems.imageUrls,
+  title: galleryItems.title,
+  description: galleryItems.description,
+  occurredAt: galleryItems.occurredAt,
+  createdAt: galleryItems.createdAt,
+  updatedAt: galleryItems.updatedAt,
+  categoryId: galleryCategories.id,
+  categoryName: galleryCategories.name,
+  categorySlug: galleryCategories.slug,
+};
+
+const mapGalleryItem = (row: GalleryItemWithCategoryRow) => ({
+  id: row.id,
+  imageUrls: row.imageUrls,
+  coverImageUrl: row.imageUrls[0] ?? null,
+  imageCount: row.imageUrls.length,
+  title: row.title,
+  description: row.description,
+  occurredAt: row.occurredAt,
+  createdAt: row.createdAt,
+  updatedAt: row.updatedAt,
+  category: {
+    id: row.categoryId,
+    name: row.categoryName,
+    slug: row.categorySlug,
+  },
+});
+
+const countGalleryItems = async (db: DbClient, whereClause?: SQL) => {
+  const query = db
+    .select({ count: sql<number>`count(*)` })
+    .from(galleryItems)
+    .innerJoin(
+      galleryCategories,
+      eq(galleryItems.categoryId, galleryCategories.id),
+    );
+
+  const rows = whereClause ? await query.where(whereClause) : await query;
+  return Number(rows[0]?.count ?? 0);
+};
+
 export const createGalleryRepository = (db: DbClient) => {
   return {
     async findAll(query: GalleryQuery) {
@@ -51,26 +109,27 @@ export const createGalleryRepository = (db: DbClient) => {
         sortOrder,
         occurredAtFrom,
         occurredAtTo,
+        categoryId,
       } = query;
 
-      const conditions = [];
-
       const searchCondition = galleryQueryBuilder.applySearch(search);
-      if (searchCondition) {
-        conditions.push(searchCondition);
-      }
+      const whereClause = combineWhere(
+        searchCondition,
+        occurredAtFrom
+          ? gte(galleryItems.occurredAt, occurredAtFrom)
+          : undefined,
+        occurredAtTo ? lte(galleryItems.occurredAt, occurredAtTo) : undefined,
+        categoryId ? eq(galleryItems.categoryId, categoryId) : undefined,
+      );
 
-      if (occurredAtFrom) {
-        conditions.push(gte(galleryItems.occurredAt, occurredAtFrom));
-      }
-      if (occurredAtTo) {
-        conditions.push(lte(galleryItems.occurredAt, occurredAtTo));
-      }
+      const baseQuery = db
+        .select(selectGalleryItemWithCategory)
+        .from(galleryItems)
+        .innerJoin(
+          galleryCategories,
+          eq(galleryItems.categoryId, galleryCategories.id),
+        );
 
-      const whereClause =
-        conditions.length > 0 ? and(...conditions) : undefined;
-
-      const baseQuery = db.select().from(galleryItems);
       const queryWithWhere = whereClause
         ? baseQuery.where(whereClause)
         : baseQuery;
@@ -86,19 +145,27 @@ export const createGalleryRepository = (db: DbClient) => {
         limit,
       );
 
-      const items = await finalQuery;
-      const total = await countRecords(db, galleryItems, whereClause);
+      const rows =
+        (await finalQuery) as unknown as GalleryItemWithCategoryRow[];
+      const items = rows.map(mapGalleryItem);
+      const total = await countGalleryItems(db, whereClause);
 
       return buildListResult(items, total, page, limit);
     },
 
     async findById(id: number) {
-      const result = await db
-        .select()
+      const rows = (await db
+        .select(selectGalleryItemWithCategory)
         .from(galleryItems)
+        .innerJoin(
+          galleryCategories,
+          eq(galleryItems.categoryId, galleryCategories.id),
+        )
         .where(eq(galleryItems.id, id))
-        .limit(1);
-      return result[0] ?? null;
+        .limit(1)) as unknown as GalleryItemWithCategoryRow[];
+
+      const row = rows[0];
+      return row ? mapGalleryItem(row) : null;
     },
 
     async create(data: CreateGalleryItemInput) {
@@ -106,7 +173,8 @@ export const createGalleryRepository = (db: DbClient) => {
       if (!created) {
         throw new Error("Failed to create gallery item");
       }
-      return created;
+
+      return this.findById(created.id);
     },
 
     async update(id: number, data: UpdateGalleryItemInput) {
@@ -121,7 +189,11 @@ export const createGalleryRepository = (db: DbClient) => {
         .where(eq(galleryItems.id, id))
         .returning();
 
-      return updated;
+      if (!updated) {
+        return null;
+      }
+
+      return this.findById(id);
     },
 
     async delete(id: number) {
@@ -141,36 +213,27 @@ export const createGalleryRepository = (db: DbClient) => {
         sortOrder,
         occurredAtFrom,
         occurredAtTo,
+        categorySlug,
         cursor,
       } = query;
 
-      const conditions = [];
-
       const searchCondition = galleryQueryBuilder.applySearch(search);
-      if (searchCondition) {
-        conditions.push(searchCondition);
-      }
-
-      if (occurredAtFrom) {
-        conditions.push(gte(galleryItems.occurredAt, occurredAtFrom));
-      }
-      if (occurredAtTo) {
-        conditions.push(lte(galleryItems.occurredAt, occurredAtTo));
-      }
-
-      const whereClause =
-        conditions.length > 0 ? and(...conditions) : undefined;
+      const whereClause = combineWhere(
+        searchCondition,
+        occurredAtFrom
+          ? gte(galleryItems.occurredAt, occurredAtFrom)
+          : undefined,
+        occurredAtTo ? lte(galleryItems.occurredAt, occurredAtTo) : undefined,
+        categorySlug ? eq(galleryCategories.slug, categorySlug) : undefined,
+      );
 
       const baseQuery = db
-        .select({
-          id: galleryItems.id,
-          imageUrl: galleryItems.imageUrl,
-          title: galleryItems.title,
-          description: galleryItems.description,
-          occurredAt: galleryItems.occurredAt,
-          createdAt: galleryItems.createdAt,
-        })
-        .from(galleryItems);
+        .select(selectGalleryItemWithCategory)
+        .from(galleryItems)
+        .innerJoin(
+          galleryCategories,
+          eq(galleryItems.categoryId, galleryCategories.id),
+        );
 
       const applyFilters = (extraCondition?: SQL) => {
         const combined = combineWhere(whereClause, extraCondition);
@@ -178,27 +241,15 @@ export const createGalleryRepository = (db: DbClient) => {
       };
 
       const cursorValue = decodeCursorValue<string>(cursor);
-      let paginatedQuery;
-      if (cursorValue) {
-        paginatedQuery = applyFilters(lte(galleryItems.createdAt, cursorValue))
-          .orderBy(desc(galleryItems.createdAt))
-          .limit(limit);
-      } else {
-        const filteredQuery = applyFilters();
-        const sortedQuery = galleryQueryBuilder.applySort(
-          filteredQuery,
-          sortBy,
-          sortOrder,
-        );
-        paginatedQuery = galleryQueryBuilder.applyPagination(
-          sortedQuery,
-          page,
-          limit,
-        );
-      }
 
-      const items = await paginatedQuery;
       if (cursorValue) {
+        const rows = (await applyFilters(
+          lte(galleryItems.createdAt, cursorValue),
+        )
+          .orderBy(desc(galleryItems.createdAt))
+          .limit(limit)) as unknown as GalleryItemWithCategoryRow[];
+
+        const items = rows.map(mapGalleryItem);
         const cursorResult = buildCursorResult(
           items,
           limit,
@@ -207,7 +258,22 @@ export const createGalleryRepository = (db: DbClient) => {
         return { ...cursorResult, page, total: undefined };
       }
 
-      const total = await countRecords(db, galleryItems, whereClause);
+      const filteredQuery = applyFilters();
+      const sortedQuery = galleryQueryBuilder.applySort(
+        filteredQuery,
+        sortBy,
+        sortOrder,
+      );
+      const paginatedQuery = galleryQueryBuilder.applyPagination(
+        sortedQuery,
+        page,
+        limit,
+      );
+
+      const rows =
+        (await paginatedQuery) as unknown as GalleryItemWithCategoryRow[];
+      const items = rows.map(mapGalleryItem);
+      const total = await countGalleryItems(db, whereClause);
 
       return buildListResult(items, total, page, limit);
     },

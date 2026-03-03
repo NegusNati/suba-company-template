@@ -6,6 +6,7 @@ import React from "react";
 import { useLandingNavigation } from "../navigation/useLandingNavigation";
 
 import googleMeetLogo from "@/assets/external-company-logos/google-meet.svg";
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import { useScrolled } from "@/hooks/useScrolled";
 import { landingPagePaths } from "@/types/navigation";
@@ -93,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isMenuOpen }) => {
                     onClick={handleScrollTop}
                   >
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0">
-                      <img
+                      <AppImage
                         src={googleMeetLogo}
                         alt="Google Meet"
                         className="w-5 h-5 object-contain"

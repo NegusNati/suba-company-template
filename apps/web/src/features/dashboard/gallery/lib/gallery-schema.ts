@@ -1,80 +1,81 @@
+import { IMAGE_MIME_TYPES } from "@suba-company-template/types";
 import { z } from "zod";
 
-// Gallery item from API response
+import { createListParamsSchema, normalizeListParams } from "@/lib/list-params";
+
+export const galleryCategorySummarySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  slug: z.string(),
+});
+
 export const galleryItemSchema = z.object({
   id: z.number(),
-  imageUrl: z.string(),
-  title: z.string().nullable(),
+  imageUrls: z.array(z.string()),
+  coverImageUrl: z.string().nullable().optional(),
+  imageCount: z.number().int().nonnegative().optional(),
+  title: z.string(),
   description: z.string().nullable(),
   occurredAt: z.string().nullable(),
+  category: galleryCategorySummarySchema,
   createdAt: z.string(),
   updatedAt: z.string(),
 });
 
-// Profile schema for optional image metadata
-const imageFileSchema = z
-  .instanceof(File)
-  .refine(
-    (file) => file.size <= 10 * 1024 * 1024,
-    "File size must be less than 10MB",
-  )
-  .refine(
-    (file) =>
-      ["image/jpeg", "image/png", "image/gif", "image/webp"].includes(
-        file.type,
-      ),
-    "File must be a JPEG, PNG, GIF, or WebP image",
-  );
+export const galleryImageWithFileSchema = z.object({
+  imageUrl: z.string().optional(),
+  image: z
+    .instanceof(File)
+    .refine(
+      (file) =>
+        IMAGE_MIME_TYPES.includes(
+          file.type as (typeof IMAGE_MIME_TYPES)[number],
+        ),
+      "File must be a supported image type",
+    )
+    .optional(),
+  previewUrl: z.string().optional(),
+  position: z.number().int().min(0).optional(),
+});
 
-// Create gallery item schema
 export const createGalleryItemSchema = z.object({
-  title: z.string().max(255, "Title must be 255 characters or less").optional(),
+  title: z.string().min(1, "Title is required").max(255),
   description: z.string().optional(),
   occurredAt: z.string().datetime().optional(),
-  image: imageFileSchema,
-  imageUrl: z.string().optional(),
+  categoryId: z.number().int().positive("Category is required"),
+  images: z
+    .array(galleryImageWithFileSchema)
+    .min(1, "At least one image is required"),
 });
 
-// Update gallery item schema (all fields optional)
-export const updateGalleryItemSchema = z.object({
-  title: z.string().max(255, "Title must be 255 characters or less").optional(),
-  description: z.string().optional(),
-  occurredAt: z.string().datetime().optional(),
-  image: imageFileSchema.optional(),
-  imageUrl: z.string().optional(),
-});
+export const updateGalleryItemSchema = createGalleryItemSchema
+  .partial()
+  .extend({
+    title: z.string().min(1, "Title is required").max(255).optional(),
+    categoryId: z.number().int().positive().optional(),
+    images: z.array(galleryImageWithFileSchema).min(1).optional(),
+  });
 
-// TypeScript types
+export type GalleryCategorySummary = z.infer<
+  typeof galleryCategorySummarySchema
+>;
 export type GalleryItem = z.infer<typeof galleryItemSchema>;
+export type GalleryImageWithFile = z.infer<typeof galleryImageWithFileSchema>;
 export type CreateGalleryItem = z.infer<typeof createGalleryItemSchema>;
 export type UpdateGalleryItem = z.infer<typeof updateGalleryItemSchema>;
 
-// List parameters schema for pagination, searching, and filtering
-export const galleryListParamsSchema = z.object({
-  page: z.number().int().positive().default(1),
-  limit: z.number().int().positive().max(100).default(10),
-  search: z.string().optional(),
-  sortBy: z.enum(["createdAt", "occurredAt", "title"]).default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  occurredAtFrom: z.string().datetime().optional(),
-  occurredAtTo: z.string().datetime().optional(),
+export const galleryListParamsSchema = createListParamsSchema({
+  sortBy: ["createdAt", "occurredAt", "title"] as const,
+  defaultSortBy: "createdAt",
+  extra: {
+    occurredAtFrom: z.string().datetime().optional(),
+    occurredAtTo: z.string().datetime().optional(),
+    categoryId: z.coerce.number().int().positive().optional(),
+  },
 });
 
 export type GalleryListParams = z.infer<typeof galleryListParamsSchema>;
 
-/**
- * Normalizes gallery list parameters to ensure all required fields have defaults
- */
-export function normalizeGalleryListParams(
-  params: Partial<GalleryListParams>,
-): GalleryListParams {
-  return galleryListParamsSchema.parse({
-    page: params.page ?? 1,
-    limit: params.limit ?? 10,
-    search: params.search,
-    sortBy: params.sortBy ?? "createdAt",
-    sortOrder: params.sortOrder ?? "desc",
-    occurredAtFrom: params.occurredAtFrom,
-    occurredAtTo: params.occurredAtTo,
-  });
-}
+export const normalizeGalleryListParams = normalizeListParams(
+  galleryListParamsSchema,
+);

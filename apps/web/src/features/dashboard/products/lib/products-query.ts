@@ -28,9 +28,9 @@ import { AUTH_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
 export const productKeys = {
   all: [AUTH_API_ENDPOINTS.PRODUCTS] as const,
   list: (params: ProductsListParams) =>
-    [AUTH_API_ENDPOINTS.PRODUCTS, "list", params] as const,
+    [AUTH_API_ENDPOINTS.PRODUCTS, params] as const,
   detail: (id: number | string) =>
-    [AUTH_API_ENDPOINTS.PRODUCTS, "detail", String(id)] as const,
+    [`${AUTH_API_ENDPOINTS.PRODUCTS}/${id}`] as const,
 };
 
 export const useProductsQuery = (

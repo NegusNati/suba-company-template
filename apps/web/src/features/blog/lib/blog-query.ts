@@ -11,19 +11,22 @@ import {
 } from "./blog-api";
 import type { BlogDetail, BlogListItem } from "./blog-schema";
 
+import { LANDING_API_ENDPOINTS } from "@/lib/API_ENDPOINTS";
+
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const blogKeys = {
-  all: ["blogs"] as const,
-  lists: () => [...blogKeys.all, "list"] as const,
+  all: [LANDING_API_ENDPOINTS.BLOG_CLIENT] as const,
+  lists: () => [...blogKeys.all] as const,
   list: (params: { page: number; limit: number; search?: string }) =>
-    [...blogKeys.lists(), params] as const,
-  details: () => [...blogKeys.all, "detail"] as const,
-  detail: (id: number | string) => [...blogKeys.details(), String(id)] as const,
+    [...blogKeys.all, params] as const,
+  details: () => [...blogKeys.all] as const,
+  detail: (id: number | string) =>
+    [`${LANDING_API_ENDPOINTS.BLOG_CLIENT}/${id}`] as const,
   detailBySlug: (slug: string) =>
-    [...blogKeys.details(), "slug", slug] as const,
+    [`${LANDING_API_ENDPOINTS.BLOG_CLIENT}/slug/${slug}`] as const,
 };
 
 // ============================================================================

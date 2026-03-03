@@ -28,6 +28,16 @@ const DEFAULT_MAX_SIZE =
   Number(process.env.UPLOAD_MAX_BYTES) || 5 * 1024 * 1024; // 5MB fallback
 const DEFAULT_MIME_TYPES = [...IMAGE_MIME_TYPES];
 
+const parseByteEnv = (value: string | undefined) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+};
+
+const getGalleryUploadMaxBytes = () =>
+  parseByteEnv(process.env.GALLERY_UPLOAD_MAX_BYTES) ??
+  parseByteEnv(process.env.UPLOAD_MAX_BYTES) ??
+  80 * 1024 * 1024;
+
 const ensureSafeSubdir = (subdir: string) => {
   if (subdir.includes("..") || subdir.startsWith(sep)) {
     throw new FileUploadError(400, "Invalid upload path");
@@ -104,7 +114,10 @@ export const uploadBlogImage = (file: File): Promise<string> =>
   uploadFile(file, { subdir: "blogs" });
 
 export const uploadGalleryImage = (file: File): Promise<string> =>
-  uploadFile(file, { subdir: "gallery" });
+  uploadFile(file, {
+    subdir: "gallery",
+    maxSize: getGalleryUploadMaxBytes(),
+  });
 
 export const uploadServiceImage = (file: File): Promise<string> =>
   uploadFile(file, { subdir: "services" });
@@ -141,4 +154,16 @@ export const uploadVacancyResume = (file: File): Promise<string> =>
     subdir: "vacancy-applications",
     maxSize: 10 * 1024 * 1024, // 10MB
     allowedMimes: [...DOCUMENT_MIME_TYPES],
+  });
+
+export const uploadBusinessSectorImage = (file: File): Promise<string> =>
+  uploadFile(file, { subdir: "business-sectors" });
+
+export const uploadBusinessSectorServiceImage = (file: File): Promise<string> =>
+  uploadFile(file, { subdir: "business-sectors/services" });
+
+export const uploadBusinessSectorGalleryImage = (file: File): Promise<string> =>
+  uploadFile(file, {
+    subdir: "business-sectors/gallery",
+    maxSize: getGalleryUploadMaxBytes(),
   });

@@ -4,6 +4,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 
 import type { Social } from "./lib/socials-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -57,7 +58,7 @@ export const Columns = (
       return (
         <div className="max-w-[100px]">
           {iconUrl ? (
-            <img
+            <AppImage
               src={API_BASE_URL + iconUrl}
               alt="Logo"
               className="h-12 w-24 rounded object-cover"

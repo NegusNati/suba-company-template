@@ -15,6 +15,7 @@ import {
   type Social,
 } from "./lib/socials-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -44,6 +45,11 @@ interface SocialFormProps {
 const socialFormSchema = createSocialSchema.omit({ icon: true });
 const updateSocialFormSchema = updateSocialSchema.omit({ icon: true });
 type SocialFormValues = ZodInfer<typeof socialFormSchema>;
+
+const createDefaultValues = (): SocialFormValues => ({
+  title: "",
+  baseUrl: "",
+});
 
 export function SocialForm({
   mode,
@@ -101,10 +107,7 @@ export function SocialForm({
 
   // TanStack Form hook setup
   const form = useDashboardForm<SocialFormValues>({
-    defaultValues: {
-      title: "",
-      baseUrl: "",
-    } satisfies SocialFormValues,
+    defaultValues: createDefaultValues(),
     validators: {
       onSubmit: (mode === "create"
         ? socialFormSchema
@@ -135,14 +138,21 @@ export function SocialForm({
     },
   });
 
-  // Effect to update form when social prop changes (for edit/view modes)
+  const socialId = social?.id;
+  const socialTitle = social?.title ?? "";
+  const socialBaseUrl = social?.baseUrl ?? "";
+
+  // Reset form when modal mode or active entity changes.
   useEffect(() => {
-    if (social && (mode === "edit" || mode === "view")) {
-      form.setFieldValue("title", social.title);
-      form.setFieldValue("baseUrl", social.baseUrl);
+    if (socialId && (mode === "edit" || mode === "view")) {
+      form.reset({
+        title: socialTitle,
+        baseUrl: socialBaseUrl,
+      });
+    } else if (mode === "create") {
+      form.reset(createDefaultValues());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [social?.id, mode]);
+  }, [socialId, socialTitle, socialBaseUrl, mode, form]);
 
   const handleDelete = () => {
     if (social) {
@@ -228,7 +238,7 @@ export function SocialForm({
             />
             {(previews.length > 0 || existingIcon) && (
               <div className="mt-2">
-                <img
+                <AppImage
                   src={previews[0] ?? existingIcon ?? ""}
                   alt="Current icon"
                   className="h-12 w-12 object-contain"
@@ -241,7 +251,7 @@ export function SocialForm({
           <Field>
             <FieldLabel>Current Icon</FieldLabel>
             <div className="mt-2">
-              <img
+              <AppImage
                 src={resolveImageUrl(social.iconUrl) ?? ""}
                 alt={social.title}
                 className="h-12 w-12 object-contain"

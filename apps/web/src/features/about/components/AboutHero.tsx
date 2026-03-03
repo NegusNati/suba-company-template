@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 
 import gambella from "@/assets/about-us/gambella.svg";
+import { AppImage } from "@/components/common/AppImage";
 
 const container = {
   hidden: { opacity: 0 },
@@ -63,7 +64,7 @@ export const AboutHero = () => {
           >
             {/* Decorative Icon */}
             <div className="hidden md:flex items-center justify-center">
-              <img src={gambella} alt="Gambella" />
+              <AppImage src={gambella} alt="Gambella" />
             </div>
 
             {/* Stats */}

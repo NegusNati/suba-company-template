@@ -3,6 +3,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 
 import type { Testimonial } from "./lib/testimonials-schema";
 
+import { AppImage } from "@/components/common/AppImage";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -127,7 +128,7 @@ export const Columns = (
       return (
         <div className="max-w-[100px]">
           {resolvedUrl ? (
-            <img
+            <AppImage
               src={resolvedUrl}
               alt="Company Logo"
               className="h-8 w-8 rounded object-cover"
@@ -155,7 +156,7 @@ export const Columns = (
       return (
         <div className="max-w-[100px]">
           {resolvedUrl ? (
-            <img
+            <AppImage
               src={resolvedUrl}
               alt="Headshot"
               className="h-8 w-8 rounded-full object-cover"

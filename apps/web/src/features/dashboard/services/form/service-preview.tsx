@@ -1,3 +1,4 @@
+import { AppImage } from "@/components/common/AppImage";
 import { LexicalViewer } from "@/components/common/rich-text/LexicalViewer";
 
 interface ServicePreviewProps {
@@ -27,7 +28,7 @@ export default function ServicePreview({
                 key={src + index}
                 className="relative aspect-video rounded-lg overflow-hidden bg-gray-200"
               >
-                <img
+                <AppImage
                   src={src}
                   alt={`Service image ${index + 1}`}
                   className="w-full h-full object-cover"
