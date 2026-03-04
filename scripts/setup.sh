@@ -76,6 +76,18 @@ main() {
         print_warning ".env already exists, skipping"
     fi
 
+    if [ ! -f ".env.prod" ]; then
+        if [ -f ".env.prod.example" ]; then
+            cp .env.prod.example .env.prod
+            print_success "Created .env.prod from .env.prod.example"
+            print_warning "Please review and update .env.prod for production"
+        else
+            print_warning ".env.prod.example not found, skipping .env.prod creation"
+        fi
+    else
+        print_warning ".env.prod already exists, skipping"
+    fi
+
     # Load only the database-related environment variables we need
     if [ -f ".env" ]; then
         # Extract specific variables safely using grep and cut
@@ -122,8 +134,10 @@ main() {
     # Run database migrations
     print_step "Pushing database schema..."
     cd packages/db
+    set +e
     DB_PUSH_OUTPUT=$(bun run db:push 2>&1)
     DB_PUSH_EXIT_CODE=$?
+    set -e
     
     # Check for both exit code and error patterns in output
     if [ $DB_PUSH_EXIT_CODE -ne 0 ] || echo "$DB_PUSH_OUTPUT" | grep -qiE "(error:|password authentication failed|connection refused|ECONNREFUSED)"; then
@@ -142,8 +156,10 @@ main() {
     # Seed database
     print_step "Seeding database with sample data..."
     cd packages/db
+    set +e
     SEED_OUTPUT=$(bun run db:seed 2>&1)
     SEED_EXIT_CODE=$?
+    set -e
     
     if [ $SEED_EXIT_CODE -ne 0 ] || echo "$SEED_OUTPUT" | grep -qiE "(error:|password authentication failed|connection refused)"; then
         echo "$SEED_OUTPUT"
